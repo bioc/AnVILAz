@@ -1,0 +1,24 @@
+Package: AnVILAz
+Title: R / Bioconductor Support for the AnVIL Azure Platform
+Version: 0.0.1
+Authors@R: 
+    c(person(
+        "Martin", "Morgan", role = c("aut", "cre"),
+        email = "mtmorgan.bioc@gmail.com",
+        comment = c(ORCID = "0000-0002-5874-8148")
+     ))
+Description: The AnVIL is a cloud computing resource developed in part
+    by the National Human Genome Research Institute. The AnVILAz
+    package supports end-users and developers using the AnVIL platform
+    in the Azure cloud.
+License: Artistic-2.0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Suggests: 
+    BiocStyle,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
