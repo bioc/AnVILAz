@@ -3,7 +3,12 @@
 #' @importFrom httr GET content add_headers
 .query_resources <- function() {
     qrs <- GET(
-        url = paste0(.DSDE_PROD_URL, "api/workspaces/v1/", WSID, "/resources"),
+        url = paste0(
+            .DSDE_PROD_URL,
+            "api/workspaces/v1/",
+            .workspace_storage_cont_id(),
+            "/resources"
+        ),
         query = list(stewardship = "CONTROLLED", limit = 1000),
         add_headers(
             authorization = .az_token()
