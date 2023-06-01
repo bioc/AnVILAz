@@ -1,3 +1,4 @@
+#' @importFrom httr POST
 .get_sas_token <- function() {
     sas_tkn <- POST(
         url = paste0(
