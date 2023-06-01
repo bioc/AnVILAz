@@ -6,7 +6,7 @@
         url = paste0(
             .DSDE_PROD_URL,
             "api/workspaces/v1/",
-            .workspace_storage_cont_id(),
+            .workspace_id(),
             "/resources"
         ),
         query = list(stewardship = "CONTROLLED", limit = 1000),
