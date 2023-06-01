@@ -6,13 +6,21 @@ Authors@R:
         "Martin", "Morgan", role = c("aut", "cre"),
         email = "mtmorgan.bioc@gmail.com",
         comment = c(ORCID = "0000-0002-5874-8148")
-     ))
+    ),
+    person(
+        "Marcel", "Ramos", role = c("aut", "ctb"),
+        email = "marcel.ramosperez@roswellpark.org",
+        comment = c(ORCID = "0000-0002-3242-0582")
+    ))
 Description: The AnVIL is a cloud computing resource developed in part
     by the National Human Genome Research Institute. The AnVILAz
     package supports end-users and developers using the AnVIL platform
     in the Azure cloud.
 License: Artistic-2.0
 Encoding: UTF-8
+Imports:
+    httr,
+    jsonlite
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
