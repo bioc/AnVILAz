@@ -4,7 +4,7 @@ az_copy <- function(from, to) {
     path <- shQuote(sas_cred[["url"]])
     if (!missing(to)) {
         path <- file.path(.workspace_storage_cont_url(), to, "?")
-        path <- paste0(path, tkn)
+        path <- shQuote(paste0(path, tkn))
     }
     cmd <- "azcopy"
     args <- c("copy", from, path)
