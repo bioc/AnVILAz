@@ -8,18 +8,15 @@
 
 .workspace_id <- function() {
     opt <- Sys.getenv("WORKSPACE_ID", "")
-    opt <- getOption("AnVILAz.workspace_id", opt)
-    if (!nzchar(opt))
-        character()
-    else
-        opt
+    getOption("AnVILAz.workspace_id", opt)
 }
 
 .workspace_storage_cont_id <- function() {
     opt <- Sys.getenv("WORKSPACE_STORAGE_CONTAINER_ID", "")
-    opt <- getOption("AnVILAz.workspace_storage_cont_id", opt)
-    if (!nzchar(opt))
-        character()
-    else
-        opt
+    getOption("AnVILAz.workspace_storage_cont_id", opt)
+}
+
+.workspace_storage_cont_url <- function() {
+    opt <- Sys.getenv("WORKSPACE_STORAGE_CONTAINER_URL", "")
+    getOption("AnVILAz.workspace_storage_cont_url", opt)
 }
