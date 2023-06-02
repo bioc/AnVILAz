@@ -14,5 +14,6 @@
             authorization = .az_token()
         )
     )
+    .stop_for_status(qrs, "resources")
     content(qrs)
 }

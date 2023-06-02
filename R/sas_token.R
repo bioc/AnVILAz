@@ -14,5 +14,6 @@
             authorization = .az_token()
         )
     )
+    .stop_for_status(sas_tkn, "getSasToken")
     content(sas_tkn)
 }
