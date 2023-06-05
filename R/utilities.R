@@ -28,3 +28,24 @@
     )
     stop(message, call.=FALSE)
 }
+
+## from terra-workspace-data-service/docs/WDS Python Client.md
+#' @importFrom httr accept_json
+.get_wds_url <- function(env = "prod") {
+    uri <- paste0(
+        "https://leonardo.dsde-",
+        env,
+        ".broadinstitute.org/api/apps/v2/",
+        .workspace_id()
+    )
+    url_resp <- GET(
+        url = uri,
+        query = list(includeDeleted = "false"),
+        accept_json(),
+        add_headers(
+            authorization = .az_token()
+        )
+    )
+    .stop_for_status(url_resp, "wds_url")
+    content(url_resp)
+}
