@@ -7,12 +7,12 @@ query_resources <- function() {
         url = paste0(
             .DSDE_PROD_URL,
             "api/workspaces/v1/",
-            .workspace_id(),
+            workspace_id(),
             "/resources"
         ),
         query = list(stewardship = "CONTROLLED", limit = 1000),
         add_headers(
-            authorization = .az_token()
+            authorization = az_token()
         )
     )
     .stop_for_status(qrs, "resources")

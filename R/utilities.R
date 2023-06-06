@@ -37,14 +37,14 @@ get_wds_url <- function(env = "prod") {
         "https://leonardo.dsde-",
         env,
         ".broadinstitute.org/api/apps/v2/",
-        .workspace_id()
+        workspace_id()
     )
     url_resp <- GET(
         url = uri,
         query = list(includeDeleted = "false"),
         accept_json(),
         add_headers(
-            authorization = .az_token()
+            authorization = az_token()
         )
     )
     .stop_for_status(url_resp, "wds_url")

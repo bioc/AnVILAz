@@ -5,14 +5,14 @@ get_sas_token <- function() {
         url = paste0(
             .DSDE_PROD_URL,
             "api/workspaces/v1/",
-            .workspace_id(),
+            workspace_id(),
             "/resources/controlled/azure/storageContainer/",
-            .workspace_storage_cont_id(),
+            workspace_storage_cont_id(),
             "/getSasToken"
         ),
         query = list(sasExpirationDuration=28800),
         add_headers(
-            authorization = .az_token()
+            authorization = az_token()
         )
     )
     .stop_for_status(sas_tkn, "getSasToken")
