@@ -1,7 +1,8 @@
 .DSDE_PROD_URL <- "https://workspace.dsde-prod.broadinstitute.org/"
 
 #' @importFrom httr GET content add_headers
-.query_resources <- function() {
+#' @export
+query_resources <- function() {
     qrs <- GET(
         url = paste0(
             .DSDE_PROD_URL,
@@ -15,5 +16,5 @@
         )
     )
     .stop_for_status(qrs, "resources")
-    content(qrs)
+    content(qrs, type = "text")
 }

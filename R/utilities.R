@@ -31,7 +31,8 @@
 
 ## from terra-workspace-data-service/docs/WDS Python Client.md
 #' @importFrom httr accept_json
-.get_wds_url <- function(env = "prod") {
+#' @export
+get_wds_url <- function(env = "prod") {
     uri <- paste0(
         "https://leonardo.dsde-",
         env,
@@ -47,5 +48,7 @@
         )
     )
     .stop_for_status(url_resp, "wds_url")
-    content(url_resp)
+    res_json <- content(url_resp, type = "text")
+    res_url <- rjsoncons::jmespath(res_json, "[*].proxyUrls.wds")
+    jsonlite::fromJSON(res_url)
 }
