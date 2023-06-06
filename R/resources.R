@@ -2,7 +2,7 @@
 
 #' @importFrom httr GET content add_headers
 #' @export
-query_resources <- function() {
+query_resources <- function(as = NULL) {
     qrs <- GET(
         url = paste0(
             .DSDE_PROD_URL,
@@ -16,5 +16,5 @@ query_resources <- function() {
         )
     )
     .stop_for_status(qrs, "resources")
-    content(qrs, type = "text")
+    content(qrs, as = as)
 }
