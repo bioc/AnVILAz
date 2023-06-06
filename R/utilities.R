@@ -48,7 +48,7 @@ get_wds_url <- function(env = "prod") {
         )
     )
     .stop_for_status(url_resp, "wds_url")
-    res_json <- content(url_resp, type = "text")
+    res_json <- content(url_resp, type = "text", encoding = "UTF-8")
     res_url <- rjsoncons::jmespath(res_json, "[*].proxyUrls.wds")
     jsonlite::fromJSON(res_url)
 }
