@@ -1,6 +1,6 @@
 #' @importFrom httr POST
 #' @export
-get_sas_token <- function() {
+get_sas_token <- function(as = NULL) {
     sas_tkn <- POST(
         url = paste0(
             .DSDE_PROD_URL,
@@ -16,5 +16,5 @@ get_sas_token <- function() {
         )
     )
     .stop_for_status(sas_tkn, "getSasToken")
-    content(sas_tkn)
+    content(sas_tkn, as = as)
 }
