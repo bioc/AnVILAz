@@ -1,3 +1,18 @@
+#' Upload a TSV file to WDS URL
+#'
+#' A function to move a flat Tab-Separated Values (TSV) file into the
+#' Azure workspace using the Workspace Data Services (WDS) API
+#'
+#' @param tsv_file `character(1)` A path to a tab-separated values file
+#'
+#' @param type `character(1)` A nickname for the uploaded dataset important for
+#'   retreival. By default, the file name will be used.
+#'
+#' @param version `character(1)` The version of the API. Set to `v0.2` by
+#'   default.
+#'
+#' @return The contents of the API POST request after uploading the TSV file
+#'
 #' @examples
 #' if (interactive()) {
 #'   type <- "model"
