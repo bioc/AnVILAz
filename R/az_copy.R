@@ -27,7 +27,6 @@ az_copy_list <- function() {
 
 #' @export
 az_copy_rm <- function(blob_file) {
-    # azcopy rm "https://[account].blob.core.windows.net/[container]/[path/to/blob]?[SAS]"
     file_tbl <- az_copy_list()
     allfiles <- file_tbl[["INFO"]]
     if (!blob_file %in% allfiles)
