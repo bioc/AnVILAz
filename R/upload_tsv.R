@@ -69,7 +69,7 @@ retrieve_tsv <- function(type, version = .WDS_API_VERSION) {
 }
 
 #' @importFrom httr DELETE
-#' @import
+#' @export
 delete_tsv_row <- function(type, id, verison = .RECORDS_API_VERSION) {
     # "/{instanceid}/records/{v}/{type}/{id}"
     tsv <- retrieve_tsv(type = type, version = version)
