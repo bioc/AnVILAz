@@ -50,7 +50,7 @@ upload_tsv <- function(
 }
 
 #' @export
-get_tsv <- function(type, version = "v0.2") {
+retrieve_tsv <- function(type, version = "v0.2") {
     base_uri <- get_wds_url()
     path <- paste0("/", workspace_id(), "/tsv/", version, "/", type)
     uri <- paste0(base_uri, path)
