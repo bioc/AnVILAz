@@ -2,12 +2,12 @@
 % Please edit documentation in R/upload_tsv.R
 \name{upload_tsv}
 \alias{upload_tsv}
-\title{Upload a TSV file to WDS URL}
+\title{Upload a TSV file to the Workspace Data Tab}
 \usage{
 upload_tsv(
   tsv_file,
   type = tools:::file_path_sans_ext(basename(tsv_file)),
-  version = .WDS_API_VERSION
+  api_version = .WDS_API_VERSION
 )
 }
 \arguments{
@@ -16,16 +16,17 @@ upload_tsv(
 \item{type}{\code{character(1)} A nickname for the uploaded dataset important for
 retreival. By default, the file name will be used.}
 
-\item{version}{\code{character(1)} The version of the API. Set to the value of
-the internal \code{.WDS_API_VERSION} variable by default. See the current
-version with \code{AnVILAz:::.WDS_API_VERSION}.}
+\item{api_version}{\code{character(1)} The version of the Workspace Data Service
+API. Set to the value of the internal \code{.WDS_API_VERSION} variable by
+default. See the current version with \code{AnVILAz:::.WDS_API_VERSION}.}
 }
 \value{
 The contents of the API POST request after uploading the TSV file
 }
 \description{
 A function to move a flat Tab-Separated Values (TSV) file into the
-Azure workspace using the Workspace Data Services (WDS) API
+Azure workspace using the Workspace Data Services (WDS) API. The dataset
+will appear as a table under the 'Data' tab.
 }
 \examples{
 if (interactive()) {

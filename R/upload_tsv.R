@@ -1,18 +1,19 @@
 .WDS_API_VERSION <- "v0.2"
 
-#' Upload a TSV file to WDS URL
+#' Upload a TSV file to the Workspace Data Tab
 #'
 #' A function to move a flat Tab-Separated Values (TSV) file into the
-#' Azure workspace using the Workspace Data Services (WDS) API
+#' Azure workspace using the Workspace Data Services (WDS) API. The dataset
+#' will appear as a table under the 'Data' tab.
 #'
 #' @param tsv_file `character(1)` A path to a tab-separated values file
 #'
 #' @param type `character(1)` A nickname for the uploaded dataset important for
 #'   retreival. By default, the file name will be used.
 #'
-#' @param version `character(1)` The version of the API. Set to the value of
-#'   the internal `.WDS_API_VERSION` variable by default. See the current
-#'   version with `AnVILAz:::.WDS_API_VERSION`.
+#' @param api_version `character(1)` The version of the Workspace Data Service
+#'   API. Set to the value of the internal `.WDS_API_VERSION` variable by
+#'   default. See the current version with `AnVILAz:::.WDS_API_VERSION`.
 #'
 #' @return The contents of the API POST request after uploading the TSV file
 #'
@@ -35,12 +36,14 @@
 upload_tsv <- function(
     tsv_file,
     type = tools:::file_path_sans_ext(basename(tsv_file)),
-    version = .WDS_API_VERSION
+    api_version = .WDS_API_VERSION
 ) {
-    # "/{instanceid}/tsv/{v}/{type}"
+    api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
+    instanceid <- get_wds_url()
+    v <- api_version
+    endpoint <- whisker.render(api_endpoint)
     base_uri <- get_wds_url()
-    path <- paste0("/", workspace_id(), "/tsv/", version, "/", type)
-    uri <- paste0(base_uri, path)
+    uri <- paste0(base_uri, endpoint)
     response <- POST(
         uri,
         body = list(records =
@@ -54,11 +57,12 @@ upload_tsv <- function(
 }
 
 #' @export
-retrieve_tsv <- function(type, version = .WDS_API_VERSION) {
-    # "/{instanceid}/tsv/{v}/{type}"
-    base_uri <- get_wds_url()
-    path <- paste0("/", workspace_id(), "/tsv/", version, "/", type)
-    uri <- paste0(base_uri, path)
+retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
+    api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
+    instanceid <- get_wds_url()
+    v <- api_version
+    endpoint <- whisker.render(api_endpoint)
+    uri <- paste0(base_uri, endpoint)
     response <- GET(
         uri,
         add_headers(authorization = az_token()),
@@ -68,15 +72,19 @@ retrieve_tsv <- function(type, version = .WDS_API_VERSION) {
     content(response, encoding = "UTF-8")
 }
 
+#' @importFrom whisker whisker.render
 #' @importFrom httr DELETE
 #' @export
-delete_tsv_row <- function(type, id, verison = .RECORDS_API_VERSION) {
-    # "/{instanceid}/records/{v}/{type}/{id}"
-    tsv <- retrieve_tsv(type = type, version = version)
+delete_tsv_row <- function(type, id, api_verison = .RECORDS_API_VERSION) {
+    instanceid <- workspace_id()
+    v <- api_version
+    api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
+    endpoint <- whisker.render(api_endpoint)
+
+    tsv <- retrieve_tsv(type = type, api_version = api_version)
     allids <- tsv[[1L]]
     stopifnot(id %in% allids)
     base_uri <- get_wds_url()
-    path <- paste0("/", workspace_id(), "/records/", version, "/", type, id)
     uri <- paste0(base_uri, path)
     response <- DELETE(
         uri,

@@ -1,16 +1,17 @@
 #' @importFrom httr POST
 #' @export
-get_sas_token <- function(as = NULL) {
+get_sas_token <- function(as = NULL, expiration = 28800) {
+    workspaceId <- workspace_id()
+    resourceId <- workspace_storage_cont_id()
+    api_endpoint <- paste0(
+        "/api/workspaces/v1/{{workspaceId}}/resources/",
+        "controlled/azure/storageContainer/{{resourceId}}/getSasToken"
+    )
+    endpoint <- whisker.render(api_endpoint)
+    url <- paste0(.DSDE_PROD_URL, endpoint)
     sas_tkn <- POST(
-        url = paste0(
-            .DSDE_PROD_URL,
-            "api/workspaces/v1/",
-            workspace_id(),
-            "/resources/controlled/azure/storageContainer/",
-            workspace_storage_cont_id(),
-            "/getSasToken"
-        ),
-        query = list(sasExpirationDuration=28800),
+        url = url,
+        query = list(sasExpirationDuration = expiration),
         add_headers(
             authorization = az_token()
         )

@@ -33,12 +33,12 @@
 #' @importFrom httr accept_json
 #' @export
 get_wds_url <- function(env = "prod") {
-    uri <- paste0(
-        "https://leonardo.dsde-",
-        env,
-        ".broadinstitute.org/api/apps/v2/",
-        workspace_id()
+    workspaceId <- workspace_id()
+    api_url <- paste0(
+        "https://leonardo.dsde-{{env}}.broadinstitute.org",
+        "/api/apps/v2/{{workspaceId}}"
     )
+    uri <- whisker.render(api_url)
     url_resp <- GET(
         url = uri,
         query = list(includeDeleted = "false"),
