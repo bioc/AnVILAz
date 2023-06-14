@@ -1,5 +1,5 @@
 #' @export
-az_copy <- function(from, to) {
+az_copy_copy <- function(from, to) {
     sas_cred <- .get_sas_token()
     tkn <- sas_cred[["token"]]
     path <- shQuote(sas_cred[["url"]])
