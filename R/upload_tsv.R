@@ -1,3 +1,5 @@
+.WDS_API_VERSION <- "v0.2"
+
 #' Upload a TSV file to WDS URL
 #'
 #' A function to move a flat Tab-Separated Values (TSV) file into the
@@ -8,8 +10,9 @@
 #' @param type `character(1)` A nickname for the uploaded dataset important for
 #'   retreival. By default, the file name will be used.
 #'
-#' @param version `character(1)` The version of the API. Set to `v0.2` by
-#'   default.
+#' @param version `character(1)` The version of the API. Set to the value of
+#'   the internal `.WDS_API_VERSION` variable by default. See the current
+#'   version with `AnVILAz:::.WDS_API_VERSION`.
 #'
 #' @return The contents of the API POST request after uploading the TSV file
 #'
@@ -32,7 +35,7 @@
 upload_tsv <- function(
     tsv_file,
     type = tools:::file_path_sans_ext(basename(tsv_file)),
-    version = "v0.2"
+    version = .WDS_API_VERSION
 ) {
     base_uri <- get_wds_url()
     path <- paste0("/", workspace_id(), "/tsv/", version, "/", type)
@@ -50,7 +53,7 @@ upload_tsv <- function(
 }
 
 #' @export
-retrieve_tsv <- function(type, version = "v0.2") {
+retrieve_tsv <- function(type, version = .WDS_API_VERSION) {
     base_uri <- get_wds_url()
     path <- paste0("/", workspace_id(), "/tsv/", version, "/", type)
     uri <- paste0(base_uri, path)

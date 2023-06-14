@@ -7,7 +7,7 @@
 upload_tsv(
   tsv_file,
   type = tools:::file_path_sans_ext(basename(tsv_file)),
-  version = "v0.2"
+  version = .WDS_API_VERSION
 )
 }
 \arguments{
@@ -16,8 +16,9 @@ upload_tsv(
 \item{type}{\code{character(1)} A nickname for the uploaded dataset important for
 retreival. By default, the file name will be used.}
 
-\item{version}{\code{character(1)} The version of the API. Set to \code{v0.2} by
-default.}
+\item{version}{\code{character(1)} The version of the API. Set to the value of
+the internal \code{.WDS_API_VERSION} variable by default. See the current
+version with \code{AnVILAz:::.WDS_API_VERSION}.}
 }
 \value{
 The contents of the API POST request after uploading the TSV file
