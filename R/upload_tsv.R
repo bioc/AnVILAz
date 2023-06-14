@@ -37,6 +37,7 @@ upload_tsv <- function(
     type = tools:::file_path_sans_ext(basename(tsv_file)),
     version = .WDS_API_VERSION
 ) {
+    # "/{instanceid}/tsv/{v}/{type}"
     base_uri <- get_wds_url()
     path <- paste0("/", workspace_id(), "/tsv/", version, "/", type)
     uri <- paste0(base_uri, path)
@@ -54,6 +55,7 @@ upload_tsv <- function(
 
 #' @export
 retrieve_tsv <- function(type, version = .WDS_API_VERSION) {
+    # "/{instanceid}/tsv/{v}/{type}"
     base_uri <- get_wds_url()
     path <- paste0("/", workspace_id(), "/tsv/", version, "/", type)
     uri <- paste0(base_uri, path)
@@ -66,3 +68,21 @@ retrieve_tsv <- function(type, version = .WDS_API_VERSION) {
     content(response, encoding = "UTF-8")
 }
 
+#' @importFrom httr DELETE
+#' @import
+delete_tsv_row <- function(type, id, verison = .RECORDS_API_VERSION) {
+    # "/{instanceid}/records/{v}/{type}/{id}"
+    tsv <- retrieve_tsv(type = type, version = version)
+    allids <- tsv[[1L]]
+    stopifnot(id %in% allids)
+    base_uri <- get_wds_url()
+    path <- paste0("/", workspace_id(), "/records/", version, "/", type, id)
+    uri <- paste0(base_uri, path)
+    response <- DELETE(
+        uri,
+        add_headers(authorization = az_token()),
+        accept_json()
+    )
+    stop_for_status(response)
+    content(response)
+}
