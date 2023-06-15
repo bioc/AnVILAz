@@ -18,7 +18,8 @@ upload_tsv(
 retreival. By default, the file name will be used.}
 
 \item{primaryKey}{\code{character(1)} The optional column name to uniquely
-identify a record.}
+identify a record. By default, the first column is used as the primary
+key and all values in the column must be unique.}
 
 \item{api_version}{\code{character(1)} The version of the Workspace Data Service
 API. Set to the value of the internal \code{.WDS_API_VERSION} variable by
