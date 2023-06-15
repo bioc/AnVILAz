@@ -22,6 +22,7 @@ Imports:
     BiocBaseUtils,
     httr,
     jsonlite,
+    rjsoncons,
     tibble,
     whisker
 Roxygen: list(markdown = TRUE)
@@ -30,6 +31,7 @@ Suggests:
     BiocStyle,
     dplyr,
     knitr,
+    readr,
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
