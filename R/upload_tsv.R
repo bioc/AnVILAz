@@ -50,7 +50,7 @@ upload_tsv <- function(
     api_version = .WDS_API_VERSION
 ) {
     api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
-    instanceid <- get_wds_url()
+    instanceid <- workspace_id()
     v <- api_version
     endpoint <- whisker.render(api_endpoint)
     base_uri <- get_wds_url()
