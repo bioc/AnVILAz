@@ -1,10 +1,23 @@
 .WDS_API_VERSION <- "v0.2"
 
-#' Upload a TSV file to the Workspace Data Tab
+#' @rdname workspace-data-ops
 #'
-#' A function to move a flat Tab-Separated Values (TSV) file into the
-#' Azure workspace using the Workspace Data Services (WDS) API. The dataset
-#' will appear as a table under the 'Data' tab.
+#' @title Functions to work with workspace data
+#'
+#' @aliases upload_tsv retrieve_tsv delete_tsv_row delete_tsv
+#'
+#' @description These group of functions will allow you to manipulate data in
+#'   the "DATA" tab. Example operations include moving a flat Tab-Separated
+#'   Values (TSV) file into the workspace, deleting records, deleting tables,
+#'   and retrieving the data table.
+#'
+#' @details These functions use the Workspace Data Services (WDS) API. Current
+#'   operations that affect the "DATA" tab include:
+#'   * `upload_tsv` - a `POST` request using a TSV file that populates the data
+#'   * `retrieve_tsv` - a `GET` request with the data name (`type` argument) in
+#'     `upload_tsv` to download the data
+#'   * `delete_tsv_row` - a `DELETE` request to remove a record or row from `type`
+#'   * `delete_tsv` - a `DELETE` request to remove then entire data set (`type`)
 #'
 #' @param tsv_file `character(1)` A path to a tab-separated values file
 #'
@@ -22,7 +35,10 @@
 #'   API. Set to the value of the internal `.WDS_API_VERSION` variable by
 #'   default. See the current version with `AnVILAz:::.WDS_API_VERSION`.
 #'
-#' @return The contents of the API POST request after uploading the TSV file
+#' @return
+#'   * `upload_tsv` - A response list indicating successful upload
+#'   * `retrieve_tsv` - A `tibble` corresponding to the data labeled with `type`
+#'   * `delete_tsv_row`; `delete_tsv` - When successful, a `NULL` value
 #'
 #' @importFrom httr upload_file
 #'
@@ -69,6 +85,7 @@ upload_tsv <- function(
     content(response)
 }
 
+#' @name workspace-data-ops
 #' @export
 retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
     opt <- options(readr.show_col_types = FALSE)
@@ -89,6 +106,7 @@ retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
     content(response, encoding = "UTF-8")
 }
 
+#' @name workspace-data-ops
 #' @importFrom whisker whisker.render
 #' @importFrom httr DELETE
 #' @export
@@ -115,6 +133,7 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
     content(response)
 }
 
+#' @name workspace-data-ops
 #' @export
 delete_tsv <- function(type, api_version = .WDS_API_VERSION) {
     opt <- options(readr.show_col_types = FALSE)
