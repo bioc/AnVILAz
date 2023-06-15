@@ -71,6 +71,9 @@ upload_tsv <- function(
 
 #' @export
 retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
+    opt <- options(readr.show_col_types = FALSE)
+    on.exit(options(opt))
+
     api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
     instanceid <- workspace_id()
     v <- api_version
@@ -90,6 +93,9 @@ retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
 #' @importFrom httr DELETE
 #' @export
 delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
+    opt <- options(readr.show_col_types = FALSE)
+    on.exit(options(opt))
+
     instanceid <- workspace_id()
     v <- api_version
     api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
@@ -111,6 +117,9 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
 
 #' @export
 delete_tsv <- function(type, api_version = .WDS_API_VERSION) {
+    opt <- options(readr.show_col_types = FALSE)
+    on.exit(options(opt))
+
     instanceid <- workspace_id()
     v <- api_version
     api_endpoint <- "/{{instanceid}}/types/{{v}}/{{type}}"
