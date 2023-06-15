@@ -40,6 +40,7 @@ az_copy_rm <- function(blob_file) {
     .az_do("azcopy", args = args)
 }
 
+#' @importFrom BiocBaseUtils isScalarCharacter isCharacter
 .az_do <- function(command, args) {
     stopifnot(
         isScalarCharacter(command),

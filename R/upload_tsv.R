@@ -17,6 +17,8 @@
 #'
 #' @return The contents of the API POST request after uploading the TSV file
 #'
+#' @importFrom httr upload_file
+#'
 #' @examples
 #' if (interactive()) {
 #'   type <- "model"
