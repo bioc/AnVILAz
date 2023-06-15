@@ -7,6 +7,7 @@
 upload_tsv(
   tsv_file,
   type = tools:::file_path_sans_ext(basename(tsv_file)),
+  primaryKey = NULL,
   api_version = .WDS_API_VERSION
 )
 }
@@ -16,9 +17,15 @@ upload_tsv(
 \item{type}{\code{character(1)} A nickname for the uploaded dataset important for
 retreival. By default, the file name will be used.}
 
+\item{primaryKey}{\code{character(1)} The optional column name to uniquely
+identify a record.}
+
 \item{api_version}{\code{character(1)} The version of the Workspace Data Service
 API. Set to the value of the internal \code{.WDS_API_VERSION} variable by
 default. See the current version with \code{AnVILAz:::.WDS_API_VERSION}.}
+
+\item{id}{\code{character(1)} The value in the \code{primaryKey} column that
+indicates the row to be removed.}
 }
 \value{
 The contents of the API POST request after uploading the TSV file
@@ -30,6 +37,7 @@ will appear as a table under the 'Data' tab.
 }
 \examples{
 if (interactive()) {
+  library(dplyr)
   type <- "model"
   mtcars_tbl <-
       mtcars |>

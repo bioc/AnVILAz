@@ -11,6 +11,12 @@
 #' @param type `character(1)` A nickname for the uploaded dataset important for
 #'   retreival. By default, the file name will be used.
 #'
+#' @param id `character(1)` The value in the `primaryKey` column that
+#'   indicates the row to be removed.
+#'
+#' @param primaryKey `character(1)` The optional column name to uniquely
+#'   identify a record.
+#'
 #' @param api_version `character(1)` The version of the Workspace Data Service
 #'   API. Set to the value of the internal `.WDS_API_VERSION` variable by
 #'   default. See the current version with `AnVILAz:::.WDS_API_VERSION`.
@@ -21,6 +27,7 @@
 #'
 #' @examples
 #' if (interactive()) {
+#'   library(dplyr)
 #'   type <- "model"
 #'   mtcars_tbl <-
 #'       mtcars |>
@@ -32,12 +39,14 @@
 #'   upload_tsv(
 #'     tsv_file = tsvfile,
 #'     type = "testData",
+#'     primaryKey = "model_id"
 #'   )
 #' }
 #' @export
 upload_tsv <- function(
     tsv_file,
     type = tools:::file_path_sans_ext(basename(tsv_file)),
+    primaryKey = NULL,
     api_version = .WDS_API_VERSION
 ) {
     api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
@@ -48,6 +57,7 @@ upload_tsv <- function(
     uri <- paste0(base_uri, endpoint)
     response <- POST(
         uri,
+        query = list(primaryKey = primaryKey),
         body = list(records =
             upload_file(tsv_file, "text/tab-separated-values")
         ),
