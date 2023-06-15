@@ -32,7 +32,7 @@ az_copy_rm <- function(blob_file) {
     if (!blob_file %in% allfiles)
         stop("File not found; check path to blob file with `az_copy_list`")
 
-    sas_cred <- .get_sas_token()
+    sas_cred <- get_sas_token()
     token_slug <- sas_cred[["token"]]
     path <- file.path(workspace_storage_cont_url(), blob_file, "?")
     path <- shQuote(paste0(path, token_slug))
