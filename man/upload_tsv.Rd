@@ -49,6 +49,7 @@ if (interactive()) {
   upload_tsv(
     tsv_file = tsvfile,
     type = "testData",
+    primaryKey = "model_id"
   )
 }
 }
