@@ -63,6 +63,7 @@ retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
     api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
     instanceid <- get_wds_url()
     v <- api_version
+    base_uri <- get_wds_url()
     endpoint <- whisker.render(api_endpoint)
     uri <- paste0(base_uri, endpoint)
     response <- GET(
@@ -77,7 +78,7 @@ retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
 #' @importFrom whisker whisker.render
 #' @importFrom httr DELETE
 #' @export
-delete_tsv_row <- function(type, id, api_verison = .RECORDS_API_VERSION) {
+delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
     instanceid <- workspace_id()
     v <- api_version
     api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
@@ -87,12 +88,12 @@ delete_tsv_row <- function(type, id, api_verison = .RECORDS_API_VERSION) {
     allids <- tsv[[1L]]
     stopifnot(id %in% allids)
     base_uri <- get_wds_url()
-    uri <- paste0(base_uri, path)
+    uri <- paste0(base_uri, endpoint)
     response <- DELETE(
         uri,
         add_headers(authorization = az_token()),
         accept_json()
     )
-    stop_for_status(response)
+    .stop_for_status(response)
     content(response)
 }
