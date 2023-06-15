@@ -58,8 +58,8 @@ upload_tsv <- function(
     response <- POST(
         uri,
         query = list(primaryKey = primaryKey),
-        body = list(records =
-            upload_file(tsv_file, "text/tab-separated-values")
+        body = list(
+            records = upload_file(tsv_file, "text/tab-separated-values")
         ),
         add_headers(authorization = az_token()),
         accept_json()
