@@ -70,7 +70,7 @@ upload_tsv <- function(
     instanceid <- workspace_id()
     v <- api_version
     endpoint <- whisker.render(api_endpoint)
-    base_uri <- get_wds_url()
+    base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
     response <- POST(
         uri,
@@ -94,7 +94,7 @@ retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
     api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
     instanceid <- workspace_id()
     v <- api_version
-    base_uri <- get_wds_url()
+    base_uri <- workspace_data_service_url()
     endpoint <- whisker.render(api_endpoint)
     uri <- paste0(base_uri, endpoint)
     response <- GET(
@@ -122,7 +122,7 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
     tsv <- retrieve_tsv(type = type, api_version = api_version)
     allids <- tsv[[1L]]
     stopifnot(id %in% allids)
-    base_uri <- get_wds_url()
+    base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
     response <- DELETE(
         uri,
@@ -143,7 +143,7 @@ delete_tsv <- function(type, api_version = .WDS_API_VERSION) {
     v <- api_version
     api_endpoint <- "/{{instanceid}}/types/{{v}}/{{type}}"
     endpoint <- whisker.render(api_endpoint)
-    base_uri <- get_wds_url()
+    base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
     response <- DELETE(
         uri,

@@ -28,27 +28,3 @@
     )
     stop(message, call.=FALSE)
 }
-
-## from terra-workspace-data-service/docs/WDS Python Client.md
-#' @importFrom httr accept_json
-#' @export
-get_wds_url <- function(env = "prod") {
-    workspaceId <- workspace_id()
-    api_url <- paste0(
-        "https://leonardo.dsde-{{env}}.broadinstitute.org",
-        "/api/apps/v2/{{workspaceId}}"
-    )
-    uri <- whisker.render(api_url)
-    url_resp <- GET(
-        url = uri,
-        query = list(includeDeleted = "false"),
-        accept_json(),
-        add_headers(
-            authorization = az_token()
-        )
-    )
-    .stop_for_status(url_resp, "wds_url")
-    res_json <- content(url_resp, type = "text", encoding = "UTF-8")
-    res_url <- rjsoncons::jmespath(res_json, "[*].proxyUrls.wds")
-    jsonlite::fromJSON(res_url)
-}

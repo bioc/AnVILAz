@@ -6,21 +6,3 @@ az_token <- function() {
     token <- restkn[["accessToken"]]
     paste('Bearer', token)
 }
-
-#' @export
-workspace_id <- function() {
-    opt <- Sys.getenv("WORKSPACE_ID", "")
-    getOption("AnVILAz.workspace_id", opt)
-}
-
-#' @export
-workspace_storage_cont_id <- function() {
-    opt <- Sys.getenv("WORKSPACE_STORAGE_CONTAINER_ID", "")
-    getOption("AnVILAz.workspace_storage_cont_id", opt)
-}
-
-#' @export
-workspace_storage_cont_url <- function() {
-    opt <- Sys.getenv("WORKSPACE_STORAGE_CONTAINER_URL", "")
-    getOption("AnVILAz.workspace_storage_cont_url", opt)
-}
