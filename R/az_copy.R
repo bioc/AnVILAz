@@ -14,29 +14,36 @@
 #' * `az_copy_copy` - copy a file from the Azure workspace to the container
 #' * `az_copy_rm` - remove a file from the Azure Storage Container
 #'
-#' @param from `character(1)` A file path relevant to the Azure workspace,
-#'   usually where the Jupyter Notebooks are found.
+#' @param from `character(1)` A relative file path corresponding to either the
+#'   remote or local (working directory) file location. Remote locations should
+#'   be relative to the base directory in the Azure Storage Container.
 #'
-#' @param to `character(1)` A relative path in the Azure Storage Container
+#' @param to `character(1)` A relative file path corresponding to either the
+#'   remote or local (working directory) file location. Remote locations should
+#'   be relative to the base directory in the Azure Storage Container.
 #'
 #' @param blob_file `character(1)` A relative path to a file in the Azure
 #'   Storage Container to be removed
 #'
 #' @return
 #' * `az_copy_list` - a `tibble` of files and metadata
-#' * `az_copy_copy` - called for the side effect of copying a file
+#' * `az_copy_from_storage` - called for the side effect of copying a file
+#'   __from__ the Azure Storage Container
+#' * `az_copy_to_storage` - called for the side effect of copying a file __to__
+#'   the Azure Storage Container
 #' * `az_copy_rm` - called for the side effect of removing a file
 #'
 #' @examples
 #' if (interactive()) {
 #'
 #'   az_copy_list()
-#'   az_copy_copy("jupyter.log", "analyses/jupyter.log")
+#'   az_copy_to_storage("jupyter.log", "analyses/jupyter.log")
+#'   az_copy_from_storage("analyses/jupyter.log", "jupyter.log")
 #'   az_copy_rm("analyses/jupyter.log")
 #'
 #' }
 #' @export
-az_copy_copy <- function(from, to) {
+az_copy_from_storage <- function(from, to) {
     stopifnot(
         isScalarCharacter(from), isScalarCharacter(to)
     )
@@ -44,12 +51,32 @@ az_copy_copy <- function(from, to) {
     wscu <- workspace_storage_cont_url()
     token <- sas_cred[["token"]]
     path <- sas_cred[["url"]]
+
+    if (!missing(from)) {
+        path <- file.path(wscu, from, "?")
+        path <- paste0(path, token)
+    }
+
+    .az_copy(path, to)
+}
+
+#' @rdname az_copy
+#' @export
+az_copy_to_storage <- function(from, to) {
+    stopifnot(
+        isScalarCharacter(from), isScalarCharacter(to)
+    )
+    sas_cred <- get_sas_token()
+    wscu <- workspace_storage_cont_url()
+    token <- sas_cred[["token"]]
+    path <- sas_cred[["url"]]
+
     if (!missing(to)) {
         path <- file.path(wscu, to, "?")
         path <- paste0(path, token)
     }
-    args <- c("copy", from, shQuote(path))
-    .az_do("azcopy", args = args)
+
+    .az_copy(from, path)
 }
 
 #' @rdname az_copy
@@ -125,4 +152,9 @@ az_copy_rm <- function(blob_file) {
         normalizePath(bin)
     else
         stop("failed to find '", command, "' binary", call. = FALSE)
+}
+
+.az_copy <- function(from, to) {
+    args <- c("copy", from, to)
+    .az_do("azcopy", args = args)
 }

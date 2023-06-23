@@ -2,22 +2,29 @@
 % Please edit documentation in R/az_copy.R
 \name{az_copy}
 \alias{az_copy}
-\alias{az_copy_copy}
+\alias{az_copy_from_storage}
 \alias{az_copy_list}
+\alias{az_copy_copy}
 \alias{az_copy_rm}
+\alias{az_copy_to_storage}
 \title{Azure Copy command line utility interface}
 \usage{
-az_copy_copy(from, to)
+az_copy_from_storage(from, to)
+
+az_copy_to_storage(from, to)
 
 az_copy_list()
 
 az_copy_rm(blob_file)
 }
 \arguments{
-\item{from}{\code{character(1)} A file path relevant to the Azure workspace,
-usually where the Jupyter Notebooks are found.}
+\item{from}{\code{character(1)} A relative file path corresponding to either the
+remote or local (working directory) file location. Remote locations should
+be relative to the base directory in the Azure Storage Container.}
 
-\item{to}{\code{character(1)} A relative path in the Azure Storage Container}
+\item{to}{\code{character(1)} A relative file path corresponding to either the
+remote or local (working directory) file location. Remote locations should
+be relative to the base directory in the Azure Storage Container.}
 
 \item{blob_file}{\code{character(1)} A relative path to a file in the Azure
 Storage Container to be removed}
@@ -25,7 +32,10 @@ Storage Container to be removed}
 \value{
 \itemize{
 \item \code{az_copy_list} - a \code{tibble} of files and metadata
-\item \code{az_copy_copy} - called for the side effect of copying a file
+\item \code{az_copy_from_storage} - called for the side effect of copying a file
+\strong{from} the Azure Storage Container
+\item \code{az_copy_to_storage} - called for the side effect of copying a file \strong{to}
+the Azure Storage Container
 \item \code{az_copy_rm} - called for the side effect of removing a file
 }
 }
@@ -46,7 +56,8 @@ credential details.
 if (interactive()) {
 
   az_copy_list()
-  az_copy_copy("jupyter.log", "analyses/jupyter.log")
+  az_copy_to_storage("jupyter.log", "analyses/jupyter.log")
+  az_copy_from_storage("analyses/jupyter.log", "jupyter.log")
   az_copy_rm("analyses/jupyter.log")
 
 }
