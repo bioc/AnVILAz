@@ -95,7 +95,28 @@ az_copy_rm <- function(blob_file) {
         isCharacter(args, na.ok = FALSE)
     )
     bin <- .az_find(command)
-    system2(command = command, args = args, stdout = TRUE)
+    res <- withCallingHandlers({
+        tryCatch({
+            system2(bin, args, stdout = TRUE, stderr = TRUE, wait=TRUE)
+        }, error = function(err) {
+            msg <- paste0(
+                "'", command, " ", paste(args, collapse = " "), "' failed:\n",
+                "  ", conditionMessage(err)
+            )
+            stop(msg, call. = FALSE)
+        })
+    }, warning = function(warn) {
+        invokeRestart("muffleWarning")
+    })
+    if (!is.null(attr(res, "status"))) {
+        msg <- paste0(
+            "'", command, " ", paste(args, collapse = " "), "' failed:",
+            "\n  ", paste(as.vector(res), collapse = "\n    "),
+            "\n  exit status: ", attr(res, "status")
+        )
+        stop(msg, call. = FALSE)
+    }
+    res
 }
 
 .az_find <- function(command) {
