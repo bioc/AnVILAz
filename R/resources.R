@@ -17,3 +17,24 @@ query_resources <- function(as = NULL) {
     .stop_for_status(qrs, "resources")
     content(qrs, as = as)
 }
+
+query_records <- function(type, version = .WDS_API_VERSION) {
+    workspaceId <- workspace_id()
+    v <- version
+    api_endpoint <- "/{{instanceid}}/search/{{v}}/{{type}}"
+    endpoint <- whisker.render(api_endpoint)
+
+    base_uri <- workspace_data_service_url()
+    uri <- paste0(base_uri, endpoint)
+    response <- POST(
+        url = uri,
+        body = list(
+            offset = 0, limit = 10, sort = "asc", sortAttribute = "string"
+        ),
+        add_headers(authorization = az_token()),
+        encode = "multipart",
+        accept_json()
+    )
+    .stop_for_status(response, "query_records")
+    content(response, as = as)
+}

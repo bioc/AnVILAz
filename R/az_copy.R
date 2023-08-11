@@ -115,6 +115,48 @@ az_copy_rm <- function(blob_file) {
     .az_do("azcopy", args = args)
 }
 
+#' @rdname az_copy
+#' @export
+az_copy_backup <- function(from_dir, to_dir) {
+    stopifnot(
+        isScalarCharacter(from_dir),
+        dir.exists(from_dir)
+    )
+
+    sas_cred <- get_sas_token()
+    wscu <- workspace_storage_cont_url()
+    token <- sas_cred[["token"]]
+    path <- sas_cred[["url"]]
+    if (!missing(to_dir)) {
+        path <- file.path(wscu, to_dir, "?")
+        path <- paste0(path, token)
+    }
+
+    .az_copy(from = folder, to = path, "--recursive=true")
+}
+
+#' @rdname az_copy
+#' @export
+az_copy_restore <- function(from_dir, to_dir = ".") {
+    stopifnot(
+        isScalarCharacter(to_dir),
+        dir.exists(to_dir)
+    )
+    if (missing(from_dir))
+        stop("Specify a remote directory 'from_dir' to restore locally")
+
+    sas_cred <- get_sas_token()
+    wscu <- workspace_storage_cont_url()
+    token <- sas_cred[["token"]]
+    path <- sas_cred[["url"]]
+    path <- file.path(wscu, from_dir, "?")
+    path <- paste0(path, token)
+
+    .az_copy(from = path, to = to_dir, "--recursive=true")
+}
+
+
+
 #' @importFrom BiocBaseUtils isScalarCharacter isCharacter
 .az_do <- function(command, args) {
     stopifnot(
@@ -154,7 +196,7 @@ az_copy_rm <- function(blob_file) {
         stop("failed to find '", command, "' binary", call. = FALSE)
 }
 
-.az_copy <- function(from, to) {
-    args <- c("copy", from, to)
+.az_copy <- function(from, to, ...) {
+    args <- c("copy", from, to, ...)
     .az_do("azcopy", args = args)
 }
