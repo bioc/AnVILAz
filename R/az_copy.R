@@ -15,12 +15,17 @@
 #' * `az_copy_rm` - remove a file from the Azure Storage Container
 #'
 #' @param from `character(1)` A relative file path corresponding to either the
-#'   remote or local (working directory) file location. Remote locations should
-#'   be relative to the base directory in the Azure Storage Container.
+#'   remote (`az_copy_from_storage`) or local (`az_copy_to_storage`) file
+#'   location. Remote locations should be relative to the base directory in the
+#'   Azure Storage Container e.g., `analyses/jupyter.log`.
 #'
 #' @param to `character(1)` A relative file path corresponding to either the
-#'   remote or local (working directory) file location. Remote locations should
-#'   be relative to the base directory in the Azure Storage Container.
+#'   remote (`az_copy_to_storage`) or local (`az_copy_from_storage`) file
+#'   location. Remote locations should be relative to the base directory in the
+#'   Azure Storage Container. When not specified, it will default to the base
+#'   directory of the remote location. The `to` path can be a folder path but
+#'   must end in a forward slash (`/`). If the `to` path points to a
+#'   non-existent directory, it will be created.
 #'
 #' @param blob_file `character(1)` A relative path to a file in the Azure
 #'   Storage Container to be removed
@@ -37,46 +42,65 @@
 #' if (interactive()) {
 #'
 #'   az_copy_list()
+#'
+#'   ## local -> remote
 #'   az_copy_to_storage("jupyter.log", "analyses/jupyter.log")
+#'   az_copy_to_storage("jupyter.log", "analyses/test/")
+#'   ## placed in the base storage UUID directory
+#'   az_copy_to_storage("jupyter.log")
+#'
+#'   ## remote -> local
 #'   az_copy_from_storage("analyses/jupyter.log", "jupyter.log")
+#'   ## download to the current directory
+#'   az_copy_from_storage("analyses/jupyter.log")
+#'
 #'   az_copy_rm("analyses/jupyter.log")
 #'
 #' }
 #' @export
-az_copy_from_storage <- function(from, to) {
+az_copy_from_storage <- function(from, to = ".") {
     stopifnot(
         isScalarCharacter(from), isScalarCharacter(to)
     )
+    if (endsWith(from, "/"))
+        stop("Provide a remote file location in the 'from' input")
+
+    isdir <- file.info(to)[["isdir"]]
+    if (isTRUE(isdir) || endsWith(to, "/"))
+        to <- file.path(to, basename(from))
+
     sas_cred <- get_sas_token()
     wscu <- workspace_storage_cont_url()
     token <- sas_cred[["token"]]
-    path <- sas_cred[["url"]]
+    path <- paste0(wscu, "/", from, "?")
+    path <- paste0(path, token)
 
-    if (!missing(from)) {
-        path <- file.path(wscu, from, "?")
-        path <- paste0(path, token)
-    }
-
-    .az_copy(path, to)
+    .az_copy(from = shQuote(path), to = to)
 }
 
 #' @rdname az_copy
 #' @export
 az_copy_to_storage <- function(from, to) {
+    if (!missing(to))
+        stopifnot(
+            isScalarCharacter(to)
+        )
+
     stopifnot(
-        isScalarCharacter(from), isScalarCharacter(to)
+        isScalarCharacter(from)
     )
+
     sas_cred <- get_sas_token()
     wscu <- workspace_storage_cont_url()
     token <- sas_cred[["token"]]
     path <- sas_cred[["url"]]
 
     if (!missing(to)) {
-        path <- file.path(wscu, to, "?")
+        path <- paste0(wscu, "/", to, "?")
         path <- paste0(path, token)
     }
 
-    .az_copy(from, path)
+    .az_copy(from, shQuote(path))
 }
 
 #' @rdname az_copy

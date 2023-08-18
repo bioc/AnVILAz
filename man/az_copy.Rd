@@ -9,7 +9,7 @@
 \alias{az_copy_to_storage}
 \title{Azure Copy command line utility interface}
 \usage{
-az_copy_from_storage(from, to)
+az_copy_from_storage(from, to = ".")
 
 az_copy_to_storage(from, to)
 
@@ -19,12 +19,17 @@ az_copy_rm(blob_file)
 }
 \arguments{
 \item{from}{\code{character(1)} A relative file path corresponding to either the
-remote or local (working directory) file location. Remote locations should
-be relative to the base directory in the Azure Storage Container.}
+remote (\code{az_copy_from_storage}) or local (\code{az_copy_to_storage}) file
+location. Remote locations should be relative to the base directory in the
+Azure Storage Container e.g., \code{analyses/jupyter.log}.}
 
 \item{to}{\code{character(1)} A relative file path corresponding to either the
-remote or local (working directory) file location. Remote locations should
-be relative to the base directory in the Azure Storage Container.}
+remote (\code{az_copy_to_storage}) or local (\code{az_copy_from_storage}) file
+location. Remote locations should be relative to the base directory in the
+Azure Storage Container. When not specified, it will default to the base
+directory of the remote location. The \code{to} path can be a folder path but
+must end in a forward slash (\code{/}). If the \code{to} path points to a
+non-existent directory, it will be created.}
 
 \item{blob_file}{\code{character(1)} A relative path to a file in the Azure
 Storage Container to be removed}
@@ -56,8 +61,20 @@ credential details.
 if (interactive()) {
 
   az_copy_list()
+
+  ## local -> remote
   az_copy_to_storage("jupyter.log", "analyses/jupyter.log")
+  az_copy_to_storage("jupyter.log", "analyses/test/")
+  ## placed in the base storage UUID directory
+  az_copy_to_storage("jupyter.log")
+
+  ## remote -> local
   az_copy_from_storage("analyses/jupyter.log", "jupyter.log")
+  ## should be an error
+  az_copy_from_storage("analyses/", "jupyter.log")
+  ## download to the current directory
+  az_copy_from_storage("analyses/jupyter.log")
+
   az_copy_rm("analyses/jupyter.log")
 
 }
