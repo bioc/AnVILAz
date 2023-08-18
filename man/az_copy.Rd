@@ -7,6 +7,8 @@
 \alias{az_copy_copy}
 \alias{az_copy_rm}
 \alias{az_copy_to_storage}
+\alias{az_copy_backup}
+\alias{az_copy_restore}
 \title{Azure Copy command line utility interface}
 \usage{
 az_copy_from_storage(from, to = ".")
@@ -16,6 +18,10 @@ az_copy_to_storage(from, to)
 az_copy_list()
 
 az_copy_rm(blob_file)
+
+az_copy_backup(from_dir, to_dir)
+
+az_copy_restore(from_dir, to_dir = ".")
 }
 \arguments{
 \item{from}{\code{character(1)} A relative file path corresponding to either the
