@@ -19,9 +19,9 @@ az_copy_list()
 
 az_copy_rm(blob_file)
 
-az_copy_backup(from_dir, to_dir)
+az_copy_backup(from_dir, to_dir, contentsOnly = FALSE)
 
-az_copy_restore(from_dir, to_dir = ".")
+az_copy_restore(from_dir, to_dir = ".", contentsOnly = FALSE)
 }
 \arguments{
 \item{from}{\code{character(1)} A relative file path corresponding to either the
@@ -39,6 +39,20 @@ non-existent directory, it will be created.}
 
 \item{blob_file}{\code{character(1)} A relative path to a file in the Azure
 Storage Container to be removed}
+
+\item{from_dir}{\code{character(1)} A relative folder path that corresponds to
+either the remote (\code{az_copy_backup}) or local (\code{az_copy_restore}) directory
+location. Local locations are relative to the working directory, usually
+the home directory. Remote locations should be relative to the base directory
+in the Azure Storage Container e.g., \verb{analyses/}.}
+
+\item{to_dir}{\code{character(1)} A relative folder path pointing to either the
+remote (\code{az_copy_backup}) or local (\code{az_copy_restore}) directory. When
+performing a 'restore' operation with \code{az_copy_restore}, the default \code{to_dir}
+location is the current working directory, i.e., \code{"."}.}
+
+\item{contentsOnly}{\code{logical(1)} Whether to only upload / download the
+contents of the \code{from_dir}}
 }
 \value{
 \itemize{
@@ -76,8 +90,6 @@ if (interactive()) {
 
   ## remote -> local
   az_copy_from_storage("analyses/jupyter.log", "jupyter.log")
-  ## should be an error
-  az_copy_from_storage("analyses/", "jupyter.log")
   ## download to the current directory
   az_copy_from_storage("analyses/jupyter.log")
 

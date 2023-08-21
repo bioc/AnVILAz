@@ -19,6 +19,12 @@
 #'   location. Remote locations should be relative to the base directory in the
 #'   Azure Storage Container e.g., `analyses/jupyter.log`.
 #'
+#' @param from_dir `character(1)` A relative folder path that corresponds to
+#' either the remote (`az_copy_backup`) or local (`az_copy_restore`) directory
+#' location. Local locations are relative to the working directory, usually
+#' the home directory. Remote locations should be relative to the base directory
+#' in the Azure Storage Container e.g., `analyses/`.
+#'
 #' @param to `character(1)` A relative file path corresponding to either the
 #'   remote (`az_copy_to_storage`) or local (`az_copy_from_storage`) file
 #'   location. Remote locations should be relative to the base directory in the
@@ -26,6 +32,14 @@
 #'   directory of the remote location. The `to` path can be a folder path but
 #'   must end in a forward slash (`/`). If the `to` path points to a
 #'   non-existent directory, it will be created.
+#'
+#' @param to_dir `character(1)` A relative folder path pointing to either the
+#' remote (`az_copy_backup`) or local (`az_copy_restore`) directory. When
+#' performing a 'restore' operation with `az_copy_restore`, the default `to_dir`
+#' location is the current working directory, i.e., `"."`.
+#'
+#' @param contentsOnly `logical(1)` Whether to only upload / download the
+#'   contents of the `from_dir`
 #'
 #' @param blob_file `character(1)` A relative path to a file in the Azure
 #'   Storage Container to be removed
@@ -141,45 +155,51 @@ az_copy_rm <- function(blob_file) {
 
 #' @rdname az_copy
 #' @export
-az_copy_backup <- function(from_dir, to_dir) {
+az_copy_backup <- function(from_dir, to_dir, contentsOnly = FALSE) {
     stopifnot(
         isScalarCharacter(from_dir),
         dir.exists(from_dir)
     )
+
+    from_dir <- gsub("\\/$", "", from_dir)
+    if (contentsOnly)
+        from_dir <- paste0(from_dir, "/*")
 
     sas_cred <- get_sas_token()
     wscu <- workspace_storage_cont_url()
     token <- sas_cred[["token"]]
     path <- sas_cred[["url"]]
     if (!missing(to_dir)) {
-        path <- file.path(wscu, to_dir, "?")
+        to_dir <- gsub("\\/$", "", to_dir)
+        path <- paste0(wscu, "/", to_dir, "?")
         path <- paste0(path, token)
     }
 
-    .az_copy(from = folder, to = path, "--recursive=true")
+    .az_copy(from = shQuote(from_dir), to = shQuote(path), "--recursive=true")
 }
 
 #' @rdname az_copy
 #' @export
-az_copy_restore <- function(from_dir, to_dir = ".") {
+az_copy_restore <- function(from_dir, to_dir = ".", contentsOnly = FALSE) {
     stopifnot(
         isScalarCharacter(to_dir),
-        dir.exists(to_dir)
+        isScalarCharacter(from_dir)
     )
-    if (missing(from_dir))
-        stop("Specify a remote directory 'from_dir' to restore locally")
+    if (!dir.exists(to_dir))
+        dir.create(to_dir, recursive = TRUE)
+
+    from_dir <- gsub("\\/$", "", from_dir)
+    if (contentsOnly)
+        from_dir <- paste0(from_dir, "/*")
 
     sas_cred <- get_sas_token()
     wscu <- workspace_storage_cont_url()
     token <- sas_cred[["token"]]
-    path <- sas_cred[["url"]]
-    path <- file.path(wscu, from_dir, "?")
+    path <- paste0(wscu, "/", from_dir, "?")
     path <- paste0(path, token)
 
-    .az_copy(from = path, to = to_dir, "--recursive=true")
+    .az_copy(from = shQuote(path), to = shQuote(to_dir), "--recursive=true")
 }
-
-
 
 #' @importFrom BiocBaseUtils isScalarCharacter isCharacter
 .az_do <- function(command, args) {
