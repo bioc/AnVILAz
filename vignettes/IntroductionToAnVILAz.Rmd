@@ -25,13 +25,14 @@ knitr::opts_chunk$set(
     crop = NULL ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
     )
 options(width = 75)
+has_az <- AnVILAz::az_exists()
 ```
 
 # Installation
 
 The package is not yet available from [Bioconductor][]. 
 
-Install the development verion of the _AnVILAz_ package from GitHub
+Install the development version of the _AnVILAz_ package from GitHub
 with
 
 ```{r install, eval = FALSE}
@@ -44,6 +45,20 @@ Once installed, load the package with
 
 ```{r library, message = FALSE, eval = TRUE, cache = FALSE}
 library(AnVILAz)
+```
+
+# List Azure Storage Container Files
+
+```{r,eval=has_az}
+az_copy_list()
+```
+
+The `az_copy_list` command corresponds to a view of the files in the Blob
+container on Azure. They can also be browsed via the Microsoft Azure Storage
+Explorer
+
+```{r}
+knitr::include_graphics("AzStorageExplorer.png")
 ```
 
 # Session information {.unnumbered}
