@@ -147,7 +147,7 @@ az_copy_rm <- function(blob_file) {
     wscu <- workspace_storage_cont_url()
     sas_cred <- get_sas_token()
     token_slug <- sas_cred[["token"]]
-    path <- file.path(wscu, blob_file, "?")
+    path <- paste0(wscu, "/", blob_file, "?")
     path <- shQuote(paste0(path, token_slug))
     args <- c("rm", path)
     .az_do("azcopy", args = args)
