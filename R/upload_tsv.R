@@ -16,7 +16,8 @@
 #'   * `upload_tsv` - a `POST` request using a TSV file that populates the data
 #'   * `retrieve_tsv` - a `GET` request with the data name (`type` argument) in
 #'     `upload_tsv` to download the data
-#'   * `delete_tsv_row` - a `DELETE` request to remove a record or row from `type`
+#'   * `delete_tsv_row` - a `DELETE` request to remove a record or row from
+#'     `type`
 #'   * `delete_tsv` - a `DELETE` request to remove then entire data set (`type`)
 #'
 #' @param tsv_file `character(1)` A path to a tab-separated values file

@@ -58,7 +58,8 @@ operations that affect the "DATA" tab include:
 \item \code{upload_tsv} - a \code{POST} request using a TSV file that populates the data
 \item \code{retrieve_tsv} - a \code{GET} request with the data name (\code{type} argument) in
 \code{upload_tsv} to download the data
-\item \code{delete_tsv_row} - a \code{DELETE} request to remove a record or row from \code{type}
+\item \code{delete_tsv_row} - a \code{DELETE} request to remove a record or row from
+\code{type}
 \item \code{delete_tsv} - a \code{DELETE} request to remove then entire data set (\code{type})
 }
 }
