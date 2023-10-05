@@ -20,15 +20,16 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-    collapse = TRUE,
-    crop = NULL ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
-    )
-options(width = 75)
 has_az <- AnVILAz::az_exists()
 has_envs <- nzchar(AnVILAz::workspace_id()) &&
-  nzchar(AnVILAz::workspace_storage_cont_id())
+    nzchar(AnVILAz::workspace_storage_cont_id())
 az_ok <- has_az && has_envs
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    crop = NULL, ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
+    eval = az_ok
+)
+options(width = 75)
 ```
 
 # Installation
@@ -50,21 +51,34 @@ Once installed, load the package with
 library(AnVILAz)
 ```
 
-# List Azure Storage Container Files
+# File Management
 
-```{r,eval=az_ok}
+For this tutorial we will refer to the Azure Blob Storage service as ABS.
+Within the ABS, we are given access to a Container. For more information,
+follow this [link][1] to Microsoft's definition of containers and blobs.
+
+[1]: https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction#containers
+
+## List Azure Blob Storage Container Files
+
+```{r}
 az_copy_list()
 ```
 
 The `az_copy_list` command corresponds to a view of the files in the Blob
-container on Azure. They can also be browsed via the Microsoft Azure Storage
-Explorer
+container on Azure. They can also be accessed via the
+[Microsoft Azure Storage Explorer][2].
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,eval=TRUE}
 knitr::include_graphics("AzStorageExplorer.png")
 ```
 
-# Generating Data
+[2]: https://azure.microsoft.com/en-us/products/storage/storage-explorer
+
+## Uploading a file
+
+First, we load the internal `mtcars` dataset and save as an `.Rda` file with
+`save`.
 
 ```{r}
 data("mtcars", package = "datasets")
@@ -72,23 +86,111 @@ test <- head(mtcars)
 save(test, file = "mydata.Rda")
 ```
 
-# Moving Data
+We can now upload the data to the `analyses/` folder in the Azure Storage
+Container.
 
 ```{r}
 az_copy_to_storage("mydata.Rda", "analyses/")
 ```
 
-# Removing Data
+## Deleting a file
+
+We can remove the data with `az_copy_rm` and the _relative_ path to the `.Rda`
+file.
 
 ```{r}
 az_copy_rm("analyses/mydata.Rda")
 ```
 
-# Downloading from the Azure Storage Container
+## Downloading from the ABS
 
 ```{r}
 az_copy_from_storage("analyses/jupyter.log", "./test/")
 ```
+
+## Folder-wise upload to ABS
+
+```{r}
+az_copy_backup("./test/", "analyses/test/", contentsOnly = TRUE)
+```
+
+## Folder-wise download from ABS
+
+By default the contents of the `from_dir` will be copied to the current
+working directory `"."`, i.e., the base `/` workspace directory.
+
+```{r}
+az_copy_restore("analyses/test", contentsOnly = TRUE)
+```
+
+You may also move this to another folder by providing a folder name as the
+second argument.
+
+```{r}
+az_copy_restore("analyses/test", "test", contentsOnly = TRUE)
+```
+
+Note. The `contentsOnly` argument appends a `/*` wildcard to the folder and
+moves only the contents to the desired folder, in this case, the folder in the
+second argument (`test`).
+
+# The `DATA` tab
+
+## Example TSV
+
+First we create an example `tsv` for uploading to the `DATA` tab. We create a
+`model_id` column from the `rownames`. Then we write the file to a `.tsv` with
+the `readr::write_tsv` function.
+
+```{r}
+library(dplyr)
+library(readr)
+type <- "model"
+mtcars_tbl <-
+    mtcars |>
+    as_tibble(rownames = "model_id") |>
+    mutate(model_id = gsub(" ", "-", model_id))
+
+tsv_file <- tempfile()
+write_tsv(mtcars_tbl, tsv_file)
+```
+
+## TSV upload
+
+Note that the `type` variable will serve as the table name in the `DATA` tab.
+We also need to provide the `primaryKey` which corresponds to the column
+name that uniquely identifies each row in the data. Typically, these are
+patient or UUID identifiers.
+
+```{r}
+upload_tsv(tsv_file = tsv_file, type = type, primaryKey = "model_id")
+```
+
+## Delete a row in the table
+
+The API allows deletion of specific rows in the data using the `primaryKey`.
+In this example, we remove the `AMC-Javelin` entry from the data. We are left
+with 31 records.
+
+```{r}
+delete_tsv_row(type = "model", id = "AMC-Javelin")
+```
+
+## Delete entire table
+
+To remove the entire table from the `DATA` tab, we can use the `delete_tsv`
+function with the corresponding table identifier a.k.a. `type`.
+
+```{r}
+delete_tsv(type = "model")
+```
+
+# Bug Reports
+
+If you experience issues, please feel free to contact us with a reproducible
+example on GitHub:
+
+<https://github.com/Bioconductor/AnVILAz/issues>
 
 # Session information {.unnumbered}
 
