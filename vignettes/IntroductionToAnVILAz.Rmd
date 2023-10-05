@@ -26,6 +26,9 @@ knitr::opts_chunk$set(
     )
 options(width = 75)
 has_az <- AnVILAz::az_exists()
+has_envs <- nzchar(AnVILAz::workspace_id()) &&
+  nzchar(AnVILAz::workspace_storage_cont_id())
+az_ok <- has_az && has_envs
 ```
 
 # Installation
@@ -49,7 +52,7 @@ library(AnVILAz)
 
 # List Azure Storage Container Files
 
-```{r,eval=has_az}
+```{r,eval=az_ok}
 az_copy_list()
 ```
 
@@ -57,8 +60,28 @@ The `az_copy_list` command corresponds to a view of the files in the Blob
 container on Azure. They can also be browsed via the Microsoft Azure Storage
 Explorer
 
-```{r}
+```{r,echo=FALSE}
 knitr::include_graphics("AzStorageExplorer.png")
+```
+
+# Generating Data
+
+```{r}
+data("mtcars", package = "datasets")
+test <- head(mtcars)
+save(test, file = "mydata.Rda")
+```
+
+# Moving Data
+
+```{r}
+az_copy_to_storage("mydata.Rda", "analyses/")
+```
+
+# Removing Data
+
+```{r}
+az_copy_rm("analyses/mydata.Rda")
 ```
 
 # Session information {.unnumbered}
