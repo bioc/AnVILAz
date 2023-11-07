@@ -15,7 +15,7 @@
 #'   operations that affect the "DATA" tab include:
 #'   * `upload_tsv` - a `POST` request using a TSV file that populates the data
 #'   * `retrieve_tsv` - a `GET` request with the data name (`type` argument) in
-#'     `upload_tsv` to download the data
+#'     `upload_tsv` to represent the data locally as a `tibble`
 #'   * `delete_tsv_row` - a `DELETE` request to remove a record or row from
 #'     `type`
 #'   * `delete_tsv` - a `DELETE` request to remove then entire data set (`type`)
