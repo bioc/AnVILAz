@@ -2,7 +2,7 @@
 % Please edit documentation in R/upload_tsv.R
 \name{upload_tsv}
 \alias{upload_tsv}
-\alias{retrieve_tsv}
+\alias{download_tsv}
 \alias{delete_tsv_row}
 \alias{delete_tsv}
 \alias{workspace-data-ops}
@@ -15,7 +15,7 @@ upload_tsv(
   api_version = .WDS_API_VERSION
 )
 
-retrieve_tsv(type, api_version = .WDS_API_VERSION)
+download_tsv(type, api_version = .WDS_API_VERSION)
 
 delete_tsv_row(type, id, api_version = .WDS_API_VERSION)
 
@@ -41,7 +41,7 @@ indicates the row to be removed.}
 \value{
 \itemize{
 \item \code{upload_tsv} - A response list indicating successful upload
-\item \code{retrieve_tsv} - A \code{tibble} corresponding to the data labeled with \code{type}
+\item \code{download_tsv} - A \code{tibble} corresponding to the data labeled with \code{type}
 \item \code{delete_tsv_row}; \code{delete_tsv} - When successful, a \code{NULL} value
 }
 }
@@ -56,7 +56,7 @@ These functions use the Workspace Data Services (WDS) API. Current
 operations that affect the "DATA" tab include:
 \itemize{
 \item \code{upload_tsv} - a \code{POST} request using a TSV file that populates the data
-\item \code{retrieve_tsv} - a \code{GET} request with the data name (\code{type} argument) in
+\item \code{download_tsv} - a \code{GET} request with the data name (\code{type} argument) in
 \code{upload_tsv} to represent the data locally as a \code{tibble}
 \item \code{delete_tsv_row} - a \code{DELETE} request to remove a record or row from
 \code{type}

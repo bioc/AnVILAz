@@ -166,14 +166,14 @@ patient or UUID identifiers.
 upload_tsv(tsv_file = tsv_file, type = type, primaryKey = "model_id")
 ```
 
-## TSV retrieval 
+## TSV download 
 
-The `retrieve_tsv` function will pull the data from the `DATA` tab and
+The `download_tsv` function will pull the data from the `DATA` tab and
 represent it locally. It can only work by using the same `type` identifier
 used when the data was uploaded.
 
 ```{r}
-model_data <- retrieve_tsv(type = "model")
+model_data <- download_tsv(type = "model")
 head(model_data)
 ```
 

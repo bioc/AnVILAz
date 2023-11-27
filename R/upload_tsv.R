@@ -4,7 +4,7 @@
 #'
 #' @title Functions to work with workspace data
 #'
-#' @aliases upload_tsv retrieve_tsv delete_tsv_row delete_tsv
+#' @aliases upload_tsv download_tsv delete_tsv_row delete_tsv
 #'
 #' @description These group of functions will allow you to manipulate data in
 #'   the "DATA" tab. Example operations include moving a flat Tab-Separated
@@ -14,7 +14,7 @@
 #' @details These functions use the Workspace Data Services (WDS) API. Current
 #'   operations that affect the "DATA" tab include:
 #'   * `upload_tsv` - a `POST` request using a TSV file that populates the data
-#'   * `retrieve_tsv` - a `GET` request with the data name (`type` argument) in
+#'   * `download_tsv` - a `GET` request with the data name (`type` argument) in
 #'     `upload_tsv` to represent the data locally as a `tibble`
 #'   * `delete_tsv_row` - a `DELETE` request to remove a record or row from
 #'     `type`
@@ -38,7 +38,7 @@
 #'
 #' @return
 #'   * `upload_tsv` - A response list indicating successful upload
-#'   * `retrieve_tsv` - A `tibble` corresponding to the data labeled with `type`
+#'   * `download_tsv` - A `tibble` corresponding to the data labeled with `type`
 #'   * `delete_tsv_row`; `delete_tsv` - When successful, a `NULL` value
 #'
 #' @importFrom httr upload_file
@@ -88,7 +88,7 @@ upload_tsv <- function(
 
 #' @name workspace-data-ops
 #' @export
-retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
+download_tsv <- function(type, api_version = .WDS_API_VERSION) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
@@ -103,7 +103,7 @@ retrieve_tsv <- function(type, api_version = .WDS_API_VERSION) {
         add_headers(authorization = az_token()),
         accept_json()
     )
-    .stop_for_status(response, "retrieve_tsv")
+    .stop_for_status(response, "download_tsv")
     content(response, encoding = "UTF-8")
 }
 
@@ -120,7 +120,7 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
     api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
     endpoint <- whisker.render(api_endpoint)
 
-    tsv <- retrieve_tsv(type = type, api_version = api_version)
+    tsv <- download_tsv(type = type, api_version = api_version)
     allids <- tsv[[1L]]
     stopifnot(id %in% allids)
     base_uri <- workspace_data_service_url()
