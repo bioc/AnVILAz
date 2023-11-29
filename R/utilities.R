@@ -38,3 +38,20 @@
     source <- normalizePath(source)
     shQuote(source)
 }
+
+## testthat helpers
+
+.is_anvil_az <- function() {
+    nzchar(Sys.getenv("WORKSPACE_ID"))
+}
+
+.is_anvil_gcp <- function() {
+    nzchar(Sys.getenv("WORKSPACE_BUCKET"))
+}
+
+.skip_if_not_anvilaz <- function() {
+    if (!.is_anvil_az() && .is_anvil_gcp())
+        skip("Not running on AnVIL Azure workspace")
+    else
+        stop("Could not resolve AnVIL workspace platform")
+}
