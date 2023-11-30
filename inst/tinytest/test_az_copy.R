@@ -1,4 +1,4 @@
-.exit_if_not_anvilaz()
+AnVILAz:::.exit_if_not_anvilaz()
 
 # test az_copy_list -------------------------------------------------------
 
