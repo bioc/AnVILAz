@@ -51,5 +51,5 @@
 
 .exit_if_not_anvilaz <- function() {
     if (!.is_anvil_az())
-        exit_file("Not running on AnVIL Azure workspace")
+        tinytest::exit_file("Not running on AnVIL Azure workspace")
 }
