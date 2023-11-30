@@ -18,10 +18,10 @@ query_resources <- function(as = NULL) {
     content(qrs, as = as)
 }
 
-query_records <- function(type, version = .WDS_API_VERSION) {
+query_records <- function(type, version = .WDS_API_VERSION, as = NULL) {
     workspaceId <- workspace_id()
     v <- version
-    api_endpoint <- "/{{instanceid}}/search/{{v}}/{{type}}"
+    api_endpoint <- "/{{workspaceId}}/search/{{v}}/{{type}}"
     endpoint <- whisker.render(api_endpoint)
 
     base_uri <- workspace_data_service_url()
