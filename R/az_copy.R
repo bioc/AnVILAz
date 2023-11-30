@@ -41,8 +41,12 @@
 #' @param contentsOnly `logical(1)` Whether to only upload / download the
 #'   contents of the `from_dir`
 #'
-#' @param blob_file `character(1)` A relative path to a file in the Azure
-#'   Storage Container to be removed
+#' @param blob_file `character(1)` A relative path to a file or folder in the
+#'   Azure Storage Container to be removed. If a folder is specified, all files
+#'   in the folder will be removed.
+#'
+#' @param recursive `logical(1)` Whether to recursively remove files in a
+#'   directory. Only applies to `az_copy_rm`. Default is `FALSE`.
 #'
 #' @return
 #' * `az_copy_list` - a `tibble` of files and metadata
@@ -141,7 +145,7 @@ az_copy_list <- function() {
 
 #' @rdname az_copy
 #' @export
-az_copy_rm <- function(blob_file) {
+az_copy_rm <- function(blob_file, recursive = FALSE) {
     stopifnot(
         isScalarCharacter(blob_file)
     )
@@ -152,7 +156,8 @@ az_copy_rm <- function(blob_file) {
     token_slug <- sas_cred[["token"]]
     path <- paste0(wscu, "/", blob_file, "?")
     path <- shQuote(paste0(path, token_slug))
-    args <- c("rm", path)
+    recurse <- paste0("--recursive=", tolower(recursive))
+    args <- c("rm", path, recurse)
     .az_do("azcopy", args = args)
 }
 
