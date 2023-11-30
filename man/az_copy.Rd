@@ -17,7 +17,7 @@ az_copy_to_storage(from, to)
 
 az_copy_list()
 
-az_copy_rm(blob_file)
+az_copy_rm(blob_file, recursive = FALSE)
 
 az_copy_backup(from_dir, to_dir, contentsOnly = FALSE)
 
@@ -37,8 +37,12 @@ directory of the remote location. The \code{to} path can be a folder path but
 must end in a forward slash (\code{/}). If the \code{to} path points to a
 non-existent directory, it will be created.}
 
-\item{blob_file}{\code{character(1)} A relative path to a file in the Azure
-Storage Container to be removed}
+\item{blob_file}{\code{character(1)} A relative path to a file or folder in the
+Azure Storage Container to be removed. If a folder is specified, all files
+in the folder will be removed.}
+
+\item{recursive}{\code{logical(1)} Whether to recursively remove files in a
+directory. Only applies to \code{az_copy_rm}. Default is \code{FALSE}.}
 
 \item{from_dir}{\code{character(1)} A relative folder path that corresponds to
 either the remote (\code{az_copy_backup}) or local (\code{az_copy_restore}) directory
@@ -87,11 +91,15 @@ if (interactive()) {
   az_copy_to_storage("jupyter.log", "analyses/test/")
   ## placed in the base storage UUID directory
   az_copy_to_storage("jupyter.log")
+  ## upload a directory
+  az_copy_backup("./test/", "analyses/test/", contentsOnly = TRUE)
 
   ## remote -> local
   az_copy_from_storage("analyses/jupyter.log", "jupyter.log")
   ## download to the current directory
   az_copy_from_storage("analyses/jupyter.log")
+  ## download a directory
+  az_copy_restore("analyses/test/", "./test/", contentsOnly = TRUE)
 
   az_copy_rm("analyses/jupyter.log")
 
