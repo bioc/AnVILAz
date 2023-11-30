@@ -50,7 +50,7 @@ expect_true(
     "analyses/test_backup/test2.log" %in% az_copy_list()[["INFO"]]
 )
 
-az_copy_rm("analyses/test_backup", recursive = TRUE)
+az_copy_rm("analyses/test_backup/", recursive = TRUE)
 expect_false(
     "analyses/test_backup/test.log" %in% az_copy_list()[["INFO"]]
 )
