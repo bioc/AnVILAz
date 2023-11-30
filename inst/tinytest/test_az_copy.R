@@ -42,7 +42,7 @@ file.create("test/test.log")
 file.create("test/test2.log")
 
 ## create remote folder and copy file
-az_copy_backup("./test", "analyses/test_backup", contentsOnly = TRUE)
+az_copy_backup("./test", "analyses/test_backup/", contentsOnly = TRUE)
 expect_true(
     "analyses/test_backup/test.log" %in% az_copy_list()[["INFO"]]
 )
@@ -62,7 +62,7 @@ az_copy_backup("./test", "analyses/test_backup")
 expect_true(
     "analyses/test_backup/test/test.log" %in% az_copy_list()[["INFO"]]
 )
-az_copy_rm("analyses/test_backup", recursive = TRUE)
+az_copy_rm("analyses/test_backup/", recursive = TRUE)
 
 az_copy_backup("./test", "analyses/test_restore", contentsOnly = TRUE)
 az_copy_restore(
@@ -75,6 +75,7 @@ expect_true(
     file.exists("test_restore/test.log")
 )
 
+unlink("./test", recursive = TRUE)
 unlink("./test_restore", recursive = TRUE)
 
 az_copy_restore("analyses/test_restore", "./test_restore")
@@ -86,4 +87,4 @@ expect_true(
 )
 
 unlink("./test_restore", recursive = TRUE)
-az_copy_rm("analyses/test_restore", recursive = TRUE)
+az_copy_rm("analyses/test_restore/", recursive = TRUE)
