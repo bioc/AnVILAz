@@ -15,9 +15,7 @@ expect_identical(
 file.create("test.log")
 az_copy_to_storage("test.log", "analyses/test/test.log")
 expect_true(
-    any(
-        grepl("test\\.log$", az_copy_list()[["INFO"]])
-    )
+    "analyses/test/test.log" %in% az_copy_list()[["INFO"]]
 )
 file.remove("test.log")
 az_copy_from_storage("analyses/test/test.log", "./test.log")
@@ -29,15 +27,12 @@ expect_true(
 
 az_copy_rm("analyses/test/test.log")
 expect_false(
-    any(
-        grepl("test\\.log$", az_copy_list()[["INFO"]])
-    )
+    "analyses/test/test.log" %in% az_copy_list()[["INFO"]]
 )
+
 az_copy_rm("analyses/test")
 expect_false(
-    any(
-        grepl("test", az_copy_list()[["INFO"]])
-    )
+    "analyses/test" %in% az_copy_list()[["INFO"]]
 )
 
 file.remove("test.log")
@@ -50,23 +45,17 @@ file.create("test/test.log")
 ## create remote folder and copy file
 az_copy_backup("./test", "analyses/test_backup", contentsOnly = TRUE)
 expect_true(
-    any(
-        grepl("test_backup\\/test\\.log$", az_copy_list()[["INFO"]])
-    )
+    "analyses/test_backup/test.log" %in% az_copy_list()[["INFO"]]
 )
 
 az_copy_rm("analyses/test_backup", recursive = TRUE)
 expect_false(
-    any(
-        grepl("test\\.log$", az_copy_list()[["INFO"]])
-    )
+    "analyses/test_backup/test.log" %in% az_copy_list()[["INFO"]]
 )
 
 az_copy_backup("./test", "analyses/test_backup")
 expect_true(
-    any(
-        grepl("test_backup\\/test\\/test\\.log$", az_copy_list()[["INFO"]])
-    )
+    "analyses/test_backup/test/test.log" %in% az_copy_list()[["INFO"]]
 )
 az_copy_rm("analyses/test_backup", recursive = TRUE)
 
