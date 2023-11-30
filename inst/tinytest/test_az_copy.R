@@ -1,5 +1,12 @@
 AnVILAz:::.exit_if_not_anvilaz()
 
+if (!AnVILAz:::.is_anvil_az())
+    tinytest::exit_file("Not running on AnVIL Azure workspace")
+
+tinytest::exit_if_not(
+    "Not running on AnVIL Azure workspace" = AnVILAz:::.is_anvil_az()
+)
+
 # test az_copy_list -------------------------------------------------------
 
 files <- az_copy_list()
