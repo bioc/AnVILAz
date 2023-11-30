@@ -39,7 +39,8 @@ non-existent directory, it will be created.}
 
 \item{blob_file}{\code{character(1)} A relative path to a file or folder in the
 Azure Storage Container to be removed. If a folder is specified, all files
-in the folder will be removed.}
+in the folder will be removed. Folder inputs \strong{must} end with a forward
+slash (\code{/}).}
 
 \item{recursive}{\code{logical(1)} Whether to recursively remove files in a
 directory. Only applies to \code{az_copy_rm}. Default is \code{FALSE}.}
@@ -65,7 +66,7 @@ contents of the \code{from_dir}}
 \strong{from} the Azure Storage Container
 \item \code{az_copy_to_storage} - called for the side effect of copying a file \strong{to}
 the Azure Storage Container
-\item \code{az_copy_rm} - called for the side effect of removing a file
+\item \code{az_copy_rm} - called for the side effect of removing a file or folder
 }
 }
 \description{
@@ -78,7 +79,7 @@ credential details.
 \itemize{
 \item \code{az_copy_list} - list all the files in the Azure Storage Container
 \item \code{az_copy_copy} - copy a file from the Azure workspace to the container
-\item \code{az_copy_rm} - remove a file from the Azure Storage Container
+\item \code{az_copy_rm} - remove a file or folder from the Azure Storage Container
 }
 }
 \examples{

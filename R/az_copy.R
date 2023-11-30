@@ -12,7 +12,7 @@
 #' @details
 #' * `az_copy_list` - list all the files in the Azure Storage Container
 #' * `az_copy_copy` - copy a file from the Azure workspace to the container
-#' * `az_copy_rm` - remove a file from the Azure Storage Container
+#' * `az_copy_rm` - remove a file or folder from the Azure Storage Container
 #'
 #' @param from `character(1)` A relative file path corresponding to either the
 #'   remote (`az_copy_from_storage`) or local (`az_copy_to_storage`) file
@@ -43,7 +43,8 @@
 #'
 #' @param blob_file `character(1)` A relative path to a file or folder in the
 #'   Azure Storage Container to be removed. If a folder is specified, all files
-#'   in the folder will be removed.
+#'   in the folder will be removed. Folder inputs **must** end with a forward
+#'   slash (`/`).
 #'
 #' @param recursive `logical(1)` Whether to recursively remove files in a
 #'   directory. Only applies to `az_copy_rm`. Default is `FALSE`.
@@ -54,7 +55,7 @@
 #'   __from__ the Azure Storage Container
 #' * `az_copy_to_storage` - called for the side effect of copying a file __to__
 #'   the Azure Storage Container
-#' * `az_copy_rm` - called for the side effect of removing a file
+#' * `az_copy_rm` - called for the side effect of removing a file or folder
 #'
 #' @examples
 #' if (interactive()) {
