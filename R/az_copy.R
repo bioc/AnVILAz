@@ -165,7 +165,9 @@ az_copy_rm <- function(blob_file, recursive = FALSE) {
 .validate_file <- function(file) {
     file_tbl <- az_copy_list()
     allfiles <- file_tbl[["INFO"]]
-    if (!file %in% allfiles)
+    if (endsWith(file, "/") && !any(startsWith(allfiles, file)))
+        stop("Directory not found; check path to blob file with `az_copy_list`")
+    else if (!file %in% allfiles)
         stop("File not found; check path to blob file with `az_copy_list`")
 }
 
