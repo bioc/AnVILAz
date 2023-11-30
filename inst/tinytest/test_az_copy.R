@@ -29,8 +29,6 @@ az_copy_rm("analyses/test/test.log")
 expect_false(
     "analyses/test/test.log" %in% az_copy_list()[["INFO"]]
 )
-
-az_copy_rm("analyses/test")
 expect_false(
     "analyses/test" %in% az_copy_list()[["INFO"]]
 )
@@ -41,16 +39,23 @@ file.remove("test.log")
 
 dir.create("test")
 file.create("test/test.log")
+file.create("test/test2.log")
 
 ## create remote folder and copy file
 az_copy_backup("./test", "analyses/test_backup", contentsOnly = TRUE)
 expect_true(
     "analyses/test_backup/test.log" %in% az_copy_list()[["INFO"]]
 )
+expect_true(
+    "analyses/test_backup/test2.log" %in% az_copy_list()[["INFO"]]
+)
 
 az_copy_rm("analyses/test_backup", recursive = TRUE)
 expect_false(
     "analyses/test_backup/test.log" %in% az_copy_list()[["INFO"]]
+)
+expect_false(
+    "analyses/test_backup/test2.log" %in% az_copy_list()[["INFO"]]
 )
 
 az_copy_backup("./test", "analyses/test_backup")
