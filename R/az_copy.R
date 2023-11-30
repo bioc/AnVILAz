@@ -80,7 +80,7 @@
 #'
 #' }
 #' @export
-az_copy_from_storage <- function(from, to = ".") {
+az_copy_from_storage <- function(from, to = "./") {
     stopifnot(
         isScalarCharacter(from), isScalarCharacter(to)
     )
@@ -88,10 +88,11 @@ az_copy_from_storage <- function(from, to = ".") {
         stop("Provide a remote file location in the 'from' input")
     .validate_file(from)
 
-    to <- .az_shQuote(to)
     isdir <- file.info(to)[["isdir"]]
     if (isTRUE(isdir) || endsWith(to, "/"))
-        to <- file.path(to, basename(from))
+        to <- file.path(normalizePath(to), basename(from))
+    else
+        to <- file.path(normalizePath(dirname(to)), basename(to))
 
     sas_cred <- get_sas_token()
     wscu <- workspace_storage_cont_url()
@@ -99,7 +100,7 @@ az_copy_from_storage <- function(from, to = ".") {
     path <- paste0(wscu, "/", from, "?")
     path <- paste0(path, token)
 
-    .az_copy(from = shQuote(path), to = to)
+    .az_copy(from = shQuote(path), to = shQuote(to))
 }
 
 #' @rdname az_copy
