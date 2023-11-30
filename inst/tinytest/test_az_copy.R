@@ -7,6 +7,11 @@ tinytest::exit_if_not(
     "Not running on AnVIL Azure workspace" = AnVILAz:::.is_anvil_az()
 )
 
+## https://github.com/markvanderloo/tinytest/issues/126
+## fallback to logical condition for now
+
+if (AnVILAz:::.is_anvil_az()) {
+
 # test az_copy_list -------------------------------------------------------
 
 files <- az_copy_list()
@@ -95,3 +100,5 @@ expect_true(
 
 unlink("./test_restore", recursive = TRUE)
 az_copy_rm("analyses/test_restore/", recursive = TRUE)
+
+}
