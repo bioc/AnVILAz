@@ -86,7 +86,7 @@ az_copy_from_storage <- function(from, to = "./") {
     )
     if (endsWith(from, "/"))
         stop("Provide a remote file location in the 'from' input")
-    .validate_file(from)
+    .validate_blob(from)
 
     isdir <- file.info(to)[["isdir"]]
     if (isTRUE(isdir) || endsWith(to, "/"))
@@ -150,7 +150,7 @@ az_copy_rm <- function(blob_file, recursive = FALSE) {
     stopifnot(
         isScalarCharacter(blob_file)
     )
-    .validate_file(blob_file)
+    .validate_blob(blob_file)
 
     wscu <- workspace_storage_cont_url()
     sas_cred <- get_sas_token()
@@ -162,13 +162,17 @@ az_copy_rm <- function(blob_file, recursive = FALSE) {
     .az_do("azcopy", args = args)
 }
 
-.validate_file <- function(file) {
+.validate_blob <- function(blob) {
     file_tbl <- az_copy_list()
     allfiles <- file_tbl[["INFO"]]
-    if (endsWith(file, "/") && !any(startsWith(allfiles, file)))
-        stop("Directory not found; check path to blob file with `az_copy_list`")
-    else if (!file %in% allfiles)
+    is_dir <- endsWith(blob, "/")
+    if (is_dir && !any(startsWith(allfiles, blob)))
+        stop("Virtual directory not found; check path with `az_copy_list`")
+
+    if (!blob %in% allfiles && !is_dir)
         stop("File not found; check path to blob file with `az_copy_list`")
+
+    TRUE
 }
 
 #' @rdname az_copy
