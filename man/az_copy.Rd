@@ -11,7 +11,7 @@
 \alias{az_copy_restore}
 \title{Azure Copy command line utility interface}
 \usage{
-az_copy_from_storage(from, to = ".")
+az_copy_from_storage(from, to = "./")
 
 az_copy_to_storage(from, to)
 
