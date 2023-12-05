@@ -3,10 +3,9 @@
 \name{az_copy}
 \alias{az_copy}
 \alias{az_copy_from_storage}
-\alias{az_copy_list}
-\alias{az_copy_copy}
-\alias{az_copy_rm}
 \alias{az_copy_to_storage}
+\alias{az_copy_list}
+\alias{az_copy_rm}
 \alias{az_copy_backup}
 \alias{az_copy_restore}
 \title{Azure Copy command line utility interface}
@@ -14,6 +13,8 @@
 az_copy_from_storage(from, to = ".")
 
 az_copy_to_storage(from, to)
+
+az_copy(source, destination, ...)
 
 az_copy_list()
 
@@ -24,17 +25,17 @@ az_copy_backup(from_dir, to_dir, contentsOnly = FALSE)
 az_copy_restore(from_dir, to_dir = ".", contentsOnly = FALSE)
 }
 \arguments{
-\item{from}{\code{character(1)} A relative file path corresponding to either the
-remote (\code{az_copy_from_storage}) or local (\code{az_copy_to_storage}) file
-location. Remote locations should be relative to the base directory in the
-Azure Storage Container e.g., \code{analyses/jupyter.log}.}
+\item{source, from}{\code{character(1)} A relative file path corresponding to
+either the remote (\code{az_copy_from_storage}) or local (\code{az_copy_to_storage})
+file location. Remote locations should be relative to the base directory in
+the Azure Storage Container e.g., \code{analyses/jupyter.log}.}
 
-\item{to}{\code{character(1)} A relative file path corresponding to either the
-remote (\code{az_copy_to_storage}) or local (\code{az_copy_from_storage}) file
-location. Remote locations should be relative to the base directory in the
-Azure Storage Container. When not specified, it will default to the base
-directory of the remote location. The \code{to} path can be a folder path but
-must end in a forward slash (\code{/}). If the \code{to} path points to a
+\item{destination, to}{\code{character(1)} A relative file path corresponding to
+either the remote (\code{az_copy_to_storage}) or local (\code{az_copy_from_storage})
+file location. Remote locations should be relative to the base directory in
+the Azure Storage Container. When not specified, it will default to the
+base directory of the remote location. The \code{to} path can be a folder path
+but must end in a forward slash (\code{/}). If the \code{to} path points to a
 non-existent directory, it will be created.}
 
 \item{blob_file}{\code{character(1)} A relative path to a file in the Azure
@@ -43,8 +44,8 @@ Storage Container to be removed}
 \item{from_dir}{\code{character(1)} A relative folder path that corresponds to
 either the remote (\code{az_copy_backup}) or local (\code{az_copy_restore}) directory
 location. Local locations are relative to the working directory, usually
-the home directory. Remote locations should be relative to the base directory
-in the Azure Storage Container e.g., \verb{analyses/}.}
+the home directory. Remote locations should be relative to the base
+directory in the Azure Storage Container e.g., \verb{analyses/}.}
 
 \item{to_dir}{\code{character(1)} A relative folder path pointing to either the
 remote (\code{az_copy_backup}) or local (\code{az_copy_restore}) directory. When
@@ -61,7 +62,14 @@ contents of the \code{from_dir}}
 \strong{from} the Azure Storage Container
 \item \code{az_copy_to_storage} - called for the side effect of copying a file \strong{to}
 the Azure Storage Container
+\item \code{az_copy} - called for the side effect of copying a file \strong{to} or \strong{from}
+the Azure Storage Container depending on the \code{source} and \code{destination}
+inputs
 \item \code{az_copy_rm} - called for the side effect of removing a file
+\item \code{az_copy_backup} - called for the side effect of copying a directory \strong{to}
+the Azure Storage Container
+\item \code{az_copy_restore} - called for the side effect of copying a directory
+\strong{from} the Azure Storage Container
 }
 }
 \description{
@@ -73,8 +81,17 @@ credential details.
 \details{
 \itemize{
 \item \code{az_copy_list} - list all the files in the Azure Storage Container
-\item \code{az_copy_copy} - copy a file from the Azure workspace to the container
+\item \code{az_copy_from_storage} - copy a file from the Azure Storage Container to
+the workspace environment
+\item \code{az_copy_to_storage} - copy a file from the workspace environment to the
+Azure Storage Container
+\item \code{az_copy} - a generalized interface for either \code{az_copy_from_storage} or
+\code{az_copy_to_storage}; deduced from the \code{source} and \code{destination} inputs
 \item \code{az_copy_rm} - remove a file from the Azure Storage Container
+\item \code{az_copy_backup} - copy a directory from the workspace environment to the
+Azure Storage Container
+\item \code{az_copy_restore} - copy a directory from the Azure Storage Container to
+the workspace environment
 }
 }
 \examples{
@@ -85,13 +102,22 @@ if (interactive()) {
   ## local -> remote
   az_copy_to_storage("jupyter.log", "analyses/jupyter.log")
   az_copy_to_storage("jupyter.log", "analyses/test/")
+  ## using general interface az_copy
+  az_copy("jupyter.log", "analyses/jupyter.log")
+
   ## placed in the base storage UUID directory
   az_copy_to_storage("jupyter.log")
+  ## upload a directory
+  az_copy_backup("./test/", "analyses/test/", contentsOnly = TRUE)
 
   ## remote -> local
   az_copy_from_storage("analyses/jupyter.log", "jupyter.log")
   ## download to the current directory
   az_copy_from_storage("analyses/jupyter.log")
+  ## using general interface az_copy
+  az_copy("analyses/jupyter.log", "./jupyter.log")
+  ## download a directory
+  az_copy_restore("analyses/test/", "./test/", contentsOnly = TRUE)
 
   az_copy_rm("analyses/jupyter.log")
 

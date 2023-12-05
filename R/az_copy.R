@@ -1,7 +1,5 @@
 #' @name az_copy
 #'
-#' @aliases az_copy_list az_copy_copy az_copy_rm
-#'
 #' @title Azure Copy command line utility interface
 #'
 #' @description These functions invoke the `azcopy` command line utility. The
@@ -11,26 +9,35 @@
 #'
 #' @details
 #' * `az_copy_list` - list all the files in the Azure Storage Container
-#' * `az_copy_copy` - copy a file from the Azure workspace to the container
+#' * `az_copy_from_storage` - copy a file from the Azure Storage Container to
+#'   the workspace environment
+#' * `az_copy_to_storage` - copy a file from the workspace environment to the
+#'   Azure Storage Container
+#' * `az_copy` - a generalized interface for either `az_copy_from_storage` or
+#'   `az_copy_to_storage`; deduced from the `source` and `destination` inputs
 #' * `az_copy_rm` - remove a file from the Azure Storage Container
+#' * `az_copy_backup` - copy a directory from the workspace environment to the
+#'   Azure Storage Container
+#' * `az_copy_restore` - copy a directory from the Azure Storage Container to
+#'   the workspace environment
 #'
-#' @param from `character(1)` A relative file path corresponding to either the
-#'   remote (`az_copy_from_storage`) or local (`az_copy_to_storage`) file
-#'   location. Remote locations should be relative to the base directory in the
-#'   Azure Storage Container e.g., `analyses/jupyter.log`.
+#' @param source,from `character(1)` A relative file path corresponding to
+#'   either the remote (`az_copy_from_storage`) or local (`az_copy_to_storage`)
+#'   file location. Remote locations should be relative to the base directory in
+#'   the Azure Storage Container e.g., `analyses/jupyter.log`.
 #'
 #' @param from_dir `character(1)` A relative folder path that corresponds to
-#' either the remote (`az_copy_backup`) or local (`az_copy_restore`) directory
-#' location. Local locations are relative to the working directory, usually
-#' the home directory. Remote locations should be relative to the base directory
-#' in the Azure Storage Container e.g., `analyses/`.
+#'   either the remote (`az_copy_backup`) or local (`az_copy_restore`) directory
+#'   location. Local locations are relative to the working directory, usually
+#'   the home directory. Remote locations should be relative to the base
+#'   directory in the Azure Storage Container e.g., `analyses/`.
 #'
-#' @param to `character(1)` A relative file path corresponding to either the
-#'   remote (`az_copy_to_storage`) or local (`az_copy_from_storage`) file
-#'   location. Remote locations should be relative to the base directory in the
-#'   Azure Storage Container. When not specified, it will default to the base
-#'   directory of the remote location. The `to` path can be a folder path but
-#'   must end in a forward slash (`/`). If the `to` path points to a
+#' @param destination,to `character(1)` A relative file path corresponding to
+#'   either the remote (`az_copy_to_storage`) or local (`az_copy_from_storage`)
+#'   file location. Remote locations should be relative to the base directory in
+#'   the Azure Storage Container. When not specified, it will default to the
+#'   base directory of the remote location. The `to` path can be a folder path
+#'   but must end in a forward slash (`/`). If the `to` path points to a
 #'   non-existent directory, it will be created.
 #'
 #' @param to_dir `character(1)` A relative folder path pointing to either the
@@ -50,7 +57,14 @@
 #'   __from__ the Azure Storage Container
 #' * `az_copy_to_storage` - called for the side effect of copying a file __to__
 #'   the Azure Storage Container
+#' * `az_copy` - called for the side effect of copying a file __to__ or __from__
+#'   the Azure Storage Container depending on the `source` and `destination`
+#'   inputs
 #' * `az_copy_rm` - called for the side effect of removing a file
+#' * `az_copy_backup` - called for the side effect of copying a directory __to__
+#'   the Azure Storage Container
+#' * `az_copy_restore` - called for the side effect of copying a directory
+#'   __from__ the Azure Storage Container
 #'
 #' @examples
 #' if (interactive()) {
@@ -60,6 +74,9 @@
 #'   ## local -> remote
 #'   az_copy_to_storage("jupyter.log", "analyses/jupyter.log")
 #'   az_copy_to_storage("jupyter.log", "analyses/test/")
+#'   ## using general interface az_copy
+#'   az_copy("jupyter.log", "analyses/jupyter.log")
+#'
 #'   ## placed in the base storage UUID directory
 #'   az_copy_to_storage("jupyter.log")
 #'   ## upload a directory
@@ -69,6 +86,8 @@
 #'   az_copy_from_storage("analyses/jupyter.log", "jupyter.log")
 #'   ## download to the current directory
 #'   az_copy_from_storage("analyses/jupyter.log")
+#'   ## using general interface az_copy
+#'   az_copy("analyses/jupyter.log", "./jupyter.log")
 #'   ## download a directory
 #'   az_copy_restore("analyses/test/", "./test/", contentsOnly = TRUE)
 #'
@@ -121,6 +140,28 @@ az_copy_to_storage <- function(from, to) {
     }
 
     .az_copy(.az_shQuote(from), shQuote(path))
+}
+
+.is_remote_path <- function(path) {
+    startsWith(path, "http") || !file.exists(path)
+}
+
+#' @rdname az_copy
+#' @export
+az_copy <- function(source, destination, ...) {
+    stopifnot(
+        isScalarCharacter(source)
+    )
+    if (.is_remote_path(source))
+        az_copy_from_storage(from = source, to = destination)
+    else if (
+        file.exists(source) && (
+            .is_remote_path(destination) || missing(destination)
+        )
+    )
+        az_copy_to_storage(from = source, to = destination)
+    else
+        stop("Invalid source or destination path")
 }
 
 #' @rdname az_copy
