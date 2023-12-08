@@ -1,0 +1,20 @@
+---
+title: "Convert AnVILAz vignette to jupyter notebook"
+output: html_document
+---
+
+First convert to jupyter notebook:
+
+```
+jupytext --to notebook vignettes/IntroductionToAnVILAz.Rmd
+```
+
+Substitute metadata to use R kernel:
+
+```{r, eval=FALSE}
+nb <- readLines("vignettes/IntroductionToAnVILAz.ipynb")
+jnb <- jsonlite::fromJSON(nb)
+jnb$metadata$kernelspec <-
+    list(display_name = "R", language = "R", name = "ir")
+jsonlite::write_json(jnb, "vignettes/IntroductionToAnVILAz.ipynb")
+```
