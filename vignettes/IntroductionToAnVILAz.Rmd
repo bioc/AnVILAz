@@ -34,7 +34,7 @@ options(width = 75)
 
 # Installation
 
-The package is not yet available from [Bioconductor][]. 
+The package is not yet available from [Bioconductor](https://bioconductor.org). 
 
 Install the development version of the _AnVILAz_ package from GitHub
 with
@@ -55,9 +55,8 @@ library(AnVILAz)
 
 For this tutorial we will refer to the Azure Blob Storage service as ABS.
 Within the ABS, we are given access to a Container. For more information,
-follow this [link][1] to Microsoft's definition of containers and blobs.
-
-[1]: https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction#containers
+follow this [link](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction#containers)
+to Microsoft's definition of containers and blobs.
 
 ## List Azure Blob Storage Container Files
 
@@ -67,13 +66,9 @@ az_copy_list()
 
 The `az_copy_list` command corresponds to a view of the files in the Blob
 container on Azure. They can also be accessed via the
-[Microsoft Azure Storage Explorer][2].
+[Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer).
 
-```{r,echo=FALSE,eval=TRUE}
-knitr::include_graphics("AzStorageExplorer.png")
-```
-
-[2]: https://azure.microsoft.com/en-us/products/storage/storage-explorer
+![Azure Storage Explorer](AzStorageExplorer.png)
 
 ## Uploading a file
 
