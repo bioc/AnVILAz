@@ -108,7 +108,12 @@ az_copy_from_storage <- function(from, to = "./") {
         stop("Provide a remote file location in the 'from' input")
     .validate_blob(from)
 
+    if (!endsWith(to, "/"))
+       stop("Provide a local directory with a forward slash (e.g., './to/')")
+
     isdir <- file.info(to)[["isdir"]]
+    if (is.na(isdir) || !dir.exists(to))
+        dir.create(isdir, recursive = TRUE)
     if (isTRUE(isdir) || endsWith(to, "/"))
         to <- file.path(normalizePath(to), basename(from))
     else
