@@ -113,7 +113,7 @@ az_copy_from_storage <- function(from, to = "./") {
 
     isdir <- file.info(to)[["isdir"]]
     if (is.na(isdir) || !dir.exists(to))
-        dir.create(isdir, recursive = TRUE)
+        dir.create(to, recursive = TRUE)
     if (isTRUE(isdir) || endsWith(to, "/"))
         to <- file.path(normalizePath(to), basename(from))
     else
