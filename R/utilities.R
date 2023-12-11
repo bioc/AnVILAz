@@ -38,3 +38,18 @@
     source <- normalizePath(source)
     shQuote(source)
 }
+
+## tinytest helpers
+
+.is_anvil_az <- function() {
+    nzchar(Sys.getenv("WORKSPACE_ID"))
+}
+
+.is_anvil_gcp <- function() {
+    nzchar(Sys.getenv("WORKSPACE_BUCKET"))
+}
+
+.exit_if_not_anvilaz <- function() {
+    if (!.is_anvil_az())
+        tinytest::exit_file("Not running on AnVIL Azure workspace")
+}

@@ -10,7 +10,7 @@
 \alias{az_copy_restore}
 \title{Azure Copy command line utility interface}
 \usage{
-az_copy_from_storage(from, to = ".")
+az_copy_from_storage(from, to = "./")
 
 az_copy_to_storage(from, to)
 
@@ -18,7 +18,7 @@ az_copy(source, destination, ...)
 
 az_copy_list()
 
-az_copy_rm(blob_file)
+az_copy_rm(blob_file, recursive = FALSE)
 
 az_copy_backup(from_dir, to_dir, contentsOnly = FALSE)
 
@@ -38,8 +38,13 @@ base directory of the remote location. The \code{to} path can be a folder path
 but must end in a forward slash (\code{/}). If the \code{to} path points to a
 non-existent directory, it will be created.}
 
-\item{blob_file}{\code{character(1)} A relative path to a file in the Azure
-Storage Container to be removed}
+\item{blob_file}{\code{character(1)} A relative path to a file or folder in the
+Azure Storage Container to be removed. If a folder is specified, all files
+in the folder will be removed. Folder inputs \strong{must} end with a forward
+slash (\code{/}).}
+
+\item{recursive}{\code{logical(1)} Whether to recursively remove files in a
+directory. Only applies to \code{az_copy_rm}. Default is \code{FALSE}.}
 
 \item{from_dir}{\code{character(1)} A relative folder path that corresponds to
 either the remote (\code{az_copy_backup}) or local (\code{az_copy_restore}) directory
@@ -65,7 +70,7 @@ the Azure Storage Container
 \item \code{az_copy} - called for the side effect of copying a file \strong{to} or \strong{from}
 the Azure Storage Container depending on the \code{source} and \code{destination}
 inputs
-\item \code{az_copy_rm} - called for the side effect of removing a file
+\item \code{az_copy_rm} - called for the side effect of removing a file or folder
 \item \code{az_copy_backup} - called for the side effect of copying a directory \strong{to}
 the Azure Storage Container
 \item \code{az_copy_restore} - called for the side effect of copying a directory
@@ -87,7 +92,7 @@ the workspace environment
 Azure Storage Container
 \item \code{az_copy} - a generalized interface for either \code{az_copy_from_storage} or
 \code{az_copy_to_storage}; deduced from the \code{source} and \code{destination} inputs
-\item \code{az_copy_rm} - remove a file from the Azure Storage Container
+\item \code{az_copy_rm} - remove a file or folder from the Azure Storage Container
 \item \code{az_copy_backup} - copy a directory from the workspace environment to the
 Azure Storage Container
 \item \code{az_copy_restore} - copy a directory from the Azure Storage Container to

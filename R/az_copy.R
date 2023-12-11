@@ -15,7 +15,7 @@
 #'   Azure Storage Container
 #' * `az_copy` - a generalized interface for either `az_copy_from_storage` or
 #'   `az_copy_to_storage`; deduced from the `source` and `destination` inputs
-#' * `az_copy_rm` - remove a file from the Azure Storage Container
+#' * `az_copy_rm` - remove a file or folder from the Azure Storage Container
 #' * `az_copy_backup` - copy a directory from the workspace environment to the
 #'   Azure Storage Container
 #' * `az_copy_restore` - copy a directory from the Azure Storage Container to
@@ -48,8 +48,13 @@
 #' @param contentsOnly `logical(1)` Whether to only upload / download the
 #'   contents of the `from_dir`
 #'
-#' @param blob_file `character(1)` A relative path to a file in the Azure
-#'   Storage Container to be removed
+#' @param blob_file `character(1)` A relative path to a file or folder in the
+#'   Azure Storage Container to be removed. If a folder is specified, all files
+#'   in the folder will be removed. Folder inputs **must** end with a forward
+#'   slash (`/`).
+#'
+#' @param recursive `logical(1)` Whether to recursively remove files in a
+#'   directory. Only applies to `az_copy_rm`. Default is `FALSE`.
 #'
 #' @return
 #' * `az_copy_list` - a `tibble` of files and metadata
@@ -60,7 +65,7 @@
 #' * `az_copy` - called for the side effect of copying a file __to__ or __from__
 #'   the Azure Storage Container depending on the `source` and `destination`
 #'   inputs
-#' * `az_copy_rm` - called for the side effect of removing a file
+#' * `az_copy_rm` - called for the side effect of removing a file or folder
 #' * `az_copy_backup` - called for the side effect of copying a directory __to__
 #'   the Azure Storage Container
 #' * `az_copy_restore` - called for the side effect of copying a directory
@@ -95,18 +100,19 @@
 #'
 #' }
 #' @export
-az_copy_from_storage <- function(from, to = ".") {
+az_copy_from_storage <- function(from, to = "./") {
     stopifnot(
         isScalarCharacter(from), isScalarCharacter(to)
     )
     if (endsWith(from, "/"))
         stop("Provide a remote file location in the 'from' input")
-    .validate_file(from)
+    .validate_blob(from)
 
-    to <- .az_shQuote(to)
     isdir <- file.info(to)[["isdir"]]
     if (isTRUE(isdir) || endsWith(to, "/"))
-        to <- file.path(to, basename(from))
+        to <- file.path(normalizePath(to), basename(from))
+    else
+        to <- file.path(normalizePath(dirname(to)), basename(to))
 
     sas_cred <- get_sas_token()
     wscu <- workspace_storage_cont_url()
@@ -114,7 +120,7 @@ az_copy_from_storage <- function(from, to = ".") {
     path <- paste0(wscu, "/", from, "?")
     path <- paste0(path, token)
 
-    .az_copy(from = shQuote(path), to = to)
+    .az_copy(from = shQuote(path), to = shQuote(to))
 }
 
 #' @rdname az_copy
@@ -182,26 +188,33 @@ az_copy_list <- function() {
 
 #' @rdname az_copy
 #' @export
-az_copy_rm <- function(blob_file) {
+az_copy_rm <- function(blob_file, recursive = FALSE) {
     stopifnot(
         isScalarCharacter(blob_file)
     )
-    .validate_file(blob_file)
+    .validate_blob(blob_file)
 
     wscu <- workspace_storage_cont_url()
     sas_cred <- get_sas_token()
     token_slug <- sas_cred[["token"]]
     path <- paste0(wscu, "/", blob_file, "?")
     path <- shQuote(paste0(path, token_slug))
-    args <- c("rm", path)
+    recurse <- paste0("--recursive=", tolower(recursive))
+    args <- c("rm", path, recurse)
     .az_do("azcopy", args = args)
 }
 
-.validate_file <- function(file) {
+.validate_blob <- function(blob) {
     file_tbl <- az_copy_list()
     allfiles <- file_tbl[["INFO"]]
-    if (!file %in% allfiles)
+    is_dir <- endsWith(blob, "/")
+    if (is_dir && !any(startsWith(allfiles, blob)))
+        stop("Virtual directory not found; check path with `az_copy_list`")
+
+    if (!blob %in% allfiles && !is_dir)
         stop("File not found; check path to blob file with `az_copy_list`")
+
+    TRUE
 }
 
 #' @rdname az_copy
