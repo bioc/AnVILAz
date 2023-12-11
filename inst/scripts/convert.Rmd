@@ -5,8 +5,8 @@ output: html_document
 
 First convert to jupyter notebook:
 
-```
-jupytext --to notebook vignettes/IntroductionToAnVILAz.Rmd
+```sh
+python3 -m jupytext --to notebook vignettes/IntroductionToAnVILAz.Rmd
 ```
 
 Substitute metadata to use R kernel:
