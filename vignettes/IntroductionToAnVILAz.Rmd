@@ -26,7 +26,8 @@ has_envs <- nzchar(AnVILAz::workspace_id()) &&
 az_ok <- has_az && has_envs
 knitr::opts_chunk$set(
     collapse = TRUE,
-    crop = NULL, ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
+## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
+    crop = NULL,
     eval = az_ok
 )
 options(width = 75)
@@ -86,6 +87,13 @@ Container.
 
 ```{r}
 az_copy_to_storage("mydata.Rda", "analyses/")
+```
+
+We will also use a small log file for demonstration purposes. The `jupyter.log`
+file is already present in our workspace directory.
+
+```{r}
+az_copy_to_storage("jupyter.log", "analyses/")
 ```
 
 ## Deleting a file
