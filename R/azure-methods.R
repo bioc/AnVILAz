@@ -68,7 +68,7 @@ NULL
 #' @importFrom AnVILBase avcopy
 #' @exportMethod avcopy
 setMethod(f = "avcopy", signature = "azure", definition =
-    function(source, destination, ..., platform = "AnVILAz") {
+    function(source, destination, ..., platform = azure()) {
         stopifnot(
             isScalarCharacter(source)
         )
@@ -92,7 +92,7 @@ setMethod(f = "avcopy", signature = "azure", definition =
 #' @importFrom AnVILBase avlist
 #' @exportMethod avlist
 setMethod(f = "avlist", signature = "azure", definition =
-    function(..., platform = "AnVILAz") {
+    function(..., platform = azure()) {
         path <- get_sas_token()[["url"]]
         args <- c("list", shQuote(path))
         output <- .az_do("azcopy", args = args)
@@ -114,7 +114,7 @@ setMethod(f = "avlist", signature = "azure", definition =
 #' @importFrom AnVILBase avremove
 #' @exportMethod avremove
 setMethod(f = "avremove", signature = "azure", definition =
-    function(source, recursive = FALSE, ..., platform = "AnVILAz") {
+    function(source, recursive = FALSE, ..., platform = azure()) {
         stopifnot(
             isScalarCharacter(source)
         )
@@ -138,7 +138,7 @@ setMethod(f = "avremove", signature = "azure", definition =
 #' @importFrom AnVILBase avbackup
 #' @exportMethod avbackup
 setMethod(f = "avbackup", signature = "azure", definition =
-    function(source, destination, recursive = FALSE, ..., platform = "AnVILAz")
+    function(source, destination, recursive = FALSE, ..., platform = azure())
     {
         stopifnot(
             isScalarCharacter(source),
@@ -174,7 +174,7 @@ setMethod(f = "avbackup", signature = "azure", definition =
 #' @importFrom AnVILBase avrestore
 #' @exportMethod avrestore
 setMethod(f = "avrestore", signature = "azure", definition =
-    function(source, destination, recursive = FALSE, ..., platform = "AnVILAz")
+    function(source, destination, recursive = FALSE, ..., platform = azure())
     {
         stopifnot(
             isScalarCharacter(source),
@@ -206,7 +206,7 @@ setMethod(f = "avrestore", signature = "azure", definition =
 #' @importFrom AnVILBase avstorage
 #' @exportMethod avstorage
 setMethod(f = "avstorage", signature = "azure", definition =
-    function(..., platform = "AnVILAz") {
+    function(..., platform = azure()) {
         opt <- Sys.getenv("WORKSPACE_STORAGE_CONTAINER_URL", "")
         getOption("AnVILAz.workspace_storage_cont_url", opt)
     }
