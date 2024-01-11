@@ -4,7 +4,11 @@
 \name{azure-class}
 \alias{azure-class}
 \alias{.azure}
+\alias{azure}
 \title{Azure platform class}
+\usage{
+azure()
+}
 \description{
 This class represents the Azure platform.
 }

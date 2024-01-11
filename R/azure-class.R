@@ -13,8 +13,5 @@
 #'
 #' @export
 azure <- function() {
-    if (identical(cloud_platform(), "AnVILAz"))
-        .azure()
-    else
-        stop("Azure platform not detected; contact maintainer.")
+    .azure()
 }

@@ -10,17 +10,29 @@
 \alias{avstorage,azure-method}
 \title{A number of methods compatible with the Azure platform class.}
 \usage{
-\S4method{avcopy}{azure}(source, destination, ..., platform = "AnVILAz")
+\S4method{avcopy}{azure}(source, destination, ..., platform = cloud_platform())
 
-\S4method{avlist}{azure}(..., platform = "AnVILAz")
+\S4method{avlist}{azure}(..., platform = cloud_platform())
 
-\S4method{avremove}{azure}(source, recursive = FALSE, ..., platform = "AnVILAz")
+\S4method{avremove}{azure}(source, recursive = FALSE, ..., platform = cloud_platform())
 
-\S4method{avbackup}{azure}(source, destination, recursive = FALSE, ..., platform = "AnVILAz")
+\S4method{avbackup}{azure}(
+  source,
+  destination,
+  recursive = FALSE,
+  ...,
+  platform = cloud_platform()
+)
 
-\S4method{avrestore}{azure}(source, destination, recursive = FALSE, ..., platform = "AnVILAz")
+\S4method{avrestore}{azure}(
+  source,
+  destination,
+  recursive = FALSE,
+  ...,
+  platform = cloud_platform()
+)
 
-\S4method{avstorage}{azure}(..., platform = "AnVILAz")
+\S4method{avstorage}{azure}(..., platform = cloud_platform())
 }
 \arguments{
 \item{source}{\code{character(1)} A relative file path corresponding to
