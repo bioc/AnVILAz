@@ -62,10 +62,10 @@ to Microsoft's definition of containers and blobs.
 ## List Azure Blob Storage Container Files
 
 ```{r}
-az_copy_list()
+avlist()
 ```
 
-The `az_copy_list` command corresponds to a view of the files in the Blob
+The `avlist` command corresponds to a view of the files in the Blob
 container on Azure. They can also be accessed via the
 [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer).
 
@@ -98,11 +98,11 @@ az_copy_to_storage("jupyter.log", "analyses/")
 
 ## Deleting a file
 
-We can remove the data with `az_copy_rm` and the _relative_ path to the `.Rda`
+We can remove the data with `avremove` and the _relative_ path to the `.Rda`
 file.
 
 ```{r}
-az_copy_rm("analyses/mydata.Rda")
+avremove("analyses/mydata.Rda")
 ```
 
 ## Downloading from the ABS
@@ -114,7 +114,7 @@ az_copy_from_storage("analyses/jupyter.log", "./test/")
 ## Folder-wise upload to ABS
 
 ```{r}
-az_copy_backup("./test/", "analyses/test/", contentsOnly = TRUE)
+avbackup("./test/", "analyses/test/", contentsOnly = TRUE)
 ```
 
 ## Folder-wise download from ABS
@@ -123,14 +123,14 @@ By default the contents of the `from_dir` will be copied to the current
 working directory `"."`, i.e., the base `/` workspace directory.
 
 ```{r}
-az_copy_restore("analyses/test", contentsOnly = TRUE)
+avrestore("analyses/test", contentsOnly = TRUE)
 ```
 
 You may also move this to another folder by providing a folder name as the
 second argument.
 
 ```{r}
-az_copy_restore("analyses/test", "test", contentsOnly = TRUE)
+avrestore("analyses/test", "test", contentsOnly = TRUE)
 ```
 
 Note. The `contentsOnly` argument appends a `/*` wildcard to the folder and

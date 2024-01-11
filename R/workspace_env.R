@@ -18,15 +18,12 @@
 #'   in API calls
 #' * `workspace_storage_cont_id` - A UUID string identifiying the resource
 #'   storage container owned by the user account, a.k.a. "resourceId"
-#' * `workspace_storage_cont_url` - The base URI string used to move data
-#'   to and from the Azure Storage Container
 #' * `workspace_data_service_url` - The base URI string used to move data to
 #'   to and from the workspace "DATA" tab
 #'
 #' @examples
 #' workspace_id()
 #' workspace_storage_cont_id()
-#' workspace_storage_cont_url()
 #' if (interactive()) {
 #'   workspace_data_service_url()
 #' }
@@ -41,13 +38,6 @@ workspace_id <- function() {
 workspace_storage_cont_id <- function() {
     opt <- Sys.getenv("WORKSPACE_STORAGE_CONTAINER_ID", "")
     getOption("AnVILAz.workspace_storage_cont_id", opt)
-}
-
-#' @rdname workspace-env
-#' @export
-workspace_storage_cont_url <- function() {
-    opt <- Sys.getenv("WORKSPACE_STORAGE_CONTAINER_URL", "")
-    getOption("AnVILAz.workspace_storage_cont_url", opt)
 }
 
 ## from terra-workspace-data-service/docs/WDS Python Client.md

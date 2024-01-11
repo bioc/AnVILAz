@@ -1,7 +1,6 @@
 .DSDE_PROD_URL <- "https://workspace.dsde-prod.broadinstitute.org"
 
 #' @importFrom httr GET content add_headers
-#' @export
 query_resources <- function(as = NULL) {
     workspaceId <- workspace_id()
     api_endpoint <- "/api/workspaces/v1/{{workspaceId}}/resources"
