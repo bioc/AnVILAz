@@ -138,8 +138,10 @@ setMethod(f = "avremove", signature = "azure", definition =
 #' @importFrom AnVILBase avbackup
 #' @exportMethod avbackup
 setMethod(f = "avbackup", signature = "azure", definition =
-    function(source, destination, recursive = FALSE, ..., platform = cloud_platform())
-    {
+    function(
+        source, destination, recursive = FALSE, ...,
+        platform = cloud_platform()
+    ) {
         stopifnot(
             isScalarCharacter(source),
             dir.exists(source),
@@ -174,8 +176,10 @@ setMethod(f = "avbackup", signature = "azure", definition =
 #' @importFrom AnVILBase avrestore
 #' @exportMethod avrestore
 setMethod(f = "avrestore", signature = "azure", definition =
-    function(source, destination, recursive = FALSE, ..., platform = cloud_platform())
-    {
+    function(
+        source, destination, recursive = FALSE, ...,
+        platform = cloud_platform()
+    ) {
         stopifnot(
             isScalarCharacter(source),
             isScalarCharacter(destination)
