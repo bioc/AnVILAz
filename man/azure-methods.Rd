@@ -8,6 +8,7 @@
 \alias{avbackup,azure-method}
 \alias{avrestore,azure-method}
 \alias{avstorage,azure-method}
+\alias{avworkspaces,azure-method}
 \title{A number of methods compatible with the Azure platform class.}
 \usage{
 \S4method{avcopy}{azure}(source, destination, ..., platform = cloud_platform())
@@ -33,6 +34,8 @@
 )
 
 \S4method{avstorage}{azure}(..., platform = cloud_platform())
+
+\S4method{avworkspaces}{azure}(..., platform = cloud_platform())
 }
 \arguments{
 \item{source}{\code{character(1)} A relative file path corresponding to
@@ -92,6 +95,8 @@ Container to the workspace environment
 
 \item \code{avstorage(azure)}: The base URI string used to move data to and from
 the Azure Storage Container
+
+\item \code{avworkspaces(azure)}: List workspaces
 
 }}
 \examples{

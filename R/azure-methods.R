@@ -211,3 +211,27 @@ setMethod(f = "avstorage", signature = "azure", definition =
         getOption("AnVILAz.workspace_storage_cont_url", opt)
     }
 )
+
+.RAWLS_URL <- "https://rawls.dsde-prod.broadinstitute.org"
+
+# avworkspaces ------------------------------------------------------------
+
+#' @describeIn azure-methods List workspaces
+#'
+#' @importFrom AnVILBase avworkspaces
+#' @exportMethod avworkspaces
+setMethod(f = "avworkspaces", signature = "azure", definition =
+    function(..., platform = cloud_platform()) {
+        api_endpoint <- "/api/workspaces"
+        url <- paste0(.RAWLS_URL, api_endpoint)
+        qrs <- GET(
+            url = url,
+            add_headers(
+                authorization = az_token()
+            )
+        )
+        .stop_for_status(qrs, "avworkspaces")
+        .flatten(qrs) |>
+            AnVIL:::.avworkspaces_clean()
+    }
+)
