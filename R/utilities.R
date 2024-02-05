@@ -114,13 +114,3 @@
     if (!.is_anvil_az())
         tinytest::exit_file("Not running on AnVIL Azure workspace")
 }
-
-.flatten <- function(x) {
-    value <- content(x, as="text", encoding = "UTF-8")
-    if (nzchar(value)) {
-        json <- fromJSON(value, flatten = TRUE)
-        as_tibble(json)
-    } else {
-        tibble()
-    }
-}

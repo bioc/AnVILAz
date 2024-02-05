@@ -231,7 +231,7 @@ setMethod(f = "avworkspaces", signature = "azure", definition =
             )
         )
         .stop_for_status(qrs, "avworkspaces")
-        .flatten(qrs) |>
-            AnVIL:::.avworkspaces_clean()
+        AnVILBase::flatten(qrs) |>
+            AnVILBase::avworkspaces_clean()
     }
 )
