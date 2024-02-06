@@ -13,7 +13,7 @@ query_resources <- function(as = NULL) {
             authorization = az_token()
         )
     )
-    .stop_for_status(qrs, "resources")
+    avstop_for_status(qrs, "resources")
     content(qrs, as = as)
 }
 
@@ -34,6 +34,6 @@ query_records <- function(type, version = .WDS_API_VERSION, as = NULL) {
         encode = "multipart",
         accept_json()
     )
-    .stop_for_status(response, "query_records")
+    avstop_for_status(response, "query_records")
     content(response, as = as)
 }

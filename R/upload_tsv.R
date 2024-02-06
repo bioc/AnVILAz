@@ -82,7 +82,7 @@ upload_tsv <- function(
         add_headers(authorization = az_token()),
         accept_json()
     )
-    .stop_for_status(response, "upload_tsv")
+    avstop_for_status(response, "upload_tsv")
     content(response)
 }
 
@@ -103,7 +103,7 @@ download_tsv <- function(type, api_version = .WDS_API_VERSION) {
         add_headers(authorization = az_token()),
         accept_json()
     )
-    .stop_for_status(response, "download_tsv")
+    avstop_for_status(response, "download_tsv")
     content(response, encoding = "UTF-8")
 }
 
@@ -130,7 +130,7 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
         add_headers(authorization = az_token()),
         accept_json()
     )
-    .stop_for_status(response, "delete_tsv_row")
+    avstop_for_status(response, "delete_tsv_row")
     content(response)
 }
 
@@ -151,6 +151,6 @@ delete_tsv <- function(type, api_version = .WDS_API_VERSION) {
         add_headers(authorization = az_token()),
         accept_json()
     )
-    .stop_for_status(response, "delete_tsv")
+    avstop_for_status(response, "delete_tsv")
     content(response)
 }

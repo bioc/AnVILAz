@@ -222,7 +222,7 @@ setMethod(f = "avstorage", signature = "azure", definition =
 
 #' @describeIn azure-methods List workspaces
 #'
-#' @importFrom AnVILBase avworkspaces
+#' @importFrom AnVILBase avworkspaces avstop_for_status
 #' @exportMethod avworkspaces
 setMethod(f = "avworkspaces", signature = "azure", definition =
     function(..., platform = cloud_platform()) {
@@ -234,7 +234,7 @@ setMethod(f = "avworkspaces", signature = "azure", definition =
                 authorization = az_token()
             )
         )
-        .stop_for_status(qrs, "avworkspaces")
+        avstop_for_status(qrs, "avworkspaces")
         AnVILBase::flatten(qrs) |>
             AnVILBase::avworkspaces_clean()
     }

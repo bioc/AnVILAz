@@ -35,6 +35,6 @@ get_sas_token <- function(as = "parsed", sasExpirationDuration = 28800) {
             authorization = az_token()
         )
     )
-    .stop_for_status(sas_tkn, "getSasToken")
+    avstop_for_status(sas_tkn, "getSasToken")
     content(sas_tkn, as = as)
 }
