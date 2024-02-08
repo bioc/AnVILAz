@@ -239,3 +239,28 @@ setMethod(f = "avworkspaces", signature = "azure", definition =
             AnVILBase::avworkspaces_clean()
     }
 )
+
+# avtable_import ----------------------------------------------------------
+
+#' @describeIn azure-methods Upload a dataset to the DATA tab
+#'
+#' @importFrom AnVILBase avtable_import
+#' @exportMethod avtable_import
+setMethod(f = "avtable_import", signature = "azure", definition =
+    function(
+        .data, entity = names(.data)[[1L]], namespace, name, ...,
+        platform = cloud_platform()
+    ) {
+        stopifnot(
+            is.data.frame(.data), isScalarCharacter(entity),
+            isScalarCharacter(namespace), isScalarCharacter(name)
+        )
+        dataname <- deparse(substitute(.data))
+        temptsv <- tempfile(fileext = ".tsv")
+        write.table(.data, file = temptsv, sep = "\t", row.names = FALSE)
+        on.exit(file.remove(temptsv))
+        upload_tsv(
+            tsv_file = temptsv, type = dataname, primaryKey = entity
+        )
+    }
+)
