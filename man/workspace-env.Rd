@@ -7,11 +7,14 @@
 \alias{workspace_storage_container_url}
 \alias{workspace_data_service_url}
 \alias{workspace_storage_cont_id}
+\alias{workspace_storage_cont_url}
 \title{Access Terra on Azure workspace session variables}
 \usage{
 workspace_id()
 
 workspace_storage_cont_id()
+
+workspace_storage_cont_url()
 
 workspace_data_service_url(env = "prod")
 }
@@ -25,6 +28,8 @@ endpoint}
 in API calls
 \item \code{workspace_storage_cont_id} - A UUID string identifiying the resource
 storage container owned by the user account, a.k.a. "resourceId"
+\item \code{workspace_storage_cont_url} - The base URI string used to move data
+to and from the Azure Storage Container
 \item \code{workspace_data_service_url} - The base URI string used to move data to
 to and from the workspace "DATA" tab
 }
@@ -38,6 +43,7 @@ workspace "DATA" tab.
 \examples{
 workspace_id()
 workspace_storage_cont_id()
+workspace_storage_cont_url()
 if (interactive()) {
   workspace_data_service_url()
 }
