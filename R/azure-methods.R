@@ -35,6 +35,9 @@
 #' * `avrestore` - called for the side effect of copying a directory
 #'   __from__ the Azure Storage Container
 #' * `avstorage` - a URL string of the Azure Storage Container location
+#' * `avworkspaces` - a tibble of workspaces on AnVIL
+#' * `avtable_import` - a response list indicating successful upload
+#' * `avtable_delete_values` - when successful, a `NULL` value
 #'
 #' @examples
 #' if (interactive()) {
@@ -244,6 +247,18 @@ setMethod(f = "avworkspaces", signature = "azure", definition =
 
 #' @describeIn azure-methods Upload a dataset to the DATA tab
 #'
+#' @param .data The data.frame to be imported / uploaded to the DATA tab in the
+#'   workspace
+#'
+#' @param entity The entity name, i.e., the name of the column in the table that
+#'   provides the keys for the data. By default, the first column in the table.
+#'   The keys cannot contain special characters or spaces.
+#'
+#' @param namespace The workspace namespace, usually, the billing project
+#'
+#' @param name The name of the workspace as on the AnVIL UI and given by the
+#'   user at the time of workspace creation
+#'
 #' @importFrom AnVILBase avtable_import
 #' @exportMethod avtable_import
 setMethod(f = "avtable_import", signature = "azure", definition =
@@ -261,6 +276,29 @@ setMethod(f = "avtable_import", signature = "azure", definition =
         on.exit(file.remove(temptsv))
         upload_tsv(
             tsv_file = temptsv, type = dataname, primaryKey = entity
+        )
+    }
+)
+
+# avtable_delete_values ---------------------------------------------------
+
+#' @describeIn azure-methods Delete values from a table by key
+#'
+#' @param table The name of the table to delete values from, a.k.a., the
+#'   type in the AnVIL API
+#'
+#' @importFrom AnVILBase avtable_delete_values
+setMethod(f = "avtable_delete_values", signature = "azure", definition =
+    function(
+        table, values, namespace, name, ...,
+        platform = cloud_platform()
+    ) {
+        stopifnot(
+            isScalarCharacter(table), isCharacter(values),
+            isScalarCharacter(namespace), isScalarCharacter(name)
+        )
+        delete_tsv_row(
+            type = table, id = values
         )
     }
 )
