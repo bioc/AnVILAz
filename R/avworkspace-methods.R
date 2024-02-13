@@ -69,3 +69,16 @@ setMethod(f = "avworkspace_name", signature = "azure", definition =
         workspace_id()
     }
 )
+
+# avworkspace -------------------------------------------------------------
+
+#' @describeIn avworkspace-methods Obtain the current workspace namespace and
+#'   name combination
+#'
+#' @importFrom AnVILBase avworkspace
+#' @exportMethod avworkspace
+setMethod(f = "avworkspace", signature = "azure", definition =
+    function(..., platform = cloud_platform()) {
+        paste0(avworkspace_namespace(), "/", avworkspace_name())
+    }
+)
