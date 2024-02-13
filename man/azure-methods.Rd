@@ -8,7 +8,6 @@
 \alias{avbackup,azure-method}
 \alias{avrestore,azure-method}
 \alias{avstorage,azure-method}
-\alias{avworkspaces,azure-method}
 \alias{avtable_import,azure-method}
 \alias{avtable_delete_values,azure-method}
 \title{A number of methods compatible with the Azure platform class.}
@@ -36,8 +35,6 @@
 )
 
 \S4method{avstorage}{azure}(..., platform = cloud_platform())
-
-\S4method{avworkspaces}{azure}(..., platform = cloud_platform())
 
 \S4method{avtable_import}{azure}(
   .data,
@@ -133,8 +130,6 @@ Container to the workspace environment
 
 \item \code{avstorage(azure)}: The base URI string used to move data to and from
 the Azure Storage Container
-
-\item \code{avworkspaces(azure)}: List workspaces
 
 \item \code{avtable_import(azure)}: Upload a dataset to the DATA tab
 

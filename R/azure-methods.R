@@ -219,30 +219,6 @@ setMethod(f = "avstorage", signature = "azure", definition =
     }
 )
 
-.RAWLS_URL <- "https://rawls.dsde-prod.broadinstitute.org"
-
-# avworkspaces ------------------------------------------------------------
-
-#' @describeIn azure-methods List workspaces
-#'
-#' @importFrom AnVILBase avworkspaces avstop_for_status
-#' @exportMethod avworkspaces
-setMethod(f = "avworkspaces", signature = "azure", definition =
-    function(..., platform = cloud_platform()) {
-        api_endpoint <- "/api/workspaces"
-        url <- paste0(.RAWLS_URL, api_endpoint)
-        qrs <- GET(
-            url = url,
-            add_headers(
-                authorization = az_token()
-            )
-        )
-        avstop_for_status(qrs, "avworkspaces")
-        AnVILBase::flatten(qrs) |>
-            AnVILBase::avworkspaces_clean()
-    }
-)
-
 # avtable_import ----------------------------------------------------------
 
 #' @describeIn azure-methods Upload a dataset to the DATA tab
