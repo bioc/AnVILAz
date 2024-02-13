@@ -41,3 +41,15 @@ BugReports: https://github.com/Bioconductor/AnVILAz/issues
 URL: https://github.com/Bioconductor/AnVILAz
 VignetteBuilder: knitr
 Date: 2024-02-09
+Collate: 
+    'authentication.R'
+    'azure-class.R'
+    'avworkspace-methods.R'
+    'az.R'
+    'az_copy-helpers.R'
+    'azure-methods.R'
+    'resources.R'
+    'sas_token.R'
+    'upload_tsv.R'
+    'utilities.R'
+    'workspace_env.R'

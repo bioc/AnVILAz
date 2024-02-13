@@ -4,6 +4,8 @@
 #'
 #' @inheritParams azure-methods
 #'
+#' @include azure-class.R
+#'
 NULL
 
 # avworkspaces ------------------------------------------------------------
