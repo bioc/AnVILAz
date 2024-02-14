@@ -1,6 +1,6 @@
 .WDS_API_VERSION <- "v0.2"
 
-#' @rdname workspace-data-ops
+#' @name workspace-data-ops
 #'
 #' @title Functions to work with workspace data
 #'
@@ -21,6 +21,10 @@
 #'   * `delete_tsv` - a `DELETE` request to remove then entire data set (`type`)
 #'
 #' @param tsv_file `character(1)` A path to a tab-separated values file
+#'
+#' @param row `tibble()` or `data.frame()` A single row to add to an existing
+#'   table. The row must have the same column names as the table. The
+#'   `primaryKey` column must be unique.
 #'
 #' @param type `character(1)` A nickname for the uploaded dataset important for
 #'   retreival. By default, the file name will be used.
@@ -86,7 +90,7 @@ upload_tsv <- function(
     content(response)
 }
 
-#' @name workspace-data-ops
+#' @rdname workspace-data-ops
 #' @export
 download_tsv <- function(type, api_version = .WDS_API_VERSION) {
     opt <- options(readr.show_col_types = FALSE)
@@ -107,7 +111,7 @@ download_tsv <- function(type, api_version = .WDS_API_VERSION) {
     content(response, encoding = "UTF-8")
 }
 
-#' @name workspace-data-ops
+#' @rdname workspace-data-ops
 #' @importFrom whisker whisker.render
 #' @importFrom httr DELETE
 #' @export
@@ -134,7 +138,63 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
     content(response)
 }
 
-#' @name workspace-data-ops
+#' @rdname workspace-data-ops
+#' @importFrom httr PUT
+#' @export
+add_tsv_row <- function(row, type, id, api_version = .WDS_API_VERSION) {
+    stopifnot(identical(nrow(row), 1L))
+
+    opt <- options(readr.show_col_types = FALSE)
+    on.exit(options(opt))
+
+    instanceid <- workspace_id()
+    v <- api_version
+    api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
+    endpoint <- whisker.render(api_endpoint)
+
+    tsv <- download_tsv(type = type, api_version = api_version)
+    allids <- tsv[[1L]]
+    if (id %in% allids)
+        warning("Replacing record with id: ", id)
+    base_uri <- workspace_data_service_url()
+    uri <- paste0(base_uri, endpoint)
+    ## TODO: attributes currently returns bad SQL grammar 500 error
+    response <- PUT(
+        uri,
+        body = list(attributes = as.list(row)),
+        add_headers(authorization = az_token()),
+        accept_json()
+    )
+    avstop_for_status(response, "add_tsv_row")
+    content(response)
+}
+
+#' @rdname workspace-data-ops
+#' @importFrom httr GET
+#' @export
+get_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
+    opt <- options(readr.show_col_types = FALSE)
+    on.exit(options(opt))
+
+    instanceid <- workspace_id()
+    v <- api_version
+    api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
+    endpoint <- whisker.render(api_endpoint)
+
+    base_uri <- workspace_data_service_url()
+    uri <- paste0(base_uri, endpoint)
+    response <- GET(
+        uri,
+        add_headers(authorization = az_token()),
+        accept_json()
+    )
+
+    avstop_for_status(response, "get_tsv_row")
+    content(response)[["attributes"]] |>
+        tibble::as_tibble()
+}
+
+#' @rdname workspace-data-ops
 #' @export
 delete_tsv <- function(type, api_version = .WDS_API_VERSION) {
     opt <- options(readr.show_col_types = FALSE)
@@ -154,3 +214,4 @@ delete_tsv <- function(type, api_version = .WDS_API_VERSION) {
     avstop_for_status(response, "delete_tsv")
     content(response)
 }
+
