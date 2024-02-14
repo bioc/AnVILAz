@@ -55,7 +55,7 @@
 #'   tsv_file <- tempfile()
 #'   readr::write_tsv(mtcars_tbl, tsv_file)
 #'   upload_tsv(
-#'     tsv_file = tsvfile,
+#'     tsv_file = tsv_file,
 #'     type = "testData",
 #'     primaryKey = "model_id"
 #'   )
