@@ -153,12 +153,13 @@ add_tsv_row <- function(row, type, id, api_version = .WDS_API_VERSION) {
     endpoint <- whisker.render(api_endpoint)
 
     tsv <- download_tsv(type = type, api_version = api_version)
+    primaryKey <- names(tsv)[[1L]]
     allids <- tsv[[1L]]
     if (id %in% allids)
         warning("Replacing record with id: ", id)
+    row <- row[, !names(row) %in% primaryKey]
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
-    ## TODO: attributes currently returns bad SQL grammar 500 error
     response <- PUT(
         uri,
         body = list(attributes = as.list(row)),
