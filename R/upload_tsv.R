@@ -177,7 +177,12 @@ add_tsv_row <- function(
         accept_json()
     )
     avstop_for_status(response, "add_tsv_row")
-    content(response)
+    result <- content(response)
+    result <- tibble::as_tibble(
+        c(key = id, result[["attributes"]])
+    )
+    names(result)[[1L]] <- primaryKey
+    result
 }
 
 #' @rdname workspace-data-ops
