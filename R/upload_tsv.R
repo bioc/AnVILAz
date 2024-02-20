@@ -135,7 +135,9 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
         accept_json()
     )
     avstop_for_status(response, "delete_tsv_row")
-    content(response)
+    is.null(
+        content(response)
+    )
 }
 
 #' @rdname workspace-data-ops
