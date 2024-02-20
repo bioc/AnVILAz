@@ -141,7 +141,9 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
 #' @rdname workspace-data-ops
 #' @importFrom httr PUT
 #' @export
-add_tsv_row <- function(row, type, id, api_version = .WDS_API_VERSION) {
+add_tsv_row <- function(
+    row, type, id = row[[1L]], api_version = .WDS_API_VERSION
+) {
     stopifnot(identical(nrow(row), 1L))
 
     opt <- options(readr.show_col_types = FALSE)
@@ -154,15 +156,21 @@ add_tsv_row <- function(row, type, id, api_version = .WDS_API_VERSION) {
 
     tsv <- download_tsv(type = type, api_version = api_version)
     primaryKey <- names(tsv)[[1L]]
-    allids <- tsv[[1L]]
-    if (id %in% allids)
+    allids <- tsv[[primaryKey]]
+
+    if (!primaryKey %in% names(row) && missing(id))
+        stop("Primary key not found in row or missing id argument.")
+    else if (id %in% allids)
         warning("Replacing record with id: ", id)
+
     row <- row[, !names(row) %in% primaryKey]
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
     response <- PUT(
         uri,
         body = list(attributes = as.list(row)),
+        query = c(primaryKey = primaryKey),
+        encode = "json",
         add_headers(authorization = az_token()),
         accept_json()
     )
