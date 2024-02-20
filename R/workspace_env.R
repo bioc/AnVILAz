@@ -36,6 +36,11 @@ workspace_id <- function() {
     getOption("AnVILAz.workspace_id", opt)
 }
 
+.workspace_name <- function() {
+    opt <- Sys.getenv("WORKSPACE_NAME", "")
+    getOption("AnVILAz.workspace_name", opt)
+}
+
 #' @rdname workspace-env
 #' @export
 workspace_storage_cont_id <- function() {

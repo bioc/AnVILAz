@@ -66,7 +66,7 @@ setMethod(f = "avworkspace_namespace", signature = "azure", definition =
 #' @exportMethod avworkspace_name
 setMethod(f = "avworkspace_name", signature = "azure", definition =
     function(..., platform = cloud_platform()) {
-        workspace_id()
+        .workspace_name()
     }
 )
 
