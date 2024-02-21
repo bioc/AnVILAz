@@ -44,6 +44,7 @@ Date: 2024-02-20
 Collate: 
     'authentication.R'
     'azure-class.R'
+    'avtable-methods.R'
     'avworkspace-methods.R'
     'az.R'
     'az_copy-helpers.R'

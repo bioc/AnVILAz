@@ -21,7 +21,7 @@ download_tsv(type, api_version = .WDS_API_VERSION)
 
 delete_tsv_row(type, id, api_version = .WDS_API_VERSION)
 
-add_tsv_row(row, type, id, api_version = .WDS_API_VERSION)
+add_tsv_row(row, type, id = row[[1L]], api_version = .WDS_API_VERSION)
 
 get_tsv_row(type, id, api_version = .WDS_API_VERSION)
 
