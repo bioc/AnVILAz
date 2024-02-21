@@ -102,8 +102,6 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
             isScalarCharacter(member),
             set %in% names(.data),
             !identical(set, member), member %in% names(.data),
-            isScalarCharacter(namespace),
-            isScalarCharacter(name)
         )
         origin <- URLencode(origin)
         .data <- .data |> select(set, member)
