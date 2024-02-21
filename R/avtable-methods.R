@@ -61,7 +61,7 @@ setMethod("avtables", signature = c(platform = "azure"),
             accept_json()
         )
         avstop_for_status(response, "avtables")
-        resp <- content(response, as = "text")
+        resp <- content(response, as = "text", encoding = "UTF-8")
         tibble::tibble(
             table = jmespath(resp, "[*].name", as = "R"),
             count = jmespath(resp, "[*].count", as = "R"),
