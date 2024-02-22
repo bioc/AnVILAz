@@ -117,7 +117,7 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
         readr::write_tsv(.data, fl)
         upload_tsv(
             tsv_file = fl,
-            type = paste0(origin, set),
+            type = paste0(origin, "_set"),
             primaryKey = names(.data)[[1L]]
         )
     }
