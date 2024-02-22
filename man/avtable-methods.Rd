@@ -15,6 +15,7 @@
 
 \S4method{avtable_import}{azure}(
   .data,
+  table,
   entity = names(.data)[[1L]],
   ...,
   platform = cloud_platform()

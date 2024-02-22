@@ -93,18 +93,21 @@ setMethod("avtables", signature = c(platform = "azure"), definition =
 #' @exportMethod avtable_import
 setMethod(f = "avtable_import", signature = c(platform = "azure"), definition =
     function(
-        .data, entity = names(.data)[[1L]],
+        .data, table, entity = names(.data)[[1L]],
         ..., platform = cloud_platform()
     ) {
         stopifnot(
             is.data.frame(.data), isScalarCharacter(entity)
         )
-        dataname <- deparse(substitute(.data))
+        if (missing(table))
+            table <- deparse(substitute(.data))
+
         temptsv <- tempfile(fileext = ".tsv")
         write.table(.data, file = temptsv, sep = "\t", row.names = FALSE)
         on.exit(file.remove(temptsv))
+
         upload_tsv(
-            tsv_file = temptsv, type = dataname, primaryKey = entity
+            tsv_file = temptsv, type = table, primaryKey = entity
         )
     }
 )
@@ -151,13 +154,10 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
         ))
         names(.data)[[1L]] <- paste0(origin, "_set_id")
         names(.data)[[2L]] <- origin
-        fl <- tempfile()
-        readr::write_tsv(.data, fl)
+
         table_type <- paste0(origin, "_set")
-        upload_tsv(
-            tsv_file = fl,
-            type = table_type,
-            primaryKey = names(.data)[[1L]]
+        avtable_import(
+            .data, table_type, entity = names(.data)[[1L]]
         )
         table_type
     }
