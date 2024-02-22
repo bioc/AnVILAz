@@ -115,10 +115,12 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
         names(.data)[[2L]] <- origin
         fl <- tempfile()
         readr::write_tsv(.data, fl)
+        table_type <- paste0(origin, "_set")
         upload_tsv(
             tsv_file = fl,
-            type = paste0(origin, "_set"),
+            type = table_type,
             primaryKey = names(.data)[[1L]]
         )
+        table_type
     }
 )
