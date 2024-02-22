@@ -65,9 +65,10 @@ setMethod("avtables", signature = c(platform = "azure"),
         tibble::tibble(
             table = jmespath(resp, "[*].name", as = "R"),
             count = jmespath(resp, "[*].count", as = "R"),
-            colnames = paste(
-                jmespath(resp, "[*].attributes[*].name[]", as = "R"),
-                collapse = ", "
+            colnames = vapply(
+                jmespath(resp, "[*].attributes[*].name", as = "R"),
+                function(cnames) paste(cnames, collapse = ", "),
+                character(1L)
             )
         )
     }
