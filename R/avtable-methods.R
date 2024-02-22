@@ -23,6 +23,9 @@
 #' }
 NULL
 
+
+# avtable -----------------------------------------------------------------
+
 #' @describeIn avtable-methods List the contents of a particular table / type
 #'
 #' @param table `character(1)` The name of the table / type
@@ -30,7 +33,7 @@ NULL
 #' @importFrom AnVILBase avtable
 #' @importFrom BiocBaseUtils isScalarCharacter
 #' @exportMethod avtable
-setMethod("avtable", signature = c(platform = "azure"),
+setMethod("avtable", signature = c(platform = "azure"), definition =
     function(table, ..., platform = cloud_platform()) {
         stopifnot(isScalarCharacter(table))
         download_tsv(
@@ -40,14 +43,18 @@ setMethod("avtable", signature = c(platform = "azure"),
     }
 )
 
+# avtables ----------------------------------------------------------------
+
 #' @describeIn avtable-methods List the available tables / types
 #'
 #' @importFrom AnVILBase avtables
 #' @importFrom rjsoncons jmespath
 #' @importFrom jsonlite fromJSON
 #' @exportMethod avtables
-setMethod("avtables", signature = c(platform = "azure"),
-    function(version = .WDS_API_VERSION, ..., platform = cloud_platform()) {
+setMethod("avtables", signature = c(platform = "azure"), definition =
+    function(
+        api_version = .WDS_API_VERSION, ..., platform = cloud_platform()
+    ) {
         instanceid <- workspace_id()
         v <- version
         api_endpoint <- "/{{instanceid}}/types/{{v}}"
@@ -73,6 +80,8 @@ setMethod("avtables", signature = c(platform = "azure"),
         )
     }
 )
+
+# avtable_import_set ------------------------------------------------------
 
 #' @describeIn avtable-methods Create a grouping table from an origin dataset
 #'
@@ -123,5 +132,34 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
             primaryKey = names(.data)[[1L]]
         )
         table_type
+    }
+)
+
+# avtable_delete_values ---------------------------------------------------
+
+#' @describeIn avtable-methods Delete rows from a table / type
+#'
+#' @param values `character()` vector of `primaryKey` values corresponding to
+#'   rows to be deleted
+#'
+#' @importFrom AnVILBase avtable_delete_values
+#' @exportMethod avtable_delete_values
+setMethod("avtable_delete_values", signature = c(platform = "azure"),
+    definition = function(table, values, ..., platform = cloud_platform()) {
+        stopifnot(
+            isCharacter(values), isScalarCharacter(table)
+        )
+
+        tsv <- download_tsv(type = table)
+        allids <- tsv[[1L]]
+        stopifnot(all(values %in% allids))
+
+        names(values) <- values
+        vapply(values, function(val) {
+            delete_tsv_row(
+                type = table,
+                id = val
+            )
+        }, logical(1L))
     }
 )

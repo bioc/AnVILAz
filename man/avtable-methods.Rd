@@ -5,17 +5,27 @@
 \alias{avtable,azure-method}
 \alias{avtables,azure-method}
 \alias{avtable_import_set,azure-method}
+\alias{avtable_delete_values,azure-method}
 \title{AnVIL Azure table ("type") methods}
 \usage{
 \S4method{avtable}{azure}(table, ..., platform = cloud_platform())
 
-\S4method{avtables}{azure}(version = .WDS_API_VERSION, ..., platform = cloud_platform())
+\S4method{avtables}{azure}(api_version = .WDS_API_VERSION, ..., platform = cloud_platform())
 
 \S4method{avtable_import_set}{azure}(
   .data,
   origin,
   set = names(.data)[[1]],
   member = names(.data)[[2]],
+  ...,
+  platform = cloud_platform()
+)
+
+\S4method{avtable_delete_values}{azure}(
+  table,
+  values,
+  namespace,
+  name,
   ...,
   platform = cloud_platform()
 )
@@ -33,6 +43,9 @@ created.}
 
 \item{member}{\code{character()} vector of entity from the \code{avtable} identified by
 \code{origin}. The values may repeat if an ID is in more than one set}
+
+\item{values}{\code{character()} vector of \code{primaryKey} values corresponding to
+rows to be deleted}
 }
 \value{
 \code{avtable_import_set()} returns a \code{character(1)} name of the imported
@@ -56,6 +69,8 @@ operation is somewhat like \code{split(member, set)}.
 \item \code{avtables(azure)}: List the available tables / types
 
 \item \code{avtable_import_set(azure)}: Create a grouping table from an origin dataset
+
+\item \code{avtable_delete_values(azure)}: Delete rows from a table / type
 
 }}
 \examples{

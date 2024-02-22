@@ -143,9 +143,6 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
     api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
     endpoint <- whisker.render(api_endpoint)
 
-    tsv <- download_tsv(type = type, api_version = api_version)
-    allids <- tsv[[1L]]
-    stopifnot(id %in% allids)
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
     response <- DELETE(
