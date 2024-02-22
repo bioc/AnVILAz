@@ -105,9 +105,14 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
         )
         origin <- URLencode(origin)
         .data <- .data |> select(set, member)
-        names(.data)[[1]] <- paste0("membership:", origin, "_set_id")
-        names(.data)[[2]] <- origin
-
+        .data <- rev(stack(
+            lapply(
+                split(.data, .data[[1L]]),
+                function(x) paste(x[[2L]], collapse = ", ")
+            )
+        ))
+        names(.data)[[1L]] <- paste0("membership:", origin, "_set_id")
+        names(.data)[[2L]] <- origin
         fl <- tempfile()
         readr::write_tsv(.data, fl)
         upload_tsv(
