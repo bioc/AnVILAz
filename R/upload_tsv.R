@@ -18,6 +18,10 @@
 #'     `upload_tsv` to represent the data locally as a `tibble`
 #'   * `delete_tsv_row` - a `DELETE` request to remove a record or row from
 #'     `type`
+#'   * `add_tsv_row` - a `PUT` request to add a single row to an existing table
+#'     (`type`)
+#'   * `get_tsv_row` - a `GET` request to retrieve a single row from an existing
+#'     table (`type`)
 #'   * `delete_tsv` - a `DELETE` request to remove then entire data set (`type`)
 #'
 #' @param tsv_file `character(1)` A path to a tab-separated values file
@@ -63,6 +67,19 @@
 #'     type = "testData",
 #'     primaryKey = "model_id"
 #'   )
+#'
+#'   download_tsv("testData")
+#'
+#'   datsun <- filter(mtcars_tbl, model_id == "Datsun-710")
+#'   datsun[["model_id"]] <- "Datsun-512"
+#'
+#'   add_tsv_row(row = datsun, type = "testData")
+#'
+#'   get_tsv_row("testData", "Datsun-512")
+#'
+#'   delete_tsv_row("testData", "Datsun-512")
+#'
+#'   delete_tsv("testData")
 #' }
 #' @export
 upload_tsv <- function(

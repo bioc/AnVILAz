@@ -70,6 +70,10 @@ operations that affect the "DATA" tab include:
 \code{upload_tsv} to represent the data locally as a \code{tibble}
 \item \code{delete_tsv_row} - a \code{DELETE} request to remove a record or row from
 \code{type}
+\item \code{add_tsv_row} - a \code{PUT} request to add a single row to an existing table
+(\code{type})
+\item \code{get_tsv_row} - a \code{GET} request to retrieve a single row from an existing
+table (\code{type})
 \item \code{delete_tsv} - a \code{DELETE} request to remove then entire data set (\code{type})
 }
 }
@@ -89,5 +93,18 @@ if (interactive()) {
     type = "testData",
     primaryKey = "model_id"
   )
+
+  download_tsv("testData")
+
+  datsun <- filter(mtcars_tbl, model_id == "Datsun-710")
+  datsun[["model_id"]] <- "Datsun-512"
+
+  add_tsv_row(row = datsun, type = "testData")
+
+  get_tsv_row("testData", "Datsun-512")
+
+  delete_tsv_row("testData", "Datsun-512")
+
+  delete_tsv("testData")
 }
 }
