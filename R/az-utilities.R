@@ -25,7 +25,7 @@ az_exists <- function() {
     nchar(result) > 0L
 }
 
-#' @rdname az
+#' @rdname az-utilities
 #'
 #' @export
 az_healthcheck <- function() {
