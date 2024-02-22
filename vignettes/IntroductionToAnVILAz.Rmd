@@ -20,10 +20,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-has_az <- AnVILAz::az_exists()
-has_envs <- nzchar(AnVILAz::workspace_id()) &&
-    nzchar(AnVILAz::workspace_storage_cont_id())
-az_ok <- has_az && has_envs
+az_ok <- az_health_check()
 knitr::opts_chunk$set(
     collapse = TRUE,
 ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
