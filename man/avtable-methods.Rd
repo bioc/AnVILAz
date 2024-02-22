@@ -60,7 +60,7 @@ operation is somewhat like \code{split(member, set)}.
 }}
 \examples{
 \dontrun{
-avtable("sample") |>                          # new 'sample_set' table
-    avtable_import_set("sample", "set", "name")
+avtable("testData") |>                          # new 'testData_set' table
+    avtable_import_set("testData", "cyl", "model_id")
 }
 }
