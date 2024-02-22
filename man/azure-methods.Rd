@@ -8,8 +8,6 @@
 \alias{avbackup,azure-method}
 \alias{avrestore,azure-method}
 \alias{avstorage,azure-method}
-\alias{avtable_import,azure-method}
-\alias{avtable_delete_values,azure-method}
 \title{A number of methods compatible with the Azure platform class.}
 \usage{
 \S4method{avcopy}{azure}(source, destination, ..., platform = cloud_platform())
@@ -35,24 +33,6 @@
 )
 
 \S4method{avstorage}{azure}(..., platform = cloud_platform())
-
-\S4method{avtable_import}{azure}(
-  .data,
-  entity = names(.data)[[1L]],
-  namespace,
-  name,
-  ...,
-  platform = cloud_platform()
-)
-
-\S4method{avtable_delete_values}{azure}(
-  table,
-  values,
-  namespace,
-  name,
-  ...,
-  platform = cloud_platform()
-)
 }
 \arguments{
 \item{source}{\code{character(1)} A relative file path corresponding to
@@ -76,21 +56,6 @@ is \code{"azure"} for the \code{AnVILAz} package.}
 \item{recursive}{\code{logical(1)} Whether to recursively move or remove files in
 a directory. Only applies to \code{avremove}, \code{avbackup}, and \code{avrestore}.
 Default is \code{FALSE}.}
-
-\item{.data}{The data.frame to be imported / uploaded to the DATA tab in the
-workspace}
-
-\item{entity}{The entity name, i.e., the name of the column in the table that
-provides the keys for the data. By default, the first column in the table.
-The keys cannot contain special characters or spaces.}
-
-\item{namespace}{The workspace namespace, usually, the billing project}
-
-\item{name}{The name of the workspace as on the AnVIL UI and given by the
-user at the time of workspace creation}
-
-\item{table}{The name of the table to delete values from, a.k.a., the
-type in the AnVIL API}
 }
 \value{
 \itemize{
@@ -130,10 +95,6 @@ Container to the workspace environment
 
 \item \code{avstorage(azure)}: The base URI string used to move data to and from
 the Azure Storage Container
-
-\item \code{avtable_import(azure)}: Upload a dataset to the DATA tab
-
-\item \code{avtable_delete_values(azure)}: Delete values from a table by key
 
 }}
 \examples{

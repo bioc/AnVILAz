@@ -81,6 +81,43 @@ setMethod("avtables", signature = c(platform = "azure"), definition =
     }
 )
 
+# avtable_import ----------------------------------------------------------
+
+#' @describeIn avtable-methods Upload a dataset to the DATA tab
+#'
+#' @param .data The data.frame to be imported / uploaded to the DATA tab in the
+#'   workspace
+#'
+#' @param entity The entity name, i.e., the name of the column in the table that
+#'   provides the keys for the data. By default, the first column in the table.
+#'   The keys cannot contain special characters or spaces.
+#'
+#' @param namespace The workspace namespace, usually, the billing project
+#'
+#' @param name The name of the workspace as on the AnVIL UI and given by the
+#'   user at the time of workspace creation
+#'
+#' @importFrom AnVILBase avtable_import
+#' @exportMethod avtable_import
+setMethod(f = "avtable_import", signature = c(platform = "azure"), definition =
+    function(
+        .data, entity = names(.data)[[1L]], namespace, name, ...,
+        platform = cloud_platform()
+    ) {
+        stopifnot(
+            is.data.frame(.data), isScalarCharacter(entity),
+            isScalarCharacter(namespace), isScalarCharacter(name)
+        )
+        dataname <- deparse(substitute(.data))
+        temptsv <- tempfile(fileext = ".tsv")
+        write.table(.data, file = temptsv, sep = "\t", row.names = FALSE)
+        on.exit(file.remove(temptsv))
+        upload_tsv(
+            tsv_file = temptsv, type = dataname, primaryKey = entity
+        )
+    }
+)
+
 # avtable_import_set ------------------------------------------------------
 
 #' @describeIn avtable-methods Create a grouping table from an origin dataset
@@ -147,7 +184,7 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
 setMethod("avtable_delete_values", signature = c(platform = "azure"),
     definition = function(table, values, ..., platform = cloud_platform()) {
         stopifnot(
-            isCharacter(values), isScalarCharacter(table)
+            isScalarCharacter(table), isCharacter(values)
         )
 
         tsv <- download_tsv(type = table)

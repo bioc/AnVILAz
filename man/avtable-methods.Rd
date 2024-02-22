@@ -4,6 +4,7 @@
 \alias{avtable-methods}
 \alias{avtable,azure-method}
 \alias{avtables,azure-method}
+\alias{avtable_import,azure-method}
 \alias{avtable_import_set,azure-method}
 \alias{avtable_delete_values,azure-method}
 \title{AnVIL Azure table ("type") methods}
@@ -11,6 +12,15 @@
 \S4method{avtable}{azure}(table, ..., platform = cloud_platform())
 
 \S4method{avtables}{azure}(api_version = .WDS_API_VERSION, ..., platform = cloud_platform())
+
+\S4method{avtable_import}{azure}(
+  .data,
+  entity = names(.data)[[1L]],
+  namespace,
+  name,
+  ...,
+  platform = cloud_platform()
+)
 
 \S4method{avtable_import_set}{azure}(
   .data,
@@ -21,19 +31,21 @@
   platform = cloud_platform()
 )
 
-\S4method{avtable_delete_values}{azure}(
-  table,
-  values,
-  namespace,
-  name,
-  ...,
-  platform = cloud_platform()
-)
+\S4method{avtable_delete_values}{azure}(table, values, ..., platform = cloud_platform())
 }
 \arguments{
 \item{table}{\code{character(1)} The name of the table / type}
 
 \item{.data}{\code{tibble()} The dataset chiefly from the \code{avtable()} operation}
+
+\item{entity}{The entity name, i.e., the name of the column in the table that
+provides the keys for the data. By default, the first column in the table.
+The keys cannot contain special characters or spaces.}
+
+\item{namespace}{The workspace namespace, usually, the billing project}
+
+\item{name}{The name of the workspace as on the AnVIL UI and given by the
+user at the time of workspace creation}
 
 \item{origin}{\code{character(1)} name of the type (table) used to create the set
 e.g "sample", "participant", etc.}
@@ -67,6 +79,8 @@ operation is somewhat like \code{split(member, set)}.
 \item \code{avtable(azure)}: List the contents of a particular table / type
 
 \item \code{avtables(azure)}: List the available tables / types
+
+\item \code{avtable_import(azure)}: Upload a dataset to the DATA tab
 
 \item \code{avtable_import_set(azure)}: Create a grouping table from an origin dataset
 
