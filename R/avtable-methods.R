@@ -111,7 +111,7 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
                 function(x) paste(x[[2L]], collapse = ", ")
             )
         ))
-        names(.data)[[1L]] <- paste0("membership:", origin, "_set_id")
+        names(.data)[[1L]] <- paste0(origin, "_set_id")
         names(.data)[[2L]] <- origin
         fl <- tempfile()
         readr::write_tsv(.data, fl)
