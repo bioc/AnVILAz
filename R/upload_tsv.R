@@ -70,7 +70,9 @@
 #'
 #'   download_tsv("testData")
 #'
+#'   ## create an example single row tibble for add_tsv_row
 #'   datsun <- filter(mtcars_tbl, model_id == "Datsun-710")
+#'   ## change the model_id to be unique
 #'   datsun[["model_id"]] <- "Datsun-512"
 #'
 #'   add_tsv_row(row = datsun, type = "testData")
