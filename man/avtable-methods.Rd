@@ -16,8 +16,6 @@
 \S4method{avtable_import}{azure}(
   .data,
   entity = names(.data)[[1L]],
-  namespace,
-  name,
   ...,
   platform = cloud_platform()
 )
@@ -39,13 +37,8 @@
 \item{.data}{\code{tibble()} The dataset chiefly from the \code{avtable()} operation}
 
 \item{entity}{The entity name, i.e., the name of the column in the table that
-provides the keys for the data. By default, the first column in the table.
-The keys cannot contain special characters or spaces.}
-
-\item{namespace}{The workspace namespace, usually, the billing project}
-
-\item{name}{The name of the workspace as on the AnVIL UI and given by the
-user at the time of workspace creation}
+provides the keys for the data (a.k.a. \code{primaryKey}). By default, the first
+column in the table. The keys cannot contain special characters or spaces.}
 
 \item{origin}{\code{character(1)} name of the type (table) used to create the set
 e.g "sample", "participant", etc.}

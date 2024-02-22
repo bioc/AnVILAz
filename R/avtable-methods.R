@@ -85,28 +85,19 @@ setMethod("avtables", signature = c(platform = "azure"), definition =
 
 #' @describeIn avtable-methods Upload a dataset to the DATA tab
 #'
-#' @param .data The data.frame to be imported / uploaded to the DATA tab in the
-#'   workspace
-#'
 #' @param entity The entity name, i.e., the name of the column in the table that
-#'   provides the keys for the data. By default, the first column in the table.
-#'   The keys cannot contain special characters or spaces.
-#'
-#' @param namespace The workspace namespace, usually, the billing project
-#'
-#' @param name The name of the workspace as on the AnVIL UI and given by the
-#'   user at the time of workspace creation
+#'   provides the keys for the data (a.k.a. `primaryKey`). By default, the first
+#'   column in the table. The keys cannot contain special characters or spaces.
 #'
 #' @importFrom AnVILBase avtable_import
 #' @exportMethod avtable_import
 setMethod(f = "avtable_import", signature = c(platform = "azure"), definition =
     function(
-        .data, entity = names(.data)[[1L]], namespace, name, ...,
-        platform = cloud_platform()
+        .data, entity = names(.data)[[1L]],
+        ..., platform = cloud_platform()
     ) {
         stopifnot(
-            is.data.frame(.data), isScalarCharacter(entity),
-            isScalarCharacter(namespace), isScalarCharacter(name)
+            is.data.frame(.data), isScalarCharacter(entity)
         )
         dataname <- deparse(substitute(.data))
         temptsv <- tempfile(fileext = ".tsv")
