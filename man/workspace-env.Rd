@@ -8,6 +8,7 @@
 \alias{workspace_data_service_url}
 \alias{workspace_storage_cont_id}
 \alias{workspace_storage_cont_url}
+\alias{cbas_url}
 \title{Access Terra on Azure workspace session variables}
 \usage{
 workspace_id()
@@ -17,6 +18,8 @@ workspace_storage_cont_id()
 workspace_storage_cont_url()
 
 workspace_data_service_url(env = "prod")
+
+cbas_url(env = "prod")
 }
 \arguments{
 \item{env}{\code{character(1)} One of "prod" or "dev" for the 'leonardo.dsde' URL
@@ -46,5 +49,6 @@ workspace_storage_cont_id()
 workspace_storage_cont_url()
 if (interactive()) {
   workspace_data_service_url()
+  cbas_url()
 }
 }

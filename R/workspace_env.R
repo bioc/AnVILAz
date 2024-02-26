@@ -29,6 +29,7 @@
 #' workspace_storage_cont_url()
 #' if (interactive()) {
 #'   workspace_data_service_url()
+#'   cbas_url()
 #' }
 #' @export
 workspace_id <- function() {
@@ -78,5 +79,28 @@ workspace_data_service_url <- function(env = "prod") {
     avstop_for_status(url_resp, "wds_url")
     res_json <- content(url_resp, type = "text", encoding = "UTF-8")
     res_url <- rjsoncons::jmespath(res_json, "[*].proxyUrls.wds")
+    jsonlite::fromJSON(res_url)
+}
+
+#' @rdname workspace-env
+#' @export
+cbas_url <- function(env = "prod") {
+    workspaceId <- workspace_id()
+    api_url <- paste0(
+        "https://leonardo.dsde-{{env}}.broadinstitute.org",
+        "/api/apps/v2/{{workspaceId}}"
+    )
+    uri <- whisker.render(api_url)
+    url_resp <- GET(
+        url = uri,
+        query = list(includeDeleted = "false"),
+        accept_json(),
+        add_headers(
+            authorization = az_token()
+        )
+    )
+    avstop_for_status(url_resp, "cbas_url")
+    res_json <- content(url_resp, type = "text", encoding = "UTF-8")
+    res_url <- rjsoncons::jmespath(res_json, "[*].proxyUrls.cbas")
     jsonlite::fromJSON(res_url)
 }
