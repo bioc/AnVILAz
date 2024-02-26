@@ -22,6 +22,8 @@
 #'   to and from the Azure Storage Container
 #' * `workspace_data_service_url` - The base URI string used to move data to
 #'   to and from the workspace "DATA" tab
+#' * `cbas_url` - The base URI string used to query the workflow submission
+#'   history
 #'
 #' @examples
 #' workspace_id()

@@ -35,6 +35,8 @@ storage container owned by the user account, a.k.a. "resourceId"
 to and from the Azure Storage Container
 \item \code{workspace_data_service_url} - The base URI string used to move data to
 to and from the workspace "DATA" tab
+\item \code{cbas_url} - The base URI string used to query the workflow submission
+history
 }
 }
 \description{
