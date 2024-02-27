@@ -20,8 +20,8 @@
 #' @importFrom httr POST
 #' @export
 get_sas_token <- function(as = "parsed", sasExpirationDuration = 28800) {
-    workspaceId <- workspace_id()
-    resourceId <- workspace_storage_cont_id()
+    workspaceId <- .avcache$get("workspaceId")
+    resourceId <- .avcache$get("resourceId")
     api_endpoint <- paste0(
         "/api/workspaces/v1/{{workspaceId}}/resources/",
         "controlled/azure/storageContainer/{{resourceId}}/getSasToken"

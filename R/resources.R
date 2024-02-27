@@ -2,7 +2,7 @@
 
 #' @importFrom httr GET content add_headers
 query_resources <- function(as = NULL) {
-    workspaceId <- workspace_id()
+    workspaceId <- .avcache$get("workspaceId")
     api_endpoint <- "/api/workspaces/v1/{{workspaceId}}/resources"
     endpoint <- whisker.render(api_endpoint)
     url <- paste0(.DSDE_PROD_URL, endpoint)
@@ -17,9 +17,9 @@ query_resources <- function(as = NULL) {
     content(qrs, as = as)
 }
 
-query_records <- function(type, version = .WDS_API_VERSION, as = NULL) {
-    workspaceId <- workspace_id()
-    v <- version
+query_records <- function(type, as = NULL) {
+    workspaceId <- .avcache$get("workspaceId")
+    v <- .avcache$get("wdsApiVersion")
     api_endpoint <- "/{{workspaceId}}/search/{{v}}/{{type}}"
     endpoint <- whisker.render(api_endpoint)
 

@@ -37,8 +37,7 @@ setMethod("avtable", signature = c(platform = "azure"), definition =
     function(table, ..., platform = cloud_platform()) {
         stopifnot(isScalarCharacter(table))
         download_tsv(
-            type = table,
-            api_version = .WDS_API_VERSION
+            type = table
         )
     }
 )
@@ -53,10 +52,10 @@ setMethod("avtable", signature = c(platform = "azure"), definition =
 #' @exportMethod avtables
 setMethod("avtables", signature = c(platform = "azure"), definition =
     function(
-        api_version = .WDS_API_VERSION, ..., platform = cloud_platform()
+        ..., platform = cloud_platform()
     ) {
-        instanceid <- workspace_id()
-        v <- version
+        instanceid <- .avcache$get("workspaceId")
+        v <- .avcache$get("wdsApiVersion")
         api_endpoint <- "/{{instanceid}}/types/{{v}}"
         endpoint <- whisker.render(api_endpoint)
 

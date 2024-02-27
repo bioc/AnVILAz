@@ -69,7 +69,7 @@ az_copy_from_storage <- function(from, to = "./") {
         to <- file.path(normalizePath(dirname(to)), basename(to))
 
     sas_cred <- get_sas_token()
-    wscu <- workspace_storage_cont_url()
+    wscu <- .avcache$get("wscu")
     token <- sas_cred[["token"]]
     path <- paste0(wscu, "/", from, "?")
     path <- paste0(path, token)
@@ -90,7 +90,7 @@ az_copy_to_storage <- function(from, to) {
     )
 
     sas_cred <- get_sas_token()
-    wscu <- workspace_storage_cont_url()
+    wscu <- .avcache$get("wscu")
     token <- sas_cred[["token"]]
     path <- sas_cred[["url"]]
 

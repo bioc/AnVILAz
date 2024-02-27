@@ -11,7 +11,7 @@
 \usage{
 \S4method{avtable}{azure}(table, ..., platform = cloud_platform())
 
-\S4method{avtables}{azure}(api_version = .WDS_API_VERSION, ..., platform = cloud_platform())
+\S4method{avtables}{azure}(..., platform = cloud_platform())
 
 \S4method{avtable_import}{azure}(
   .data,

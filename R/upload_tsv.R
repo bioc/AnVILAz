@@ -1,5 +1,3 @@
-.WDS_API_VERSION <- "v0.2"
-
 #' @name workspace-data-ops
 #'
 #' @title Functions to work with workspace data
@@ -39,10 +37,6 @@
 #' @param primaryKey `character(1)` The optional column name to uniquely
 #'   identify a record. By default, the first column is used as the primary
 #'   key and all values in the column must be unique.
-#'
-#' @param api_version `character(1)` The version of the Workspace Data Service
-#'   API. Set to the value of the internal `.WDS_API_VERSION` variable by
-#'   default. See the current version with `AnVILAz:::.WDS_API_VERSION`.
 #'
 #' @return
 #'   * `upload_tsv` - A response list indicating successful upload
@@ -87,12 +81,11 @@
 upload_tsv <- function(
     tsv_file,
     type = tools:::file_path_sans_ext(basename(tsv_file)),
-    primaryKey = NULL,
-    api_version = .WDS_API_VERSION
+    primaryKey = NULL
 ) {
     api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
-    instanceid <- workspace_id()
-    v <- api_version
+    instanceid <- .avcache$get("workspaceId")
+    v <- .avcache$get("wdsApiVersion")
     endpoint <- whisker.render(api_endpoint)
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
@@ -111,13 +104,13 @@ upload_tsv <- function(
 
 #' @rdname workspace-data-ops
 #' @export
-download_tsv <- function(type, api_version = .WDS_API_VERSION) {
+download_tsv <- function(type) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
     api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
-    instanceid <- workspace_id()
-    v <- api_version
+    instanceid <- .avcache$get("workspaceId")
+    v <- .avcache$get("wdsApiVersion")
     base_uri <- workspace_data_service_url()
     endpoint <- whisker.render(api_endpoint)
     uri <- paste0(base_uri, endpoint)
@@ -134,12 +127,12 @@ download_tsv <- function(type, api_version = .WDS_API_VERSION) {
 #' @importFrom whisker whisker.render
 #' @importFrom httr DELETE
 #' @export
-delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
+delete_tsv_row <- function(type, id) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    instanceid <- workspace_id()
-    v <- api_version
+    instanceid <- .avcache$get("workspaceId")
+    v <- .avcache$get("wdsApiVersion")
     api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
     endpoint <- whisker.render(api_endpoint)
 
@@ -159,20 +152,18 @@ delete_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
 #' @rdname workspace-data-ops
 #' @importFrom httr PUT
 #' @export
-add_tsv_row <- function(
-    row, type, id = row[[1L]], api_version = .WDS_API_VERSION
-) {
+add_tsv_row <- function(row, type, id = row[[1L]]) {
     stopifnot(identical(nrow(row), 1L))
 
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    instanceid <- workspace_id()
-    v <- api_version
+    instanceid <- .avcache$get("workspaceId")
+    v <- .avcache$get("wdsApiVersion")
     api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
     endpoint <- whisker.render(api_endpoint)
 
-    tsv <- download_tsv(type = type, api_version = api_version)
+    tsv <- download_tsv(type = type)
     primaryKey <- names(tsv)[[1L]]
     allids <- tsv[[primaryKey]]
 
@@ -204,12 +195,12 @@ add_tsv_row <- function(
 #' @rdname workspace-data-ops
 #' @importFrom httr GET
 #' @export
-get_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
+get_tsv_row <- function(type, id) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    instanceid <- workspace_id()
-    v <- api_version
+    instanceid <- .avcache$get("workspaceId")
+    v <- .avcache$get("wdsApiVersion")
     api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
     endpoint <- whisker.render(api_endpoint)
 
@@ -228,12 +219,12 @@ get_tsv_row <- function(type, id, api_version = .WDS_API_VERSION) {
 
 #' @rdname workspace-data-ops
 #' @export
-delete_tsv <- function(type, api_version = .WDS_API_VERSION) {
+delete_tsv <- function(type) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    instanceid <- workspace_id()
-    v <- api_version
+    instanceid <- .avcache$get("workspaceId")
+    v <- .avcache$get("wdsApiVersion")
     api_endpoint <- "/{{instanceid}}/types/{{v}}/{{type}}"
     endpoint <- whisker.render(api_endpoint)
     base_uri <- workspace_data_service_url()

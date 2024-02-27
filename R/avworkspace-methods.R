@@ -44,7 +44,7 @@ setMethod(f = "avworkspaces", signature = c(platform = "azure"), definition =
 setMethod(f = "avworkspace_namespace", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
         api_endpoint <- "/api/v2/runtimes/{{workspaceid}}"
-        workspaceid <- workspace_id()
+        workspaceid <- .avcache$get("workspaceId")
         url <- paste0(.LEONARDO_URL, api_endpoint)
         url <- whisker.render(url)
         qrs <- GET(
@@ -66,7 +66,7 @@ setMethod(f = "avworkspace_namespace", signature = c(platform = "azure"), defini
 #' @exportMethod avworkspace_name
 setMethod(f = "avworkspace_name", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
-        .workspace_name()
+        .avcache$get("workspaceName")
     }
 )
 

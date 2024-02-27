@@ -20,6 +20,8 @@
 #'   storage container owned by the user account, a.k.a. "resourceId"
 #' * `workspace_storage_cont_url` - The base URI string used to move data
 #'   to and from the Azure Storage Container
+#' * `wds_api_version` - The version of the Workspace Data Service API, defaults
+#'   to "v0.2"
 #' * `workspace_data_service_url` - The base URI string used to move data to
 #'   to and from the workspace "DATA" tab
 #' * `cbas_url` - The base URI string used to query the workflow submission
@@ -58,13 +60,20 @@ workspace_storage_cont_url <- function() {
     getOption("AnVILAz.workspace_storage_cont_url", opt)
 }
 
+#' @rdname workspace-env
+#' @export
+wds_api_version <- function() {
+    opt <- Sys.getenv("WDS_API_VERSION", "v0.2")
+    getOption("AnVILAz.wds_api_version", opt)
+}
+
 ## from terra-workspace-data-service/docs/WDS Python Client.md
 
 #' @rdname workspace-env
 #' @importFrom httr accept_json
 #' @export
 workspace_data_service_url <- function(env = "prod") {
-    workspaceId <- workspace_id()
+    workspaceId <- .avcache$get("workspaceId")
     api_url <- paste0(
         "https://leonardo.dsde-{{env}}.broadinstitute.org",
         "/api/apps/v2/{{workspaceId}}"
@@ -87,7 +96,7 @@ workspace_data_service_url <- function(env = "prod") {
 #' @rdname workspace-env
 #' @export
 cbas_url <- function(env = "prod") {
-    workspaceId <- workspace_id()
+    workspaceId <- .avcache$get("workspaceId")
     api_url <- paste0(
         "https://leonardo.dsde-{{env}}.broadinstitute.org",
         "/api/apps/v2/{{workspaceId}}"
@@ -106,3 +115,26 @@ cbas_url <- function(env = "prod") {
     res_url <- rjsoncons::jmespath(res_json, "[*].proxyUrls.cbas")
     jsonlite::fromJSON(res_url)
 }
+
+# .avcache ----------------------------------------------------------------
+
+# Cache for workspace environment variables
+.avcache <- local({
+    hash <- new.env(parent = emptyenv())
+    list(
+        get = function(key) {
+            hash[[key]]
+        },
+        set = function(key, value) {
+            if (!is.null(value))
+                hash[[key]] <- value
+            hash[[key]]
+        },
+        keys = function() {
+            names(hash)
+        },
+        reset = function() {
+            rm(list = ls(hash), envir = hash)
+        }
+    )
+})

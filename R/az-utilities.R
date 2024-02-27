@@ -31,17 +31,15 @@ az_exists <- function() {
 az_healthcheck <- function() {
     if (!az_exists())
         warning("The 'az' command line utility is not available", call. = FALSE)
-    envs <- c(
-        WORKSPACE_ID = workspace_id(),
-        WORKSPACE_NAME = .workspace_name(),
-        WORKSPACE_STORAGE_CONTAINER_ID = workspace_storage_cont_id(),
-        WORKSPACE_STORAGE_CONTAINER_URL = workspace_storage_cont_url()
+    keys <- .avcache$keys()
+    nchars <-  vapply(
+        keys, function(x) nchar(.avcache$get(x)), numeric(1L)
     )
-    notfounds <- envs[!nchar(envs)]
+    notfounds <- keys[!nchars]
     if (length(notfounds))
         warning(
             "The environment variable(s) ",
-            paste(names(notfounds), collapse = ", "),
+            paste(notfounds, collapse = ", "),
             " are not set.",
             call. = FALSE
         )

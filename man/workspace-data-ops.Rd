@@ -13,19 +13,18 @@
 upload_tsv(
   tsv_file,
   type = tools:::file_path_sans_ext(basename(tsv_file)),
-  primaryKey = NULL,
-  api_version = .WDS_API_VERSION
+  primaryKey = NULL
 )
 
-download_tsv(type, api_version = .WDS_API_VERSION)
+download_tsv(type)
 
-delete_tsv_row(type, id, api_version = .WDS_API_VERSION)
+delete_tsv_row(type, id)
 
-add_tsv_row(row, type, id = row[[1L]], api_version = .WDS_API_VERSION)
+add_tsv_row(row, type, id = row[[1L]])
 
-get_tsv_row(type, id, api_version = .WDS_API_VERSION)
+get_tsv_row(type, id)
 
-delete_tsv(type, api_version = .WDS_API_VERSION)
+delete_tsv(type)
 }
 \arguments{
 \item{tsv_file}{\code{character(1)} A path to a tab-separated values file}
@@ -36,10 +35,6 @@ retreival. By default, the file name will be used.}
 \item{primaryKey}{\code{character(1)} The optional column name to uniquely
 identify a record. By default, the first column is used as the primary
 key and all values in the column must be unique.}
-
-\item{api_version}{\code{character(1)} The version of the Workspace Data Service
-API. Set to the value of the internal \code{.WDS_API_VERSION} variable by
-default. See the current version with \code{AnVILAz:::.WDS_API_VERSION}.}
 
 \item{id}{\code{character(1)} The value in the \code{primaryKey} column that
 indicates the row to be removed.}

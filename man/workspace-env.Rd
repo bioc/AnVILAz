@@ -8,6 +8,7 @@
 \alias{workspace_data_service_url}
 \alias{workspace_storage_cont_id}
 \alias{workspace_storage_cont_url}
+\alias{wds_api_version}
 \alias{cbas_url}
 \title{Access Terra on Azure workspace session variables}
 \usage{
@@ -16,6 +17,8 @@ workspace_id()
 workspace_storage_cont_id()
 
 workspace_storage_cont_url()
+
+wds_api_version()
 
 workspace_data_service_url(env = "prod")
 
@@ -33,6 +36,8 @@ in API calls
 storage container owned by the user account, a.k.a. "resourceId"
 \item \code{workspace_storage_cont_url} - The base URI string used to move data
 to and from the Azure Storage Container
+\item \code{wds_api_version} - The version of the Workspace Data Service API, defaults
+to "v0.2"
 \item \code{workspace_data_service_url} - The base URI string used to move data to
 to and from the workspace "DATA" tab
 \item \code{cbas_url} - The base URI string used to query the workflow submission
