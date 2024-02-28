@@ -17,7 +17,6 @@
 #'   sas[["token"]]
 #'   sas[["url"]]
 #' }
-#' @importFrom httr POST
 #' @export
 get_sas_token <- function(as = "parsed", sasExpirationDuration = 28800) {
     workspaceId <- .avcache$get("workspaceId")
@@ -28,13 +27,10 @@ get_sas_token <- function(as = "parsed", sasExpirationDuration = 28800) {
     )
     endpoint <- whisker.render(api_endpoint)
     url <- paste0(.DSDE_PROD_URL, endpoint)
-    sas_tkn <- POST(
-        url = url,
-        query = list(sasExpirationDuration = sasExpirationDuration),
-        add_headers(
-            authorization = az_token()
-        )
-    )
-    avstop_for_status(sas_tkn, "getSasToken")
-    content(sas_tkn, as = as)
+    request(url) |>
+        req_auth_bearer_token(az_token()) |>
+        req_url_query(sasExpirationDuration = sasExpirationDuration) |>
+        req_method("POST") |>
+        req_perform() |>
+        resp_body_json()
 }

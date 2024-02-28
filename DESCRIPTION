@@ -3,12 +3,12 @@ Title: R / Bioconductor Support for the AnVIL Azure Platform
 Version: 0.1.22
 Authors@R: 
     c(person(
-        "Martin", "Morgan", role = c("aut", "cre"),
+        "Martin", "Morgan", role = c("aut", "ctb"),
         email = "mtmorgan.bioc@gmail.com",
         comment = c(ORCID = "0000-0002-5874-8148")
     ),
     person(
-        "Marcel", "Ramos", role = c("aut", "ctb"),
+        "Marcel", "Ramos", role = c("aut", "cre"),
         email = "marcel.ramosperez@roswellpark.org",
         comment = c(ORCID = "0000-0002-3242-0582")
     ))
@@ -21,7 +21,7 @@ Encoding: UTF-8
 Imports:
     AnVILBase,
     BiocBaseUtils,
-    httr,
+    httr2,
     jsonlite,
     methods,
     rjsoncons,
@@ -42,6 +42,7 @@ URL: https://github.com/Bioconductor/AnVILAz
 VignetteBuilder: knitr
 Date: 2024-02-27
 Collate: 
+    'AnVILAz-package.R'
     'authentication.R'
     'azure-class.R'
     'avtable-methods.R'

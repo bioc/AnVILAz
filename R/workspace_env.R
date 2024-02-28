@@ -70,49 +70,33 @@ wds_api_version <- function() {
 ## from terra-workspace-data-service/docs/WDS Python Client.md
 
 #' @rdname workspace-env
-#' @importFrom httr accept_json
 #' @export
 workspace_data_service_url <- function(env = "prod") {
-    workspaceId <- .avcache$get("workspaceId")
-    api_url <- paste0(
-        "https://leonardo.dsde-{{env}}.broadinstitute.org",
-        "/api/apps/v2/{{workspaceId}}"
-    )
-    uri <- whisker.render(api_url)
-    url_resp <- GET(
-        url = uri,
-        query = list(includeDeleted = "false"),
-        accept_json(),
-        add_headers(
-            authorization = az_token()
-        )
-    )
-    avstop_for_status(url_resp, "wds_url")
-    res_json <- content(url_resp, type = "text", encoding = "UTF-8")
-    res_url <- rjsoncons::jmespath(res_json, "[*].proxyUrls.wds")
-    jsonlite::fromJSON(res_url)
+    .leo_apps(env = env, app = "wds")
 }
 
 #' @rdname workspace-env
 #' @export
 cbas_url <- function(env = "prod") {
+    .leo_apps(env = env, app = "cbas")
+}
+
+.leo_apps <- function(env, app) {
     workspaceId <- .avcache$get("workspaceId")
     api_url <- paste0(
         "https://leonardo.dsde-{{env}}.broadinstitute.org",
         "/api/apps/v2/{{workspaceId}}"
     )
     uri <- whisker.render(api_url)
-    url_resp <- GET(
-        url = uri,
-        query = list(includeDeleted = "false"),
-        accept_json(),
-        add_headers(
-            authorization = az_token()
-        )
+    url_resp <- request(uri) |>
+        req_auth_bearer_token(az_token()) |>
+        req_url_query(includeDeleted = "false") |>
+        req_perform() |>
+        resp_body_string()
+    res_url <- rjsoncons::jmespath(
+        url_resp,
+        paste0("[*].proxyUrls.", app)
     )
-    avstop_for_status(url_resp, "cbas_url")
-    res_json <- content(url_resp, type = "text", encoding = "UTF-8")
-    res_url <- rjsoncons::jmespath(res_json, "[*].proxyUrls.cbas")
     jsonlite::fromJSON(res_url)
 }
 

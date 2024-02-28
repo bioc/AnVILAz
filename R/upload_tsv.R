@@ -43,8 +43,6 @@
 #'   * `download_tsv` - A `tibble` corresponding to the data labeled with `type`
 #'   * `delete_tsv_row`; `delete_tsv` - When successful, a `NULL` value
 #'
-#' @importFrom httr upload_file
-#'
 #' @examples
 #' if (interactive()) {
 #'   library(dplyr)
@@ -89,17 +87,16 @@ upload_tsv <- function(
     endpoint <- whisker.render(api_endpoint)
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
-    response <- POST(
-        uri,
-        query = list(primaryKey = primaryKey),
-        body = list(
-            records = upload_file(tsv_file, "text/tab-separated-values")
-        ),
-        add_headers(authorization = az_token()),
-        accept_json()
-    )
-    avstop_for_status(response, "upload_tsv")
-    content(response)
+    request(uri) |>
+        req_auth_bearer_token(az_token()) |>
+        req_url_query(primaryKey = primaryKey) |>
+        req_body_multipart(
+            records = curl::form_file(
+                tsv_file, type = "text/tab-separated-values"
+            )
+        ) |>
+        req_perform() |>
+        resp_body_json()
 }
 
 #' @rdname workspace-data-ops
@@ -114,18 +111,19 @@ download_tsv <- function(type) {
     base_uri <- workspace_data_service_url()
     endpoint <- whisker.render(api_endpoint)
     uri <- paste0(base_uri, endpoint)
-    response <- GET(
-        uri,
-        add_headers(authorization = az_token()),
-        accept_json()
-    )
-    avstop_for_status(response, "download_tsv")
-    content(response, encoding = "UTF-8")
+
+    if (!requireNamespace("readr", quietly = TRUE))
+        stop("Install the 'readr' package to import TSV files")
+
+    request(uri) |>
+        req_auth_bearer_token(az_token()) |>
+        req_perform() |>
+        resp_body_string() |>
+        readr::read_tsv(show_col_types = FALSE)
 }
 
 #' @rdname workspace-data-ops
 #' @importFrom whisker whisker.render
-#' @importFrom httr DELETE
 #' @export
 delete_tsv_row <- function(type, id) {
     opt <- options(readr.show_col_types = FALSE)
@@ -138,19 +136,16 @@ delete_tsv_row <- function(type, id) {
 
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
-    response <- DELETE(
-        uri,
-        add_headers(authorization = az_token()),
-        accept_json()
-    )
-    avstop_for_status(response, "delete_tsv_row")
-    is.null(
-        content(response)
-    )
+    response <- request(uri) |>
+        req_auth_bearer_token(az_token()) |>
+        req_method("DELETE") |>
+        req_perform() |>
+        resp_is_error()
+
+    !response
 }
 
 #' @rdname workspace-data-ops
-#' @importFrom httr PUT
 #' @export
 add_tsv_row <- function(row, type, id = row[[1L]]) {
     stopifnot(identical(nrow(row), 1L))
@@ -175,16 +170,16 @@ add_tsv_row <- function(row, type, id = row[[1L]]) {
     row <- row[, !names(row) %in% primaryKey]
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
-    response <- PUT(
-        uri,
-        body = list(attributes = as.list(row)),
-        query = c(primaryKey = primaryKey),
-        encode = "json",
-        add_headers(authorization = az_token()),
-        accept_json()
-    )
-    avstop_for_status(response, "add_tsv_row")
-    result <- content(response)
+    result <- request(uri) |>
+        req_auth_bearer_token(az_token()) |>
+        req_body_json(
+            list(attributes = as.list(row))
+        ) |>
+        req_url_query(primaryKey = primaryKey) |>
+        req_method("PUT") |>
+        req_perform() |>
+        resp_body_json()
+
     result <- tibble::as_tibble(
         c(key = id, result[["attributes"]])
     )
@@ -193,7 +188,6 @@ add_tsv_row <- function(row, type, id = row[[1L]]) {
 }
 
 #' @rdname workspace-data-ops
-#' @importFrom httr GET
 #' @export
 get_tsv_row <- function(type, id) {
     opt <- options(readr.show_col_types = FALSE)
@@ -206,14 +200,12 @@ get_tsv_row <- function(type, id) {
 
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
-    response <- GET(
-        uri,
-        add_headers(authorization = az_token()),
-        accept_json()
-    )
+    response <- request(uri) |>
+        req_auth_bearer_token(az_token()) |>
+        req_perform() |>
+        resp_body_json()
 
-    avstop_for_status(response, "get_tsv_row")
-    content(response)[["attributes"]] |>
+    response[["attributes"]] |>
         tibble::as_tibble()
 }
 
@@ -229,12 +221,13 @@ delete_tsv <- function(type) {
     endpoint <- whisker.render(api_endpoint)
     base_uri <- workspace_data_service_url()
     uri <- paste0(base_uri, endpoint)
-    response <- DELETE(
-        uri,
-        add_headers(authorization = az_token()),
-        accept_json()
-    )
-    avstop_for_status(response, "delete_tsv")
-    content(response)
+
+    result <- request(uri) |>
+        req_auth_bearer_token(az_token()) |>
+        req_method("DELETE") |>
+        req_perform() |>
+        resp_is_error()
+
+    !result
 }
 

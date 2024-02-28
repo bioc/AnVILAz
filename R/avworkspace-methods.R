@@ -14,19 +14,16 @@ NULL
 
 #' @describeIn avworkspace-methods List workspaces
 #'
-#' @importFrom AnVILBase avworkspaces avstop_for_status
+#' @importFrom AnVILBase avworkspaces
 #' @exportMethod avworkspaces
 setMethod(f = "avworkspaces", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
         api_endpoint <- "/api/workspaces"
         url <- paste0(.RAWLS_URL, api_endpoint)
-        qrs <- GET(
-            url = url,
-            add_headers(
-                authorization = az_token()
-            )
-        )
-        avstop_for_status(qrs, "avworkspaces")
+        qrs <- request(url) |>
+            req_auth_bearer_token(az_token()) |>
+            req_perform() |>
+            resp_body_string()
         AnVILBase::flatten(qrs) |>
             AnVILBase::avworkspaces_clean()
     }
@@ -38,7 +35,7 @@ setMethod(f = "avworkspaces", signature = c(platform = "azure"), definition =
 
 #' @describeIn avworkspace-methods List the workspace namespace
 #'
-#' @importFrom AnVILBase avworkspace_namespace avstop_for_status
+#' @importFrom AnVILBase avworkspace_namespace
 #' @importFrom whisker whisker.render
 #' @exportMethod avworkspace_namespace
 setMethod(f = "avworkspace_namespace", signature = c(platform = "azure"), definition =
@@ -47,14 +44,12 @@ setMethod(f = "avworkspace_namespace", signature = c(platform = "azure"), defini
         workspaceid <- .avcache$get("workspaceId")
         url <- paste0(.LEONARDO_URL, api_endpoint)
         url <- whisker.render(url)
-        qrs <- GET(
-            url = url,
-            add_headers(
-                authorization = az_token()
-            )
-        )
-        avstop_for_status(qrs, "avworkspace_namespace")
-        content(qrs)[[1L]][["labels"]][["saturnWorkspaceNamespace"]]
+        qrs <- request(url) |>
+            req_auth_bearer_token(az_token()) |>
+            req_perform() |>
+            resp_body_json()
+
+        qrs[[1L]][["labels"]][["saturnWorkspaceNamespace"]]
     }
 )
 

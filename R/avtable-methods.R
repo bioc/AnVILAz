@@ -61,13 +61,11 @@ setMethod("avtables", signature = c(platform = "azure"), definition =
 
         base_uri <- workspace_data_service_url()
         uri <- paste0(base_uri, endpoint)
-        response <- GET(
-            url = uri,
-            add_headers(authorization = az_token()),
-            accept_json()
-        )
-        avstop_for_status(response, "avtables")
-        resp <- content(response, as = "text", encoding = "UTF-8")
+        resp <- request(uri) |>
+            req_auth_bearer_token(az_token()) |>
+            req_headers("Accept" = "application/json") |>
+            req_perform() |>
+            resp_body_string()
         tibble::tibble(
             table = jmespath(resp, "[*].name", as = "R"),
             count = jmespath(resp, "[*].count", as = "R"),
