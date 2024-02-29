@@ -60,7 +60,9 @@ file.create("test/test2.log")
 expect_error(
     avbackup("./test", "analyses/test_backup/")
 )
-avbackup("./test/*", "analyses/test_backup/")
+expect_error(
+    avbackup("./test/*", "analyses/test_backup/")
+)
 expect_true(
     "analyses/test_backup/test.log" %in% avlist()[["INFO"]]
 )

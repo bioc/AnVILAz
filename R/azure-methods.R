@@ -17,12 +17,17 @@
 #'
 #' @param recursive `logical(1)` Whether to recursively move or remove files in
 #'   a directory. Only applies to `avremove`, `avbackup`, and `avrestore`.
-#'   Default is `FALSE`.
+#'   Default is `TRUE` for `backup` and `restore` operations and `FALSE` for
+#'   `avremove`.
 #'
 #' @param platform `character(1)` The platform class to dispatch on. The default
 #'   is `"azure"` for the `AnVILAz` package.
 #'
 #' @param ... Additional arguments passed to the underlying methods (not used).
+#'
+#' @details  The `recursive` argument for `avbackup` and `avrestore` is set to
+#'   `TRUE` by default and `FALSE` for `avremove`. Note that wildcards are not
+#'   supported for local or remote paths.
 #'
 #' @return
 #' * `avlist` - a `tibble` of files and metadata
@@ -142,16 +147,14 @@ setMethod(f = "avremove", signature = c(platform = "azure"), definition =
 #' @exportMethod avbackup
 setMethod(f = "avbackup", signature = c(platform = "azure"), definition =
     function(
-        source, destination, recursive = FALSE, ...,
+        source, destination, recursive = TRUE, ...,
         platform = cloud_platform()
     ) {
-        if (endsWith(source, "*"))
-            recursive <- TRUE
-        source <- gsub("\\*$", "", source)
+        if (endWith(source, "*"))
+            stop("Source path cannot end with a wildcard")
 
         stopifnot(
-            isScalarCharacter(source),
-            dir.exists(source),
+            isScalarCharacter(source), dir.exists(source),
             is.logical(recursive)
         )
 
@@ -184,7 +187,7 @@ setMethod(f = "avbackup", signature = c(platform = "azure"), definition =
 #' @exportMethod avrestore
 setMethod(f = "avrestore", signature = c(platform = "azure"), definition =
     function(
-        source, destination, recursive = FALSE, ...,
+        source, destination, recursive = TRUE, ...,
         platform = cloud_platform()
     ) {
         stopifnot(

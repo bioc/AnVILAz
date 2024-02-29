@@ -19,7 +19,7 @@
 \S4method{avbackup}{azure}(
   source,
   destination,
-  recursive = FALSE,
+  recursive = TRUE,
   ...,
   platform = cloud_platform()
 )
@@ -27,7 +27,7 @@
 \S4method{avrestore}{azure}(
   source,
   destination,
-  recursive = FALSE,
+  recursive = TRUE,
   ...,
   platform = cloud_platform()
 )
@@ -55,7 +55,8 @@ is \code{"azure"} for the \code{AnVILAz} package.}
 
 \item{recursive}{\code{logical(1)} Whether to recursively move or remove files in
 a directory. Only applies to \code{avremove}, \code{avbackup}, and \code{avrestore}.
-Default is \code{FALSE}.}
+Default is \code{TRUE} for \code{backup} and \code{restore} operations and \code{FALSE} for
+\code{avremove}.}
 }
 \value{
 \itemize{
@@ -76,6 +77,11 @@ the Azure Storage Container
 }
 \description{
 A number of methods compatible with the Azure platform class.
+}
+\details{
+The \code{recursive} argument for \code{avbackup} and \code{avrestore} is set to
+\code{TRUE} by default and \code{FALSE} for \code{avremove}. Note that wildcards are not
+supported for local or remote paths.
 }
 \section{Functions}{
 \itemize{
