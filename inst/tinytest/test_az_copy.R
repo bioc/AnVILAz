@@ -57,7 +57,10 @@ file.create("test/test.log")
 file.create("test/test2.log")
 
 ## create remote folder and copy file
-avbackup("./test", "analyses/test_backup/", contentsOnly = TRUE)
+expect_error(
+    avbackup("./test", "analyses/test_backup/")
+)
+avbackup("./test/*", "analyses/test_backup/")
 expect_true(
     "analyses/test_backup/test.log" %in% avlist()[["INFO"]]
 )
