@@ -150,7 +150,7 @@ setMethod(f = "avbackup", signature = c(platform = "azure"), definition =
         source, destination, recursive = TRUE, ...,
         platform = cloud_platform()
     ) {
-        if (endWith(source, "*"))
+        if (endsWith(source, "*"))
             stop("Source path cannot end with a wildcard")
 
         stopifnot(
