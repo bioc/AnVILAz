@@ -64,35 +64,31 @@ expect_error(
     avbackup("./test/*", "analyses/test_backup/")
 )
 expect_true(
-    "analyses/test_backup/test.log" %in% avlist()[["INFO"]]
+    "analyses/test_backup/test/test.log" %in% avlist()[["INFO"]]
 )
 expect_true(
-    "analyses/test_backup/test2.log" %in% avlist()[["INFO"]]
+    "analyses/test_backup/test/test2.log" %in% avlist()[["INFO"]]
 )
 
 avremove("analyses/test_backup/", recursive = TRUE)
 expect_false(
-    "analyses/test_backup/test.log" %in% avlist()[["INFO"]]
-)
-expect_false(
-    "analyses/test_backup/test2.log" %in% avlist()[["INFO"]]
-)
-
-avbackup("./test", "analyses/test_backup")
-expect_true(
     "analyses/test_backup/test/test.log" %in% avlist()[["INFO"]]
 )
+expect_false(
+    "analyses/test_backup/test/test2.log" %in% avlist()[["INFO"]]
+)
+
 avremove("analyses/test_backup/", recursive = TRUE)
 
 avbackup("./test", "analyses/test_restore")
 avrestore(
-    "analyses/test_restore", "./test_restore"
+    "analyses/test_restore/test", "./test_restore"
 )
 expect_true(
     dir.exists("test_restore/")
 )
 expect_true(
-    file.exists("test_restore/test.log")
+    file.exists("test_restore/test/test.log")
 )
 
 unlink("./test", recursive = TRUE)
@@ -103,7 +99,7 @@ expect_true(
     dir.exists("test_restore/test_restore")
 )
 expect_true(
-    file.exists("test_restore/test_restore/test.log")
+    file.exists("test_restore/test_restore/test/test.log")
 )
 
 unlink("./test_restore", recursive = TRUE)
