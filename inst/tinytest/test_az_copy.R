@@ -79,9 +79,9 @@ expect_true(
 )
 avremove("analyses/test_backup/", recursive = TRUE)
 
-avbackup("./test", "analyses/test_restore", contentsOnly = TRUE)
+avbackup("./test", "analyses/test_restore")
 avrestore(
-    "analyses/test_restore", "./test_restore", contentsOnly = TRUE
+    "analyses/test_restore", "./test_restore"
 )
 expect_true(
     dir.exists("test_restore/")
