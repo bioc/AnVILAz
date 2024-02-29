@@ -122,7 +122,7 @@ setMethod(f = "avremove", signature = c(platform = "azure"), definition =
             isScalarCharacter(source)
         )
         .validate_blob(source)
-        wscu <- .azcache$get("wscu")
+        wscu <- .avcache$get("wscu")
         sas_cred <- get_sas_token()
         token_slug <- sas_cred[["token"]]
         path <- paste0(wscu, "/", source, "?")
@@ -154,7 +154,7 @@ setMethod(f = "avbackup", signature = c(platform = "azure"), definition =
         source <- gsub("\\/$", "", source)
         source <- normalizePath(source)
 
-        wscu <- .azcache$get("wscu")
+        wscu <- .avcache$get("wscu")
         sas_cred <- get_sas_token()
         token <- sas_cred[["token"]]
         path <- sas_cred[["url"]]
@@ -194,7 +194,7 @@ setMethod(f = "avrestore", signature = c(platform = "azure"), definition =
 
         sas_cred <- get_sas_token()
         token <- sas_cred[["token"]]
-        wscu <- .azcache$get("wscu")
+        wscu <- .avcache$get("wscu")
         path <- paste0(wscu, "/", source, "?")
         path <- paste0(path, token)
 
@@ -214,7 +214,7 @@ setMethod(f = "avrestore", signature = c(platform = "azure"), definition =
 #' @exportMethod avstorage
 setMethod(f = "avstorage", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
-        .azcache$get("wscu")
+        .avcache$get("wscu")
     }
 )
 
