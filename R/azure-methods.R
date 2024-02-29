@@ -145,6 +145,10 @@ setMethod(f = "avbackup", signature = c(platform = "azure"), definition =
         source, destination, recursive = FALSE, ...,
         platform = cloud_platform()
     ) {
+        if (endsWith(source, "*"))
+            recursive <- TRUE
+        source <- gsub("\\*$", "", source)
+
         stopifnot(
             isScalarCharacter(source),
             dir.exists(source),
