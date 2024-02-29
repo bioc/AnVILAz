@@ -16,7 +16,7 @@ NULL
 #'
 #' @importFrom AnVILBase avworkspaces
 #' @exportMethod avworkspaces
-setMethod(f = "avworkspaces", signature = c(platform = "azure"), definition =
+setMethod("avworkspaces", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
         api_endpoint <- "/api/workspaces"
         url <- paste0(.RAWLS_URL, api_endpoint)
@@ -38,7 +38,7 @@ setMethod(f = "avworkspaces", signature = c(platform = "azure"), definition =
 #' @importFrom AnVILBase avworkspace_namespace
 #' @importFrom whisker whisker.render
 #' @exportMethod avworkspace_namespace
-setMethod(f = "avworkspace_namespace", signature = c(platform = "azure"), definition =
+setMethod("avworkspace_namespace", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
         api_endpoint <- "/api/v2/runtimes/{{workspaceid}}"
         workspaceid <- .avcache$get("workspaceId")
@@ -59,7 +59,7 @@ setMethod(f = "avworkspace_namespace", signature = c(platform = "azure"), defini
 #'
 #' @importFrom AnVILBase avworkspace_name
 #' @exportMethod avworkspace_name
-setMethod(f = "avworkspace_name", signature = c(platform = "azure"), definition =
+setMethod("avworkspace_name", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
         .avcache$get("workspaceName")
     }
@@ -72,7 +72,7 @@ setMethod(f = "avworkspace_name", signature = c(platform = "azure"), definition 
 #'
 #' @importFrom AnVILBase avworkspace
 #' @exportMethod avworkspace
-setMethod(f = "avworkspace", signature = c(platform = "azure"), definition =
+setMethod("avworkspace", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
         paste0(avworkspace_namespace(), "/", avworkspace_name())
     }

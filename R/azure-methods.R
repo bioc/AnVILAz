@@ -75,7 +75,7 @@ NULL
 #'
 #' @importFrom AnVILBase avcopy
 #' @exportMethod avcopy
-setMethod(f = "avcopy", signature = c(platform = "azure"), definition =
+setMethod("avcopy", signature = c(platform = "azure"), definition =
     function(source, destination, ..., platform = cloud_platform()) {
         stopifnot(
             isScalarCharacter(source)
@@ -99,7 +99,7 @@ setMethod(f = "avcopy", signature = c(platform = "azure"), definition =
 #'
 #' @importFrom AnVILBase avlist
 #' @exportMethod avlist
-setMethod(f = "avlist", signature = c(platform = "azure"), definition =
+setMethod("avlist", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
         path <- get_sas_token()[["url"]]
         args <- c("list", shQuote(path))
@@ -121,7 +121,7 @@ setMethod(f = "avlist", signature = c(platform = "azure"), definition =
 #'
 #' @importFrom AnVILBase avremove
 #' @exportMethod avremove
-setMethod(f = "avremove", signature = c(platform = "azure"), definition =
+setMethod("avremove", signature = c(platform = "azure"), definition =
     function(source, recursive = FALSE, ..., platform = cloud_platform()) {
         stopifnot(
             isScalarCharacter(source)
@@ -145,7 +145,7 @@ setMethod(f = "avremove", signature = c(platform = "azure"), definition =
 #'
 #' @importFrom AnVILBase avbackup
 #' @exportMethod avbackup
-setMethod(f = "avbackup", signature = c(platform = "azure"), definition =
+setMethod("avbackup", signature = c(platform = "azure"), definition =
     function(
         source, destination, recursive = TRUE, ...,
         platform = cloud_platform()
@@ -185,7 +185,7 @@ setMethod(f = "avbackup", signature = c(platform = "azure"), definition =
 #'
 #' @importFrom AnVILBase avrestore
 #' @exportMethod avrestore
-setMethod(f = "avrestore", signature = c(platform = "azure"), definition =
+setMethod("avrestore", signature = c(platform = "azure"), definition =
     function(
         source, destination, recursive = TRUE, ...,
         platform = cloud_platform()
@@ -219,7 +219,7 @@ setMethod(f = "avrestore", signature = c(platform = "azure"), definition =
 #'
 #' @importFrom AnVILBase avstorage
 #' @exportMethod avstorage
-setMethod(f = "avstorage", signature = c(platform = "azure"), definition =
+setMethod("avstorage", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
         .avcache$get("wscu")
     }

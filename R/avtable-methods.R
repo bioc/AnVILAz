@@ -88,7 +88,7 @@ setMethod("avtables", signature = c(platform = "azure"), definition =
 #'
 #' @importFrom AnVILBase avtable_import
 #' @exportMethod avtable_import
-setMethod(f = "avtable_import", signature = c(platform = "azure"), definition =
+setMethod("avtable_import", signature = c(platform = "azure"), definition =
     function(
         .data, table, entity = names(.data)[[1L]],
         ..., platform = cloud_platform()
