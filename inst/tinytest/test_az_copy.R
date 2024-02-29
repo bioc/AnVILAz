@@ -30,7 +30,10 @@ expect_true(
     "analyses/test/test.log" %in% avlist()[["INFO"]]
 )
 file.remove("test.log")
-az_copy_from_storage("analyses/test/test.log", "./test.log")
+expect_error(
+    az_copy_from_storage("analyses/test/test.log", "./test.log")
+)
+az_copy_from_storage("analyses/test/test.log", "./")
 expect_true(
     file.exists("test.log")
 )
