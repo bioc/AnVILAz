@@ -43,5 +43,5 @@ az_healthcheck <- function() {
             " are not set.",
             call. = FALSE
         )
-    all(nchar(envs))
+    all(nchar(keys))
 }
