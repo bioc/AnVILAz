@@ -22,8 +22,8 @@ setMethod("avworkspaces", signature = c(platform = "azure"), definition =
         url <- paste0(.RAWLS_URL, api_endpoint)
         qrs <- request(url) |>
             req_auth_bearer_token(az_token()) |>
-            req_perform() |>
-            resp_body_string()
+            req_perform()
+
         AnVILBase::flatten(qrs) |>
             AnVILBase::avworkspaces_clean()
     }
@@ -38,8 +38,8 @@ setMethod("avworkspaces", signature = c(platform = "azure"), definition =
 #' @importFrom AnVILBase avworkspace_namespace
 #' @importFrom whisker whisker.render
 #' @exportMethod avworkspace_namespace
-setMethod("avworkspace_namespace", signature = c(platform = "azure"), definition =
-    function(..., platform = cloud_platform()) {
+setMethod("avworkspace_namespace", signature = c(platform = "azure"),
+    definition = function(..., platform = cloud_platform()) {
         api_endpoint <- "/api/v2/runtimes/{{workspaceid}}"
         workspaceid <- .avcache$get("workspaceId")
         url <- paste0(.LEONARDO_URL, api_endpoint)
