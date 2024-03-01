@@ -70,8 +70,8 @@ container on Azure. They can also be accessed via the
 
 ## Uploading a file
 
-First, we load the internal `mtcars` dataset and save as an `.Rda` file with
-`save`.
+As an example, we load the internal `mtcars` dataset and save it as an `.Rda`
+file with `save`. We can then upload this file to the ABS.
 
 ```{r}
 data("mtcars", package = "datasets")
@@ -79,18 +79,18 @@ test <- head(mtcars)
 save(test, file = "mydata.Rda")
 ```
 
-We can now upload the data to the `analyses/` folder in the Azure Storage
-Container.
+Now we can upload the data to the `analyses/` folder in the Azure Blob Storage
+(ABS) Container.
 
 ```{r}
-az_copy_to_storage("mydata.Rda", "analyses/")
+avcopy("mydata.Rda", "analyses/")
 ```
 
-We will also use a small log file for demonstration purposes. The `jupyter.log`
+We can also use a small log file for demonstration purposes. The `jupyter.log`
 file is already present in our workspace directory.
 
 ```{r}
-az_copy_to_storage("jupyter.log", "analyses/")
+avcopy("jupyter.log", "analyses/")
 ```
 
 ## Deleting a file
@@ -104,76 +104,75 @@ avremove("analyses/mydata.Rda")
 
 ## Downloading from the ABS
 
+The reverse operation is also possible with a remote and local paths as the
+first and second arguments, respectively.
+
 ```{r}
-az_copy_from_storage("analyses/jupyter.log", "./test/")
+avcopy("analyses/jupyter.log", "./test/")
 ```
 
 ## Folder-wise upload to ABS
 
+To upload an entire folder, we can use `avbackup`. Note that the entire `test`
+folder becomes a subfolder of the remote `analyses` folder in this example.
+
 ```{r}
-avbackup("./test/", "analyses/test/", contentsOnly = TRUE)
+avbackup("./test/", "analyses/")
 ```
 
 ## Folder-wise download from ABS
 
-By default the contents of the `from_dir` will be copied to the current
-working directory `"."`, i.e., the base `/` workspace directory.
+By default, the entire `source` directory will be copied to the current working
+directory `"."`, i.e., the base workspace directory.
 
 ```{r}
-avrestore("analyses/test", contentsOnly = TRUE)
+avrestore("analyses/test")
 ```
 
 You may also move this to another folder by providing a folder name as the
 second argument.
 
 ```{r}
-avrestore("analyses/test", "test", contentsOnly = TRUE)
+avrestore("analyses/test", "test")
 ```
-
-Note. The `contentsOnly` argument appends a `/*` wildcard to the folder and
-moves only the contents to the desired folder, in this case, the folder in the
-second argument (`test`).
 
 # The `DATA` tab
 
-## Example TSV
+## `mtcars` example
 
-First we create an example `tsv` for uploading to the `DATA` tab. We create a
-`model_id` column from the `rownames`. Then we write the file to a `.tsv` with
-the `readr::write_tsv` function.
+First we create an example dataset for uploading to the `DATA` tab. We create a
+`model_id` column from the `rownames`.
 
 ```{r}
 library(dplyr)
 library(readr)
-type <- "model"
 mtcars_tbl <-
     mtcars |>
     as_tibble(rownames = "model_id") |>
     mutate(model_id = gsub(" ", "-", model_id))
-
-tsv_file <- tempfile()
-write_tsv(mtcars_tbl, tsv_file)
 ```
 
-## TSV upload
+## Uploading data
 
-Note that the `type` variable will serve as the table name in the `DATA` tab.
-We also need to provide the `primaryKey` which corresponds to the column
-name that uniquely identifies each row in the data. Typically, these are
-patient or UUID identifiers.
+The `avtable_import` command takes an existing R object (usually a `tibble`) and
+uploads to the `DATA` tab in the AnVIL User Interface. The `table` argument will
+set the name of the table. We also need to provide the `primaryKey` which
+corresponds to the column name that uniquely identifies each row in the data.
+Typically, the `primaryKey` column provides a list of patient or UUID
+identifiers and is in the first column of the data.
 
 ```{r}
-upload_tsv(tsv_file = tsv_file, type = type, primaryKey = "model_id")
+mtcars_tbl |> avtable_import(table = "testData", primaryKey = "model_id")
 ```
 
-## TSV download 
+## Downloading data
 
-The `download_tsv` function will pull the data from the `DATA` tab and
-represent it locally. It can only work by using the same `type` identifier
-used when the data was uploaded.
+The `avtable` function will pull the data from the `DATA` tab and represent the
+data locally as a `tibble`. It works by using the same `type` identifier (i.e.,
+the `table` argument) that was used when the data was uploaded.
 
 ```{r}
-model_data <- download_tsv(type = "model")
+model_data <- avtable(table = "testData")
 head(model_data)
 ```
 
@@ -184,7 +183,7 @@ In this example, we remove the `AMC-Javelin` entry from the data. We are left
 with 31 records.
 
 ```{r}
-delete_tsv_row(type = "model", id = "AMC-Javelin")
+avtable_delete_values(table = "model", values = "AMC-Javelin")
 ```
 
 ## Delete entire table
