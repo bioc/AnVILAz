@@ -178,21 +178,23 @@ head(model_data)
 
 ## Delete a row in the table
 
-The API allows deletion of specific rows in the data using the `primaryKey`.
-In this example, we remove the `AMC-Javelin` entry from the data. We are left
-with 31 records.
+The API allows deletion of specific rows in the data using
+`avtable_delete_values`. To indicate which row to delete, provide the a value or
+set of values that correspond to row identifiers in the `primaryKey`. In this
+example, we remove the `AMC-Javelin` entry from the data. We are left with 31
+records.
 
 ```{r}
-avtable_delete_values(table = "model", values = "AMC-Javelin")
+avtable_delete_values(table = "testData", values = "AMC-Javelin")
 ```
 
 ## Delete entire table
 
-To remove the entire table from the `DATA` tab, we can use the `delete_tsv`
-function with the corresponding table identifier a.k.a. `type`.
+To remove the entire table from the `DATA` tab, we can use the `avtable_delete`
+method with the corresponding table name.
 
 ```{r}
-delete_tsv(type = "model")
+avtable_delete(table = "testData")
 ```
 
 # Bug Reports

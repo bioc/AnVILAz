@@ -6,6 +6,7 @@
 \alias{avtables,azure-method}
 \alias{avtable_import,azure-method}
 \alias{avtable_import_set,azure-method}
+\alias{avtable_delete,azure-method}
 \alias{avtable_delete_values,azure-method}
 \title{AnVIL Azure table ("type") methods}
 \usage{
@@ -17,6 +18,13 @@
   .data,
   table,
   entity = names(.data)[[1L]],
+  namespace = avworkspace_namespace(),
+  name = avworkspace_name(),
+  delete_empty_values = FALSE,
+  na = "NA",
+  n = Inf,
+  page = 1L,
+  pageSize = 10L,
   ...,
   platform = cloud_platform()
 )
@@ -30,6 +38,8 @@
   platform = cloud_platform()
 )
 
+\S4method{avtable_delete}{azure}(table, ..., platform = cloud_platform())
+
 \S4method{avtable_delete_values}{azure}(table, values, ..., platform = cloud_platform())
 }
 \arguments{
@@ -40,6 +50,9 @@
 \item{entity}{The entity name, i.e., the name of the column in the table that
 provides the keys for the data (a.k.a. \code{primaryKey}). By default, the first
 column in the table. The keys cannot contain special characters or spaces.}
+
+\item{delete_empty_values}{logical(1) when \code{TRUE}, remove entities
+not include in \code{.data} from the DATA table. Default: \code{FALSE}.}
 
 \item{origin}{\code{character(1)} name of the type (table) used to create the set
 e.g "sample", "participant", etc.}
@@ -77,6 +90,8 @@ operation is somewhat like \code{split(member, set)}.
 \item \code{avtable_import(azure)}: Upload a dataset to the DATA tab
 
 \item \code{avtable_import_set(azure)}: Create a grouping table from an origin dataset
+
+\item \code{avtable_delete(azure)}: Delete a table / type
 
 \item \code{avtable_delete_values(azure)}: Delete rows from a table / type
 

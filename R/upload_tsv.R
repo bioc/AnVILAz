@@ -1,26 +1,25 @@
-#' @name workspace-data-ops
+#' @name workspace-dev-ops
 #'
-#' @title Functions to work with workspace data
+#' @title Functions to work with workspace data for developers
 #'
-#' @aliases upload_tsv download_tsv delete_tsv_row delete_tsv
-#'
-#' @description These group of functions will allow you to manipulate data in
+#' @description These group of functions will allow you to manipulate tables in
 #'   the "DATA" tab. Example operations include moving a flat Tab-Separated
 #'   Values (TSV) file into the workspace, deleting records, deleting tables,
-#'   and retrieving the data table.
+#'   adding a single row, retrieving a single row, and retrieving the data
+#'   table. Note that the API used refers to tables as `types`.
 #'
 #' @details These functions use the Workspace Data Services (WDS) API. Current
 #'   operations that affect the "DATA" tab include:
 #'   * `upload_tsv` - a `POST` request using a TSV file that populates the data
 #'   * `download_tsv` - a `GET` request with the data name (`type` argument) in
 #'     `upload_tsv` to represent the data locally as a `tibble`
-#'   * `delete_tsv_row` - a `DELETE` request to remove a record or row from
+#'   * `delete_type_id` - a `DELETE` request to remove a record or row from
 #'     `type`
-#'   * `add_tsv_row` - a `PUT` request to add a single row to an existing table
+#'   * `add_type_id` - a `PUT` request to add a single row to an existing table
 #'     (`type`)
-#'   * `get_tsv_row` - a `GET` request to retrieve a single row from an existing
+#'   * `get_type_id` - a `GET` request to retrieve a single row from an existing
 #'     table (`type`)
-#'   * `delete_tsv` - a `DELETE` request to remove then entire data set (`type`)
+#'   * `delete_type` - a `DELETE` request to remove then entire data set (`type`)
 #'
 #' @param tsv_file `character(1)` A path to a tab-separated values file
 #'
@@ -41,7 +40,9 @@
 #' @return
 #'   * `upload_tsv` - A response list indicating successful upload
 #'   * `download_tsv` - A `tibble` corresponding to the data labeled with `type`
-#'   * `delete_tsv_row`; `delete_tsv` - When successful, a `NULL` value
+#'   * `delete_type_id`; `delete_type` - When successful, a `NULL` value
+#'
+#' @keywords internal
 #'
 #' @examples
 #' if (interactive()) {
@@ -62,20 +63,19 @@
 #'
 #'   download_tsv("testData")
 #'
-#'   ## create an example single row tibble for add_tsv_row
+#'   ## create an example single row tibble for add_type_id
 #'   datsun <- filter(mtcars_tbl, model_id == "Datsun-710")
 #'   ## change the model_id to be unique
 #'   datsun[["model_id"]] <- "Datsun-512"
 #'
-#'   add_tsv_row(row = datsun, type = "testData")
+#'   add_type_id(row = datsun, type = "testData")
 #'
-#'   get_tsv_row("testData", "Datsun-512")
+#'   get_type_id("testData", "Datsun-512")
 #'
-#'   delete_tsv_row("testData", "Datsun-512")
+#'   delete_type_id("testData", "Datsun-512")
 #'
-#'   delete_tsv("testData")
+#'   delete_type("testData")
 #' }
-#' @export
 upload_tsv <- function(
     tsv_file,
     type = tools:::file_path_sans_ext(basename(tsv_file)),
@@ -99,8 +99,7 @@ upload_tsv <- function(
         resp_body_json()
 }
 
-#' @rdname workspace-data-ops
-#' @export
+#' @rdname workspace-dev-ops
 download_tsv <- function(type) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
@@ -122,10 +121,9 @@ download_tsv <- function(type) {
         readr::read_tsv(show_col_types = FALSE)
 }
 
-#' @rdname workspace-data-ops
+#' @rdname workspace-dev-ops
 #' @importFrom whisker whisker.render
-#' @export
-delete_tsv_row <- function(type, id) {
+delete_type_id <- function(type, id) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
@@ -145,9 +143,8 @@ delete_tsv_row <- function(type, id) {
     !response
 }
 
-#' @rdname workspace-data-ops
-#' @export
-add_tsv_row <- function(row, type, id = row[[1L]]) {
+#' @rdname workspace-dev-ops
+add_type_id <- function(row, type, id = row[[1L]]) {
     stopifnot(identical(nrow(row), 1L))
 
     opt <- options(readr.show_col_types = FALSE)
@@ -187,9 +184,8 @@ add_tsv_row <- function(row, type, id = row[[1L]]) {
     result
 }
 
-#' @rdname workspace-data-ops
-#' @export
-get_tsv_row <- function(type, id) {
+#' @rdname workspace-dev-ops
+get_type_id <- function(type, id) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
@@ -209,9 +205,8 @@ get_tsv_row <- function(type, id) {
         tibble::as_tibble()
 }
 
-#' @rdname workspace-data-ops
-#' @export
-delete_tsv <- function(type) {
+#' @rdname workspace-dev-ops
+delete_type <- function(type) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
@@ -230,4 +225,3 @@ delete_tsv <- function(type) {
 
     !result
 }
-

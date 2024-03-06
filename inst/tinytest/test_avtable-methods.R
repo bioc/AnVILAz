@@ -106,7 +106,7 @@ Map(
     set = unlist(lapply(tset[["testData"]], strsplit, ", "), recursive = FALSE)
 )
 
-delete_tsv("testData")
+delete_type("testData")
 
 # avtable_delete_values ---------------------------------------------------
 
@@ -122,6 +122,6 @@ expect_identical(
     tset[["testData_set_id"]], c(4, 8)
 )
 
-delete_tsv("testData_set")
+delete_type("testData_set")
 
 }

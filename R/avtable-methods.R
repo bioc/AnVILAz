@@ -160,6 +160,20 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
     }
 )
 
+
+# avtable_delete ----------------------------------------------------------
+
+#' @describeIn avtable-methods Delete a table / type
+#' @importFrom AnVILBase avtable_delete
+#'
+#' @exportMethod avtable_delete
+setMethod("avtable_delete", signature = c(platform = "azure"), definition =
+    function(table, ..., platform = cloud_platform()) {
+        stopifnot(isScalarCharacter(table))
+        delete_type(type = table)
+    }
+)
+
 # avtable_delete_values ---------------------------------------------------
 
 #' @describeIn avtable-methods Delete rows from a table / type
@@ -181,7 +195,7 @@ setMethod("avtable_delete_values", signature = c(platform = "azure"),
 
         names(values) <- values
         vapply(values, function(val) {
-            delete_tsv_row(
+            delete_type_id(
                 type = table,
                 id = val
             )
