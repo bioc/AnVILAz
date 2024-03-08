@@ -6,6 +6,7 @@
 \alias{avworkspace_namespace,azure-method}
 \alias{avworkspace_name,azure-method}
 \alias{avworkspace,azure-method}
+\alias{avworkspace_clone,azure-method}
 \title{AnVIL Azure Workspace methods}
 \usage{
 \S4method{avworkspaces}{azure}(..., platform = cloud_platform())
@@ -15,6 +16,16 @@
 \S4method{avworkspace_name}{azure}(..., platform = cloud_platform())
 
 \S4method{avworkspace}{azure}(..., platform = cloud_platform())
+
+\S4method{avworkspace_clone}{azure}(
+  namespace = avworkspace_namespace(),
+  name = avworkspace_name(),
+  to_namespace = namespace,
+  to_name,
+  bucket_location = "US",
+  ...,
+  platform = cloud_platform()
+)
 }
 \arguments{
 \item{...}{Additional arguments passed to the underlying methods (not used).}
@@ -35,5 +46,7 @@ AnVIL Azure Workspace methods
 
 \item \code{avworkspace(azure)}: Obtain the current workspace namespace and
 name combination
+
+\item \code{avworkspace_clone(azure)}: Clone a workspace
 
 }}
