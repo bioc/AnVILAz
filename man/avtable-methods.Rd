@@ -18,13 +18,6 @@
   .data,
   table,
   entity = names(.data)[[1L]],
-  namespace = avworkspace_namespace(),
-  name = avworkspace_name(),
-  delete_empty_values = FALSE,
-  na = "NA",
-  n = Inf,
-  page = 1L,
-  pageSize = 10L,
   ...,
   platform = cloud_platform()
 )
@@ -50,9 +43,6 @@
 \item{entity}{The entity name, i.e., the name of the column in the table that
 provides the keys for the data (a.k.a. \code{primaryKey}). By default, the first
 column in the table. The keys cannot contain special characters or spaces.}
-
-\item{delete_empty_values}{logical(1) when \code{TRUE}, remove entities
-not include in \code{.data} from the DATA table. Default: \code{FALSE}.}
 
 \item{origin}{\code{character(1)} name of the type (table) used to create the set
 e.g "sample", "participant", etc.}
