@@ -11,3 +11,14 @@ query_resources <- function(FUN = resp_body_json) {
         req_perform() |>
         FUN()
 }
+
+query_userName <- function() {
+    userName <- query_resources(httr2::resp_body_string) |>
+        rjsoncons::jmespath(
+            paste0(
+                "resources[?contains(metadata.resourceType,'AZURE_VM')].",
+                "metadata.controlledResourceMetadata.privateResourceUser.",
+                "userName"
+            )
+        ) |> jsonlite::fromJSON()
+}
