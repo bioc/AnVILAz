@@ -20,9 +20,9 @@ workspace_storage_cont_url()
 
 wds_api_version()
 
-workspace_data_service_url(env = "prod")
+workspace_data_service_url()
 
-cbas_url(env = "prod")
+cbas_url()
 }
 \arguments{
 \item{env}{\code{character(1)} One of "prod" or "dev" for the 'leonardo.dsde' URL

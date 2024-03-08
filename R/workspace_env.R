@@ -71,22 +71,20 @@ wds_api_version <- function() {
 
 #' @rdname workspace-env
 #' @export
-workspace_data_service_url <- function(env = "prod") {
-    .leo_apps(env = env, app = "wds")
+workspace_data_service_url <- function() {
+    .leo_apps("wds")
 }
 
 #' @rdname workspace-env
 #' @export
-cbas_url <- function(env = "prod") {
-    .leo_apps(env = env, app = "cbas")
+cbas_url <- function() {
+    .leo_apps("cbas")
 }
 
-.leo_apps <- function(env, app) {
+.leo_apps <- function(app) {
     workspaceId <- .avcache$get("workspaceId")
-    api_url <- paste0(
-        "https://leonardo.dsde-{{env}}.broadinstitute.org",
-        "/api/apps/v2/{{workspaceId}}"
-    )
+    api_endpoint <- "/api/apps/v2/{{workspaceId}}"
+    api_url <- paste0(.LEONARDO_URL, api_endpoint)
     uri <- whisker.render(api_url)
     url_resp <- request(uri) |>
         req_auth_bearer_token(az_token()) |>
