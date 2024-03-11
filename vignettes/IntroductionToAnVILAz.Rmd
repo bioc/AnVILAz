@@ -145,7 +145,6 @@ First we create an example dataset for uploading to the `DATA` tab. We create a
 
 ```{r}
 library(dplyr)
-library(readr)
 mtcars_tbl <-
     mtcars |>
     as_tibble(rownames = "model_id") |>

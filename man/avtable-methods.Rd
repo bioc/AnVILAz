@@ -38,20 +38,28 @@
 \arguments{
 \item{table}{\code{character(1)} The name of the table / type}
 
+\item{...}{Additional arguments passed to lower level functions (not used)}
+
+\item{platform}{\code{azure()} The cloud platform class to dispatch on as given by
+\link[AnVILBase:cloud_platform]{AnVILBase::cloud_platform}. Typically not set manually as
+\code{cloud_platform()} returns the \code{"azure"} class for Azure workspaces on
+AnVIL.}
+
 \item{.data}{\code{tibble()} The dataset chiefly from the \code{avtable()} operation}
 
 \item{entity}{The entity name, i.e., the name of the column in the table that
 provides the keys for the data (a.k.a. \code{primaryKey}). By default, the first
 column in the table. The keys cannot contain special characters or spaces.}
 
-\item{origin}{\code{character(1)} name of the type (table) used to create the set
-e.g "sample", "participant", etc.}
+\item{origin}{\code{character(1)} name of the type (entity table) used to create
+the set e.g "sample", "participant", etc.}
 
 \item{set}{\code{character(1)} column name of \code{.data} identifying the set(s) to be
-created.}
+created, i.e., the grouping variable.}
 
-\item{member}{\code{character()} vector of entity from the \code{avtable} identified by
-\code{origin}. The values may repeat if an ID is in more than one set}
+\item{member}{\code{character(1)} column name of \code{.data} identifying the member(s)
+of the set(s) or groups. The values in this column may repeat if
+an ID is in more than one set.}
 
 \item{values}{\code{character()} vector of \code{primaryKey} values corresponding to
 rows to be deleted}

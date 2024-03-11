@@ -20,10 +20,12 @@
 #'   Default is `TRUE` for `backup` and `restore` operations and `FALSE` for
 #'   `avremove`.
 #'
-#' @param platform `character(1)` The platform class to dispatch on. The default
-#'   is `"azure"` for the `AnVILAz` package.
+#' @param platform `azure()` The cloud platform class to dispatch on as given by
+#'   [AnVILBase::cloud_platform]. Typically not set manually as
+#'   `cloud_platform()` returns the `"azure"` class for Azure workspaces on
+#'   AnVIL.
 #'
-#' @param ... Additional arguments passed to the underlying methods (not used).
+#' @param ... Additional arguments passed to lower level functions (not used)
 #'
 #' @details  The `recursive` argument for `avbackup` and `avrestore` is set to
 #'   `TRUE` by default and `FALSE` for `avremove`. Note that wildcards are not

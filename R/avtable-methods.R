@@ -13,6 +13,8 @@
 #'
 #' @include azure-class.R
 #'
+#' @inheritParams azure-methods
+#'
 #' @return `avtable_import_set()` returns a `character(1)` name of the imported
 #'   tibble.
 #'
@@ -100,7 +102,7 @@ setMethod("avtable_import", signature = c(platform = "azure"), definition =
             table <- deparse(substitute(.data))
 
         temptsv <- tempfile(fileext = ".tsv")
-        write.table(.data, file = temptsv, sep = "\t", row.names = FALSE)
+        utils::write.table(.data, file = temptsv, sep = "\t", row.names = FALSE)
         on.exit(file.remove(temptsv))
 
         upload_tsv(
@@ -115,18 +117,18 @@ setMethod("avtable_import", signature = c(platform = "azure"), definition =
 #'
 #' @param .data `tibble()` The dataset chiefly from the `avtable()` operation
 #'
-#' @param origin `character(1)` name of the type (table) used to create the set
-#'   e.g "sample", "participant", etc.
+#' @param origin `character(1)` name of the type (entity table) used to create
+#'   the set e.g "sample", "participant", etc.
 #'
 #' @param set `character(1)` column name of `.data` identifying the set(s) to be
-#'   created.
+#'   created, i.e., the grouping variable.
 #'
-#' @param member `character()` vector of entity from the `avtable` identified by
-#'   `origin`. The values may repeat if an ID is in more than one set
+#' @param member `character(1)` column name of `.data` identifying the member(s)
+#'   of the set(s) or groups. The values in this column may repeat if
+#'   an ID is in more than one set.
 #'
 #' @importFrom AnVILBase avtable_import_set
 #' @importFrom BiocBaseUtils isScalarCharacter
-#' @importFrom dplyr select
 #' @exportMethod avtable_import_set
 setMethod("avtable_import_set", signature = c(platform = "azure"),
     definition = function(
@@ -141,9 +143,9 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
             set %in% names(.data),
             !identical(set, member), member %in% names(.data)
         )
-        origin <- URLencode(origin)
-        .data <- .data |> select(set, member)
-        .data <- rev(stack(
+        origin <- utils::URLencode(origin)
+        .data <- .data[, c(set, member)]
+        .data <- rev(utils::stack(
             lapply(
                 split(.data, .data[[1L]]),
                 function(x) paste(x[[2L]], collapse = ", ")

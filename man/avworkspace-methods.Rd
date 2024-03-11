@@ -28,10 +28,27 @@
 )
 }
 \arguments{
-\item{...}{Additional arguments passed to the underlying methods (not used).}
+\item{...}{Additional arguments passed to lower level functions (not used)}
 
-\item{platform}{\code{character(1)} The platform class to dispatch on. The default
-is \code{"azure"} for the \code{AnVILAz} package.}
+\item{platform}{\code{azure()} The cloud platform class to dispatch on as given by
+\link[AnVILBase:cloud_platform]{AnVILBase::cloud_platform}. Typically not set manually as
+\code{cloud_platform()} returns the \code{"azure"} class for Azure workspaces on
+AnVIL.}
+
+\item{namespace}{\code{character(1)} AnVIL workspace namespace as returned by,
+e.g., \code{avworkspace_namespace()}}
+
+\item{name}{\code{character(1)} AnVIL workspace name as returned by, eg.,
+\code{avworkspace_name()}.}
+
+\item{to_namespace}{\code{character(1)} workspace (billing account) in
+which to make the clone.}
+
+\item{to_name}{\code{character(1)} name of the cloned workspace.}
+
+\item{bucket_location}{\code{character(1)} region in which bucket
+attached to the workspace should be created. The default is set to a
+single region ("US"); multi-region is available but more costly.}
 }
 \description{
 AnVIL Azure Workspace methods

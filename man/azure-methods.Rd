@@ -48,10 +48,12 @@ base directory of the remote location. The \code{to} path can be a folder path
 but must end in a forward slash (\code{/}). If the \code{to} path points to a
 non-existent directory, it will be created.}
 
-\item{...}{Additional arguments passed to the underlying methods (not used).}
+\item{...}{Additional arguments passed to lower level functions (not used)}
 
-\item{platform}{\code{character(1)} The platform class to dispatch on. The default
-is \code{"azure"} for the \code{AnVILAz} package.}
+\item{platform}{\code{azure()} The cloud platform class to dispatch on as given by
+\link[AnVILBase:cloud_platform]{AnVILBase::cloud_platform}. Typically not set manually as
+\code{cloud_platform()} returns the \code{"azure"} class for Azure workspaces on
+AnVIL.}
 
 \item{recursive}{\code{logical(1)} Whether to recursively move or remove files in
 a directory. Only applies to \code{avremove}, \code{avbackup}, and \code{avrestore}.

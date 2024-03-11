@@ -10,9 +10,6 @@
 #'   `GET` request to obtain the data services URL for uploading data to the
 #'   workspace "DATA" tab.
 #'
-#' @param env `character(1)` One of "prod" or "dev" for the 'leonardo.dsde' URL
-#'   endpoint
-#'
 #' @return
 #' * `workspace_id` - A UUID string referring to "workspaceId" or "workspaceid"
 #'   in API calls

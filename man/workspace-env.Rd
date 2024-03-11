@@ -24,10 +24,6 @@ workspace_data_service_url()
 
 cbas_url()
 }
-\arguments{
-\item{env}{\code{character(1)} One of "prod" or "dev" for the 'leonardo.dsde' URL
-endpoint}
-}
 \value{
 \itemize{
 \item \code{workspace_id} - A UUID string referring to "workspaceId" or "workspaceid"

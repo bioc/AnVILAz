@@ -82,6 +82,21 @@ setMethod("avworkspace", signature = c(platform = "azure"), definition =
 
 #' @describeIn avworkspace-methods Clone a workspace
 #'
+#' @param namespace `character(1)` AnVIL workspace namespace as returned by,
+#'   e.g., `avworkspace_namespace()`
+#'
+#' @param name `character(1)` AnVIL workspace name as returned by, eg.,
+#'   `avworkspace_name()`.
+#'
+#' @param to_namespace `character(1)` workspace (billing account) in
+#'     which to make the clone.
+#'
+#' @param to_name `character(1)` name of the cloned workspace.
+#'
+#' @param bucket_location `character(1)` region in which bucket
+#'   attached to the workspace should be created. The default is set to a
+#'   single region ("US"); multi-region is available but more costly.
+#'
 #' @importFrom AnVILBase avworkspace_clone
 #' @exportMethod avworkspace_clone
 setMethod("avworkspace_clone", signature = c(platform = "azure"),
