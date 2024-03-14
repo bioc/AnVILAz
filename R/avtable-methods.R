@@ -58,12 +58,14 @@ setMethod("avtables", signature = c(platform = "azure"), definition =
     ) {
         instanceid <- .avcache$get("workspaceId")
         v <- .avcache$get("wdsApiVersion")
-        api_endpoint <- "/{{instanceid}}/types/{{v}}"
-        endpoint <- whisker.render(api_endpoint)
 
         base_uri <- workspace_data_service_url()
-        uri <- paste0(base_uri, endpoint)
-        resp <- request(uri) |>
+        resp <- request(base_uri) |>
+            req_template(
+                "/{instanceid}/types/{v}",
+                instanceid = instanceid,
+                v = v
+            ) |>
             req_auth_bearer_token(az_token()) |>
             req_headers("Accept" = "application/json") |>
             req_perform() |>

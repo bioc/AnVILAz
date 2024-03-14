@@ -18,9 +18,8 @@ NULL
 #' @exportMethod avworkspaces
 setMethod("avworkspaces", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
-        api_endpoint <- "/api/workspaces"
-        url <- paste0(.RAWLS_URL, api_endpoint)
-        qrs <- request(url) |>
+        qrs <- request(.RAWLS_URL) |>
+            req_template("/api/workspaces") |>
             req_auth_bearer_token(az_token()) |>
             req_perform()
 
@@ -36,15 +35,14 @@ setMethod("avworkspaces", signature = c(platform = "azure"), definition =
 #' @describeIn avworkspace-methods List the workspace namespace
 #'
 #' @importFrom AnVILBase avworkspace_namespace
-#' @importFrom whisker whisker.render
 #' @exportMethod avworkspace_namespace
 setMethod("avworkspace_namespace", signature = c(platform = "azure"),
     definition = function(..., platform = cloud_platform()) {
-        api_endpoint <- "/api/v2/runtimes/{{workspaceid}}"
-        workspaceid <- .avcache$get("workspaceId")
-        url <- paste0(.LEONARDO_URL, api_endpoint)
-        url <- whisker.render(url)
-        qrs <- request(url) |>
+        qrs <- request(.LEONARDO_URL) |>
+            req_template(
+                "/api/v2/runtimes/{workspaceid}",
+                workspaceid = .avcache$get("workspaceId")
+            ) |>
             req_auth_bearer_token(az_token()) |>
             req_perform() |>
             resp_body_json()
@@ -117,11 +115,14 @@ setMethod("avworkspace_clone", signature = c(platform = "azure"),
         )
 
         api_endpoint <-
-            "/api/workspaces/{{workspaceNamespace}}/{{workspaceName}}/clone"
-        url <- paste0(.RAWLS_URL, api_endpoint)
-        url <- whisker.render(url)
+            "/api/workspaces/{workspaceNamespace}/{workspaceName}/clone"
 
-        request(url) |>
+        request(.RAWLS_URL) |>
+            req_template(
+                api_endpoint,
+                workspaceNamespace = namespace,
+                workspaceName = name
+            ) |>
             req_auth_bearer_token(az_token()) |>
             req_body_json(
                 list(

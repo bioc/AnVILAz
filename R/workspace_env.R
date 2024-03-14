@@ -79,15 +79,16 @@ cbas_url <- function() {
 }
 
 .leo_apps <- function(app) {
-    workspaceId <- .avcache$get("workspaceId")
-    api_endpoint <- "/api/apps/v2/{{workspaceId}}"
-    api_url <- paste0(.LEONARDO_URL, api_endpoint)
-    uri <- whisker.render(api_url)
-    url_resp <- request(uri) |>
+    url_resp <- request(.LEONARDO_URL) |>
+        req_template(
+            "/api/apps/v2/{workspaceId}",
+            workspaceId = .avcache$get("workspaceId")
+        ) |>
         req_auth_bearer_token(az_token()) |>
         req_url_query(includeDeleted = "false") |>
         req_perform() |>
         resp_body_string()
+
     res_url <- rjsoncons::jmespath(
         url_resp,
         paste0("[*].proxyUrls.", app)

@@ -81,13 +81,14 @@ upload_tsv <- function(
     type = tools:::file_path_sans_ext(basename(tsv_file)),
     primaryKey = NULL
 ) {
-    api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
-    instanceid <- .avcache$get("workspaceId")
-    v <- .avcache$get("wdsApiVersion")
-    endpoint <- whisker.render(api_endpoint)
     base_uri <- workspace_data_service_url()
-    uri <- paste0(base_uri, endpoint)
-    request(uri) |>
+    request(base_uri) |>
+        req_template(
+            "/{instanceid}/tsv/{v}/{type}",
+            instanceid = .avcache$get("workspaceId"),
+            v = .avcache$get("wdsApiVersion"),
+            type = type
+        ) |>
         req_auth_bearer_token(az_token()) |>
         req_url_query(primaryKey = primaryKey) |>
         req_body_multipart(
@@ -104,17 +105,17 @@ download_tsv <- function(type) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    api_endpoint <- "/{{instanceid}}/tsv/{{v}}/{{type}}"
-    instanceid <- .avcache$get("workspaceId")
-    v <- .avcache$get("wdsApiVersion")
-    base_uri <- workspace_data_service_url()
-    endpoint <- whisker.render(api_endpoint)
-    uri <- paste0(base_uri, endpoint)
-
     if (!requireNamespace("readr", quietly = TRUE))
         stop("Install the 'readr' package to import TSV files")
 
-    request(uri) |>
+    base_uri <- workspace_data_service_url()
+    request(base_uri) |>
+        req_template(
+            "/{instanceid}/tsv/{v}/{type}",
+            instanceid = .avcache$get("workspaceId"),
+            v = .avcache$get("wdsApiVersion"),
+            type = type
+        ) |>
         req_auth_bearer_token(az_token()) |>
         req_perform() |>
         resp_body_string() |>
@@ -122,19 +123,19 @@ download_tsv <- function(type) {
 }
 
 #' @rdname workspace-dev-ops
-#' @importFrom whisker whisker.render
 delete_type_id <- function(type, id) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    instanceid <- .avcache$get("workspaceId")
-    v <- .avcache$get("wdsApiVersion")
-    api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
-    endpoint <- whisker.render(api_endpoint)
-
     base_uri <- workspace_data_service_url()
-    uri <- paste0(base_uri, endpoint)
-    response <- request(uri) |>
+    response <- request(base_uri) |>
+        req_template(
+            "/{instanceid}/records/{v}/{type}/{id}",
+            instanceid = .avcache$get("workspaceId"),
+            v = .avcache$get("wdsApiVersion"),
+            type = type,
+            id = id
+        ) |>
         req_auth_bearer_token(az_token()) |>
         req_method("DELETE") |>
         req_perform() |>
@@ -150,11 +151,6 @@ add_type_id <- function(row, type, id = row[[1L]]) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    instanceid <- .avcache$get("workspaceId")
-    v <- .avcache$get("wdsApiVersion")
-    api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
-    endpoint <- whisker.render(api_endpoint)
-
     tsv <- download_tsv(type = type)
     primaryKey <- names(tsv)[[1L]]
     allids <- tsv[[primaryKey]]
@@ -165,9 +161,16 @@ add_type_id <- function(row, type, id = row[[1L]]) {
         warning("Replacing record with id: ", id)
 
     row <- row[, !names(row) %in% primaryKey]
+
     base_uri <- workspace_data_service_url()
-    uri <- paste0(base_uri, endpoint)
-    result <- request(uri) |>
+    result <- request(base_uri) |>
+        req_template(
+            "/{instanceid}/records/{v}/{type}/{id}",
+            instanceid = .avcache$get("workspaceId"),
+            v = .avcache$get("wdsApiVersion"),
+            type = type,
+            id = id
+        ) |>
         req_auth_bearer_token(az_token()) |>
         req_body_json(
             list(attributes = as.list(row))
@@ -189,14 +192,14 @@ get_type_id <- function(type, id) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    instanceid <- .avcache$get("workspaceId")
-    v <- .avcache$get("wdsApiVersion")
-    api_endpoint <- "/{{instanceid}}/records/{{v}}/{{type}}/{{id}}"
-    endpoint <- whisker.render(api_endpoint)
-
     base_uri <- workspace_data_service_url()
-    uri <- paste0(base_uri, endpoint)
-    response <- request(uri) |>
+    response <- request(base_uri) |>
+        req_template(
+            "/{instanceid}/records/{v}/{type}/{id}",
+            instanceid = .avcache$get("workspaceId"),
+            v = .avcache$get("wdsApiVersion"),
+            id = id
+        ) |>
         req_auth_bearer_token(az_token()) |>
         req_perform() |>
         resp_body_json()
@@ -210,14 +213,14 @@ delete_type <- function(type) {
     opt <- options(readr.show_col_types = FALSE)
     on.exit(options(opt))
 
-    instanceid <- .avcache$get("workspaceId")
-    v <- .avcache$get("wdsApiVersion")
-    api_endpoint <- "/{{instanceid}}/types/{{v}}/{{type}}"
-    endpoint <- whisker.render(api_endpoint)
     base_uri <- workspace_data_service_url()
-    uri <- paste0(base_uri, endpoint)
-
-    result <- request(uri) |>
+    result <- request(base_uri) |>
+        req_template(
+            "/{instanceid}/types/{v}/{type}",
+            instanceid = .avcache$get("workspaceId"),
+            v = .avcache$get("wdsApiVersion"),
+            type = type
+        ) |>
         req_auth_bearer_token(az_token()) |>
         req_method("DELETE") |>
         req_perform() |>
