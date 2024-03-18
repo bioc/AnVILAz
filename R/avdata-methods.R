@@ -24,7 +24,8 @@
 #' @include azure-class.R
 #'
 #' @examples
-#' if (az_exists() && identical(get_platform(), "AnVILAz")) {
+#' library(AnVILBase)
+#' if (az_exists() && identical(avplatform_namespace(), "AnVILAz")) {
 #'    ## from within AnVIL
 #'    data <- avdata()
 #'    avdata_import(data)
