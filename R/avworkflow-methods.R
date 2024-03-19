@@ -72,7 +72,7 @@ setMethod("avworkflow_jobs", signature = c(platform = "azure"),
             req_template(
                 endpoint,
                 workspaceNamespace = namespace,
-                workspaceName = URLencode(name)
+                workspaceName = utils::URLencode(name)
             ) |>
             req_auth_bearer_token(az_token()) |>
             req_perform() |>

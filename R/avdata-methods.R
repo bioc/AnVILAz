@@ -128,6 +128,8 @@ setMethod("avdata", signature = c(platform = "azure"),
     }
 )
 
+.AVDATA_COL_KEYS <- c("type", "table", "key", "value")
+
 # avdata_import -----------------------------------------------------------
 
 #' @describeIn avdata-methods Import "Reference" and "Other" data to an AnVIL
@@ -144,11 +146,9 @@ setMethod("avdata_import", signature = c(platform = "azure"), definition =
     ) {
         stopifnot(
             is.data.frame(.data),
-            all(c("type", "table", "key", "value") %in% names(.data)),
+            all(.AVDATA_COL_KEYS %in% names(.data)),
             all(vapply(
-                select(.data, "type", "table", "key", "value"),
-                is.character,
-                logical(1)
+                .data[, .AVDATA_COL_KEYS], is.character, logical(1)
             )),
             isScalarCharacter(namespace),
             isScalarCharacter(name)
