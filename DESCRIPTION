@@ -1,6 +1,6 @@
 Package: AnVILAz
 Title: R / Bioconductor Support for the AnVIL Azure Platform
-Version: 0.1.35
+Version: 0.1.36
 Authors@R: 
     c(person(
         "Martin", "Morgan", role = c("aut", "ctb"),
@@ -48,6 +48,7 @@ Collate:
     'av_sas_token.R'
     'azure-class.R'
     'avdata-methods.R'
+    'avnotebooks-methods.R'
     'avtable-methods.R'
     'avworkflow-methods.R'
     'avworkspace-methods.R'
