@@ -4,7 +4,7 @@
 #'
 #' @description These functions invoke the `azcopy` command line utility. The
 #'   utilities make use of a managed SAS token to mainly transfer files from the
-#'   Azure workspace to the Azure Storage container. See `get_sas_token` for
+#'   Azure workspace to the Azure Storage container. See `av_sas_token` for
 #'   credential details.
 #'
 #' @details
@@ -68,7 +68,7 @@ az_copy_from_storage <- function(from, to = "./") {
     else
         to <- file.path(normalizePath(dirname(to)), basename(to))
 
-    sas_cred <- get_sas_token()
+    sas_cred <- av_sas_token()
     wscu <- .avcache$get("wscu")
     token <- sas_cred[["token"]]
     path <- paste0(wscu, "/", from, "?")
@@ -89,7 +89,7 @@ az_copy_to_storage <- function(from, to) {
         isScalarCharacter(from)
     )
 
-    sas_cred <- get_sas_token()
+    sas_cred <- av_sas_token()
     wscu <- .avcache$get("wscu")
     token <- sas_cred[["token"]]
     path <- sas_cred[["url"]]

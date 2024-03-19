@@ -45,6 +45,7 @@ Date: 2024-03-19
 Collate: 
     'AnVILAz-package.R'
     'authentication.R'
+    'av_sas_token.R'
     'azure-class.R'
     'avdata-methods.R'
     'avtable-methods.R'
@@ -54,7 +55,6 @@ Collate:
     'az_copy-helpers.R'
     'azure-methods.R'
     'resources.R'
-    'sas_token.R'
     'utilities.R'
     'workspace-dev-ops.R'
     'workspace_env.R'

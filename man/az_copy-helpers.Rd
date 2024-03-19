@@ -35,7 +35,7 @@ the Azure Storage Container
 \description{
 These functions invoke the \code{azcopy} command line utility. The
 utilities make use of a managed SAS token to mainly transfer files from the
-Azure workspace to the Azure Storage container. See \code{get_sas_token} for
+Azure workspace to the Azure Storage container. See \code{av_sas_token} for
 credential details.
 }
 \details{

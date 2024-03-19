@@ -13,15 +13,15 @@
 #'
 #' @examples
 #' if (interactive()) {
-#'   sas <- get_sas_token()
+#'   sas <- av_sas_token()
 #'   sas[["token"]]
 #'   sas[["url"]]
 #' }
 #' @export
-get_sas_token <- function(as = "parsed", sasExpirationDuration = 28800) {
+av_sas_token <- function(as = "parsed", sasExpirationDuration = 28800) {
     api_endpoint <- paste0(
-        "/api/workspaces/v1/{{workspaceId}}/resources/",
-        "controlled/azure/storageContainer/{{resourceId}}/getSasToken"
+        "/api/workspaces/v1/{workspaceId}/resources/",
+        "controlled/azure/storageContainer/{resourceId}/getSasToken"
     )
     request(.DSDE_PROD_URL) |>
         req_template(
