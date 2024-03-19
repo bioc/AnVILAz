@@ -14,6 +14,12 @@
 )
 }
 \arguments{
+\item{namespace}{\code{character(1)} AnVIL workspace namespace as returned by,
+e.g., \code{avworkspace_namespace()}}
+
+\item{name}{\code{character(1)} AnVIL workspace name as returned by, eg.,
+\code{avworkspace_name()}.}
+
 \item{...}{Additional arguments passed to lower level functions (not used)}
 
 \item{platform}{\code{azure()} The cloud platform class to dispatch on as given by

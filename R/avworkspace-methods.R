@@ -80,11 +80,7 @@ setMethod("avworkspace", signature = c(platform = "azure"), definition =
 
 #' @describeIn avworkspace-methods Clone a workspace
 #'
-#' @param namespace `character(1)` AnVIL workspace namespace as returned by,
-#'   e.g., `avworkspace_namespace()`
-#'
-#' @param name `character(1)` AnVIL workspace name as returned by, eg.,
-#'   `avworkspace_name()`.
+#' @inheritParams avdata-methods
 #'
 #' @param to_namespace `character(1)` workspace (billing account) in
 #'     which to make the clone.

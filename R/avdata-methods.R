@@ -19,7 +19,12 @@
 #'     bucket) of the element.
 #'
 #' @inheritParams azure-methods
-#' @inheritParams avworkspace-methods
+#'
+#' @param namespace `character(1)` AnVIL workspace namespace as returned by,
+#'   e.g., `avworkspace_namespace()`
+#'
+#' @param name `character(1)` AnVIL workspace name as returned by, eg.,
+#'   `avworkspace_name()`.
 #'
 #' @include azure-class.R
 #'
@@ -132,8 +137,10 @@ setMethod("avdata", signature = c(platform = "azure"),
 #' @exportMethod avdata_import
 setMethod("avdata_import", signature = c(platform = "azure"), definition =
     function(
-        .data, namespace = avworkspace_namespace(), name = avworkspace_name(),
-        ..., platform = cloud_platform()
+        .data, namespace = avworkspace_namespace(),
+        name = avworkspace_name(),
+        ...,
+        platform = cloud_platform()
     ) {
         stopifnot(
             is.data.frame(.data),
