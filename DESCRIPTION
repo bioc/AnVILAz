@@ -48,6 +48,7 @@ Collate:
     'azure-class.R'
     'avdata-methods.R'
     'avtable-methods.R'
+    'avworkflow-methods.R'
     'avworkspace-methods.R'
     'az-utilities.R'
     'az_copy-helpers.R'
