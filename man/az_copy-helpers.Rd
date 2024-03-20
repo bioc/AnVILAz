@@ -6,9 +6,9 @@
 \alias{az_copy_to_storage}
 \title{Azure Copy command line utility helpers}
 \usage{
-az_copy_from_storage(from, to = "./")
+az_copy_from_storage(from, to = "./", recursive = FALSE, dry = TRUE)
 
-az_copy_to_storage(from, to)
+az_copy_to_storage(from, to, recursive = FALSE, dry = TRUE)
 }
 \arguments{
 \item{from}{\code{character(1)} A relative file path corresponding to

@@ -34,14 +34,11 @@ NULL
 #' @exportMethod avnotebooks
 setMethod("avnotebooks", signature = c(platform = "azure"),
     definition = function(
-        namespace = avworkspace_namespace(),
-        name = avworkspace_name(),
         local = FALSE,
         ...,
         platform = cloud_platform()
     ) {
         stopifnot(
-            isScalarCharacter(namespace), isScalarCharacter(name),
             isScalarLogical(local)
         )
         if (!local)
@@ -52,5 +49,77 @@ setMethod("avnotebooks", signature = c(platform = "azure"),
             files <- list.files()
         isNotebook <- tolower(tools::file_ext(files)) %in% c("ipynb", "rmd")
         files[isNotebook]
+    }
+)
+
+#' @describeIn avnotebooks-methods Sync notebooks between the Azure Blob Storage
+#'   Container and the local runtime
+#'
+#' @param destination `character(1)` or `missing` file path to the local file
+#'   system directory for synchronization. The default location is
+#'   `~/<workspace_data_service_url()>/analyses`. Out-of-date local files are
+#'   replaced with the workspace version.
+#'
+#' @importFrom AnVILBase avnotebooks_localize
+#' @exportMethod avnotebooks_localize
+setMethod("avnotebooks_localize", signature = c(platform = "azure"),
+    definition = function(
+        destination = "./analyses",
+        dry = TRUE,
+        ...,
+        platform = cloud_platform()
+    ) {
+        stopifnot(
+            missing(destination) || isScalarCharacter(destination),
+            isScalarLogical(dry)
+        )
+
+        source <- file.path(workspace_data_service_url(), "analyses")
+        if (missing(destination)) {
+            if (!dry && !dir.exists(destination))
+                dir.create(destination, recursive = TRUE)
+        }
+        az_copy_from_storage(
+            from = source, to = destination, recursive = TRUE, dry = dry
+        )
+    }
+)
+
+
+#' @describeIn avnotebooks-methods Sync notebooks between the local runtime and
+#'   the Azure Blob Storage Container
+#'
+#' @param source `character(1)` or `missing` file path to the local file system
+#'   directory for synchronization. The default location is the home folder.
+#'   Out-of-date local files are replaced with the workspace version.
+#'
+#' @importFrom AnVILBase avnotebooks_delocalize
+#' @exportMethod avnotebooks_delocalize
+setMethod("avnotebooks_delocalize", signature = c(platform = "azure"),
+    definition = function(
+        source = "./",
+        dry = TRUE,
+        ...,
+        platform = cloud_platform()
+    ) {
+        stopifnot(
+            missing(source) || isScalarCharacter(source),
+            isScalarLogical(dry)
+        )
+
+        files <- list.files(path = source)
+        isNotebook <- tolower(tools::file_ext(files)) %in% c("ipynb", "rmd")
+        notebooks <- file.path(source, files[isNotebook])
+        if (!length(notebooks))
+            stop("No notebooks found in ", source)
+
+        lapply(
+            notebooks,
+            function(notebook)
+                az_copy_to_storage(
+                    from = notebook, to = "analyses/",
+                    recursive = FALSE, dry = dry
+                )
+        )
     }
 )

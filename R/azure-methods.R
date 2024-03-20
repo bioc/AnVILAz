@@ -83,13 +83,13 @@ setMethod("avcopy", signature = c(platform = "azure"), definition =
             isScalarCharacter(source)
         )
         if (.is_remote_path(source))
-            az_copy_from_storage(from = source, to = destination)
+            az_copy_from_storage(from = source, to = destination, dry = FALSE)
         else if (
             file.exists(source) && (
                 .is_remote_path(destination) || missing(destination)
             )
         )
-            az_copy_to_storage(from = source, to = destination)
+            az_copy_to_storage(from = source, to = destination, dry = FALSE)
         else
             stop("Invalid source or destination path")
     }

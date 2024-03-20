@@ -6,23 +6,27 @@
 \alias{avnotebooks_localize}
 \alias{avnotebooks_delocalize}
 \alias{avnotebooks,azure-method}
+\alias{avnotebooks_localize,azure-method}
+\alias{avnotebooks_delocalize,azure-method}
 \title{Azure Notebook Management}
 \usage{
-\S4method{avnotebooks}{azure}(
-  namespace = avworkspace_namespace(),
-  name = avworkspace_name(),
-  local = FALSE,
+\S4method{avnotebooks}{azure}(local = FALSE, ..., platform = cloud_platform())
+
+\S4method{avnotebooks_localize}{azure}(
+  destination = "./analyses",
+  dry = TRUE,
+  ...,
+  platform = cloud_platform()
+)
+
+\S4method{avnotebooks_delocalize}{azure}(
+  source = "./",
+  dry = TRUE,
   ...,
   platform = cloud_platform()
 )
 }
 \arguments{
-\item{namespace}{\code{character(1)} AnVIL workspace namespace as returned by,
-e.g., \code{avworkspace_namespace()}}
-
-\item{name}{\code{character(1)} AnVIL workspace name as returned by, eg.,
-\code{avworkspace_name()}.}
-
 \item{local}{\code{logical(1)} notebooks located on the workspace
 (\code{local = FALSE}, default) or runtime / local instance (\code{local = TRUE}).
 When \code{local = TRUE}, the notebook path is
@@ -34,6 +38,15 @@ When \code{local = TRUE}, the notebook path is
 \link[AnVILBase:cloud_platform]{AnVILBase::cloud_platform}. Typically not set manually as
 \code{cloud_platform()} returns the \code{"azure"} class for Azure workspaces on
 AnVIL.}
+
+\item{destination}{\code{character(1)} or \code{missing} file path to the local file
+system directory for synchronization. The default location is
+\verb{~/<workspace_data_service_url()>/analyses}. Out-of-date local files are
+replaced with the workspace version.}
+
+\item{source}{\code{character(1)} or \code{missing} file path to the local file system
+directory for synchronization. The default location is the home folder.
+Out-of-date local files are replaced with the workspace version.}
 }
 \value{
 \code{avnotebooks()} returns a character vector of files located
@@ -46,6 +59,12 @@ system.
 \section{Functions}{
 \itemize{
 \item \code{avnotebooks(azure)}: List the notebooks in the current workspace
+
+\item \code{avnotebooks_localize(azure)}: Sync notebooks between the Azure Blob Storage
+Container and the local runtime
+
+\item \code{avnotebooks_delocalize(azure)}: Sync notebooks between the local runtime and
+the Azure Blob Storage Container
 
 }}
 \examples{

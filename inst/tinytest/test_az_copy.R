@@ -31,9 +31,9 @@ expect_true(
 )
 file.remove("test.log")
 expect_error(
-    az_copy_from_storage("analyses/test/test.log", "./test.log")
+    az_copy_from_storage("analyses/test/test.log", "./test.log", dry = FALSE)
 )
-az_copy_from_storage("analyses/test/test.log", "./")
+az_copy_from_storage("analyses/test/test.log", "./", dry = FALSE)
 expect_true(
     file.exists("test.log")
 )

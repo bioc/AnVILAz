@@ -49,9 +49,12 @@
 #'
 #' }
 #' @export
-az_copy_from_storage <- function(from, to = "./") {
+az_copy_from_storage <-
+    function(from, to = "./", recursive = FALSE, dry = TRUE)
+{
     stopifnot(
-        isScalarCharacter(from), isScalarCharacter(to)
+        isScalarCharacter(from), isScalarCharacter(to),
+        isScalarLogical(recursive), isScalarLogical(dry)
     )
     if (endsWith(from, "/"))
         stop("Provide a remote file location in the 'from' input")
@@ -68,26 +71,36 @@ az_copy_from_storage <- function(from, to = "./") {
     else
         to <- file.path(normalizePath(dirname(to)), basename(to))
 
+    recurse <- tolower(as.character(recursive))
+
     sas_cred <- av_sas_token()
     wscu <- .avcache$get("wscu")
     token <- sas_cred[["token"]]
     path <- paste0(wscu, "/", from, "?")
     path <- paste0(path, token)
 
-    .az_copy(from = shQuote(path), to = shQuote(to))
+    .az_copy(
+        shQuote(path), shQuote(to), paste0("--recursive=", recurse),
+        if (dry) "--dry-run"
+    )
 }
 
 #' @rdname az_copy-helpers
 #' @export
-az_copy_to_storage <- function(from, to) {
+az_copy_to_storage <-
+    function(from, to, recursive = FALSE, dry = TRUE)
+{
     if (!missing(to))
         stopifnot(
             isScalarCharacter(to)
         )
 
     stopifnot(
-        isScalarCharacter(from)
+        isScalarCharacter(from),
+        isScalarLogical(recursive), isScalarLogical(dry)
     )
+
+    recurse <- tolower(as.character(recursive))
 
     sas_cred <- av_sas_token()
     wscu <- .avcache$get("wscu")
@@ -99,6 +112,9 @@ az_copy_to_storage <- function(from, to) {
         path <- paste0(path, token)
     }
 
-    .az_copy(.az_shQuote(from), shQuote(path))
+    .az_copy(
+        .az_shQuote(from), shQuote(path), paste0("--recursive=", recurse),
+        if (dry) "--dry-run"
+    )
 }
 
