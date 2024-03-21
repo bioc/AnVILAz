@@ -5,7 +5,9 @@
 #' @description These functions invoke the `azcopy` command line utility. The
 #'   utilities make use of a managed SAS token to mainly transfer files from the
 #'   Azure workspace to the Azure Storage container. See `av_sas_token` for
-#'   credential details.
+#'   credential details. The results of `azcopy copy` commands are returned as
+#'   an `azcopyStatus` object which has S3 methods to print and convert to
+#'   logical.
 #'
 #' @details
 #' * `az_copy_from_storage` - copy a file from the Azure Storage Container to
@@ -79,10 +81,11 @@ az_copy_from_storage <-
     path <- paste0(wscu, "/", from, "?")
     path <- paste0(path, token)
 
-    .az_copy(
+    results <- .az_copy(
         shQuote(path), shQuote(to), paste0("--recursive=", recurse),
         if (dry) "--dry-run"
     )
+    .azcopyStatus(results)
 }
 
 #' @rdname az_copy-helpers
@@ -112,9 +115,93 @@ az_copy_to_storage <-
         path <- paste0(path, token)
     }
 
-    .az_copy(
+    results <- .az_copy(
         .az_shQuote(from), shQuote(path), paste0("--recursive=", recurse),
         if (dry) "--dry-run"
     )
+    .azcopyStatus(results)
 }
 
+.azcopyStatus <- function(txtlist) {
+    res <- lapply(txtlist, .parse_job_status_text)
+    class(res) <- c("azcopyStatus", class(res))
+    res
+}
+
+.clean_summary <- function(txt) {
+    jobsumInd <- grep("Job.*summary$", txt) + 1
+    summary <- txt[jobsumInd:length(txt)]
+    if (!length(summary))
+        return(NA_character_)
+    else
+        strwrap(summary, indent = 2L, exdent = 4L, width = 80)
+}
+
+.parse_job_status_text <- function(txt) {
+    txt <- sub("\\r", "", txt)
+    txt <- Filter(nzchar, txt)
+    statusLine <- grep(".*Done.*Failed", txt, value = TRUE)
+    status <- grepl("100.0 %", statusLine)
+    info <- Filter(function(x) startsWith(x, "INFO"), txt)
+    summary <- .clean_summary(txt)
+    logLine <- grep("Log file is located at:", txt, value = TRUE)
+    logfile <- gsub("Log file is located at: (.*)", "\\1", logLine)
+    jobLine <- grep("Job (.*) has started", txt, value = TRUE)
+    jobId <- gsub("Job (.*) has started", "\\1", jobLine)
+    result <- list(
+        INFO = if (length(info)) info else NA_character_,
+        statusLine = statusLine,
+        Status = status,
+        summary = if (length(summary)) summary else NA_character_,
+        logFile = if (length(logfile)) logfile else NA_character_,
+        jobId = jobId
+    )
+}
+
+#' @describeIn az_copy-helpers Convert results of azcopy operations to logical
+#'   values
+#'
+#' @param x `azcopyStatus` object to be checked; usually the output of `avcopy`
+#'   operations
+#'
+#' @export
+as.logical.azcopyStatus <- function(x) {
+    vapply(x, function(x) x$Status, logical(1))
+}
+
+#' @describeIn az_copy-helpers Print the results of `azcopy` operations
+#'
+#' @param ... Additional arguments (not used).
+#'
+#' @param verbose `logical(1)` Print the `INFO` lines from the `azcopy` output
+#'
+#' @export
+print.azcopyStatus <- function(x, ..., verbose = FALSE) {
+    for (i in seq_along(x)) {
+        if (verbose)
+            cat(
+                paste(x[[i]]$INFO, collapse = "\n"), "\n"
+            )
+       cat(
+           "LogFile: ", x[[i]]$logFile, "\n  ",
+            x[[i]]$statusLine, "\n",
+           sep = ""
+        )
+    }
+}
+
+#' @describeIn az_copy-helpers Get a summary of the results of `azcopy`
+#'   operations
+#'
+#' @param na.rm `logical(1)` Not used.
+#'
+#' @export
+summary.azcopyStatus <- function(x, ..., na.rm = FALSE) {
+    for (i in seq_along(x)) {
+        cat(
+            "Job ID: ", x[[i]]$jobId, "\n",
+            paste(x[[i]]$summary, collapse = "\n"), "\n",
+            sep = ""
+        )
+    }
+}

@@ -4,11 +4,20 @@
 \alias{az_copy-helpers}
 \alias{az_copy_from_storage}
 \alias{az_copy_to_storage}
+\alias{as.logical.azcopyStatus}
+\alias{print.azcopyStatus}
+\alias{summary.azcopyStatus}
 \title{Azure Copy command line utility helpers}
 \usage{
 az_copy_from_storage(from, to = "./", recursive = FALSE, dry = TRUE)
 
 az_copy_to_storage(from, to, recursive = FALSE, dry = TRUE)
+
+\method{as.logical}{azcopyStatus}(x)
+
+\method{print}{azcopyStatus}(x, ..., verbose = FALSE)
+
+\method{summary}{azcopyStatus}(x, ..., na.rm = FALSE)
 }
 \arguments{
 \item{from}{\code{character(1)} A relative file path corresponding to
@@ -23,6 +32,15 @@ the Azure Storage Container. When not specified, it will default to the
 base directory of the remote location. The \code{to} path can be a folder path
 but must end in a forward slash (\code{/}). If the \code{to} path points to a
 non-existent directory, it will be created.}
+
+\item{x}{\code{azcopyStatus} object to be checked; usually the output of \code{avcopy}
+operations}
+
+\item{...}{Additional arguments (not used).}
+
+\item{verbose}{\code{logical(1)} Print the \code{INFO} lines from the \code{azcopy} output}
+
+\item{na.rm}{\code{logical(1)} Not used.}
 }
 \value{
 \itemize{
@@ -36,7 +54,9 @@ the Azure Storage Container
 These functions invoke the \code{azcopy} command line utility. The
 utilities make use of a managed SAS token to mainly transfer files from the
 Azure workspace to the Azure Storage container. See \code{av_sas_token} for
-credential details.
+credential details. The results of \verb{azcopy copy} commands are returned as
+an \code{azcopyStatus} object which has S3 methods to print and convert to
+logical.
 }
 \details{
 \itemize{
@@ -46,6 +66,17 @@ the workspace environment
 Azure Storage Container
 }
 }
+\section{Functions}{
+\itemize{
+\item \code{as.logical(azcopyStatus)}: Convert results of azcopy operations to logical
+values
+
+\item \code{print(azcopyStatus)}: Print the results of \code{azcopy} operations
+
+\item \code{summary(azcopyStatus)}: Get a summary of the results of \code{azcopy}
+operations
+
+}}
 \examples{
 if (interactive()) {
 
