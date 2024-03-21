@@ -7,6 +7,9 @@
 #' @description `avworkflow_jobs()` reports the status of workflow executions
 #'    in the current workspace.
 #'
+#' @details The `avworkflow_jobs_inputs()` function returns the input parameters
+#'   for the workflow jobs as a `tibble`.
+#'
 #' @return `avworkflow_jobs()` returns a tibble with the status of the
 #'   jobs in the current workspace.
 #'
@@ -56,28 +59,33 @@ NULL
 #' @exportMethod avworkflow_jobs
 setMethod("avworkflow_jobs", signature = c(platform = "azure"),
     definition = function(
-        namespace = avworkspace_namespace(),
-        name = avworkspace_name(),
         ...,
         platform = cloud_platform()
     ) {
-        stopifnot(
-            isScalarCharacter(namespace), isScalarCharacter(name)
-        )
-
-        endpoint <-
-            # "/api/workspaces/{workspaceNamespace}/{workspaceName}/submissions"
-            "/api/batch/v1/run_sets"
-        qrs <- request(cbas_url()) |>
-            req_template(
-                endpoint,
-                workspaceNamespace = namespace,
-                workspaceName = utils::URLencode(name)
-            ) |>
-            req_auth_bearer_token(az_token()) |>
-            req_perform() |>
-            resp_body_string()
-
+        qrs <- .avrun_sets()
         .avworkflow_job(qrs)
     }
 )
+
+.avrun_sets <- function() {
+    request(cbas_url()) |>
+        req_template(
+            "/api/batch/v1/run_sets"
+        ) |>
+        req_auth_bearer_token(az_token()) |>
+        req_perform() |>
+        resp_body_string()
+}
+
+#' @rdname avworkflow-methods
+#'
+#' @export
+avworkflow_jobs_inputs <- function() {
+    qrs <- .avrun_sets()
+    input_tbls <- lapply(
+        .jmespath_template(qrs, "input_definition"),
+        jsonlite::fromJSON
+    )
+    names(input_tbls) <- .jmespath_template(qrs, "run_set_id")
+    input_tbls
+}
