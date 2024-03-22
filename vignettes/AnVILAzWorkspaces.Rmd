@@ -1,0 +1,183 @@
+---
+title: "Working with workspaces on AnVIL Azure"
+author: 
+- name: Marcel Ramos
+  affiliation: Roswell Park Comprehensive Cancer Center
+  email: Marcel.Ramos@RoswellPark.org
+- name: Martin Morgan
+  affiliation: Roswell Park Comprehensive Cancer Center
+  email: Martin.Morgan@RoswellPark.org
+output: 
+  BiocStyle::html_document:
+    self_contained: yes
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('AnVILAz')`"
+vignette: >
+  %\VignetteIndexEntry{Working with Workspaces on AnVIL Azure}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+```{r setup, include = FALSE}
+az_ok <- az_health_check()
+knitr::opts_chunk$set(
+    collapse = TRUE,
+## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
+    crop = NULL,
+    eval = az_ok
+)
+options(width = 75)
+```
+
+```{r library, message = FALSE, eval = TRUE, cache = FALSE}
+library(AnVILAz)
+```
+
+# Workspaces
+
+Workspaces on AnVIL Azure are a way to organize and manage data and analysis
+resources. Workspaces are created by users and can be shared with other users.
+
+## Listing workspaces
+
+The `avworkspaces()` function lists the workspaces available to the current
+user.
+
+```{r avworkspaces}
+avworkspaces()
+```
+
+## Caveats
+
+Workspaces on AnVIL are managed resources and do not provide a lot of freedom
+to work across workspaces. The `AnVILAz` package mainly provides functions to
+work with workspaces within the same namespace.
+
+There may be some workspaces that still operate using the Google Cloud Platform
+(GCP) and these workspaces are not accessible through the `AnVILAz` package
+though they may be listed in `avworkspaces()`. We refer users to `AnVILGCP`
+for working with GCP-based workspaces.
+
+## Current workspace
+
+The `avworkspace()` function returns the name of the current workspace provided
+that it is set.
+
+```{r avworkspace}
+avworkspace()
+```
+
+## Setting the current workspace
+
+The `avworkspace()` function can be used to set the current workspace.
+
+```{r avworkspace_set}
+avworkspace("my-namespace/my-workspace")
+avworkspace()
+```
+
+Typically this is not necessary as these values can be gathered from the
+AnVIL Azure environment.
+
+## Namespace and workspace
+
+The `avworkspace_namespace()` and `avworkspace_name()` functions return the
+namespace and name of the current workspace.
+
+```{r avworkspace_namespace}
+avworkspace_namespace()
+```
+
+```{r avworkspace_name}
+avworkspace_name()
+```
+
+
+# Cloning a workspace
+
+The `avworkspace_clone()` function clones a workspace.
+
+```{r avworkspace_clone, eval = FALSE}
+avworkspace_clone(
+    namespace = "my-namespace",
+    name = "my-workspace",
+    to_namespace = "my-new-namespace",
+    to_name = "my-workspace-clone"
+)
+avworkspaces()
+```
+
+Note that currently, the `createdBy` field is not populated with the user's
+information. This is a known issue and will be addressed in a future release.
+
+# Deleting a workspace
+
+To delete a workspace, it is recommended to use the AnVIL Azure interface.
+
+# Notebooks
+
+Notebooks are a way to interact with the data and analysis resources in a
+workspace. The `avnotebooks()` function lists the notebooks available in the
+current workspace. 
+
+```{r avnotebooks}
+avnotebooks()
+```
+
+Typically, notebooks are kept on the Azure Blob Storage (ABS) Container in a
+`analyses/` folder.
+
+## Localize / Delocalize
+
+The `avnotebooks_localize()` function downloads a notebook to the local
+filesystem. By default, it will download all the notebooks located in the
+`analyses/` folder to a matching `analyses` local folder. Note that this is a
+convenience function for `avcopy` file transfer operations.
+
+```{r avnotebooks_localize, eval=FALSE}
+avnotebooks_localize(destination = "./analyses")
+```
+
+On the other hand, the `avnotebooks_delocalize()` function uploads all the
+notebooks within the given directory (by default, the current directory) to the
+Azure Blob Storage Container. It places them in the `analyses/` folder on
+the ABS Container.
+
+```{r avnotebooks_delocalize, eval=FALSE}
+avnotebooks_delocalize(source = "./")
+```
+
+# Workflows
+
+## Listing current workflow runs
+
+The `avworkflows_jobs()` function reports the status of the current workflows
+within the workspace.
+
+```{r avworkflows_jobs}
+avworkflows_jobs()
+```
+
+It provides a tibble with workflow information such as the `run_set_id`,
+`run_set_name`, `submission_timestamp`, `error_count`, `run_count`, `state`,
+etc.
+
+## Listing workflow inputs
+
+The `avworkflows_jobs_inputs()` function lists the inputs for a given workflow.
+It returns a list of `tibbles` with the inputs for each workflow within the
+current workspace.
+
+```{r avworkflows_jobs_inputs}
+avworkflows_jobs_inputs()
+```
+
+# sessionInfo
+
+```{r sessionInfo}
+sessionInfo()
+```
