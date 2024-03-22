@@ -27,6 +27,8 @@
 #'
 NULL
 
+# avnotebooks ------------------------------------------------------------
+
 #' @describeIn avnotebooks-methods List the notebooks in the current workspace
 #'
 #' @importFrom BiocBaseUtils isScalarLogical
@@ -51,6 +53,8 @@ setMethod("avnotebooks", signature = c(platform = "azure"),
         files[isNotebook]
     }
 )
+
+# avnotebooks_localize ----------------------------------------------------
 
 #' @describeIn avnotebooks-methods Sync notebooks between the Azure Blob Storage
 #'   Container and the local runtime
@@ -85,6 +89,7 @@ setMethod("avnotebooks_localize", signature = c(platform = "azure"),
     }
 )
 
+# avnotebooks_delocalize --------------------------------------------------
 
 #' @describeIn avnotebooks-methods Sync notebooks between the local runtime and
 #'   the Azure Blob Storage Container
