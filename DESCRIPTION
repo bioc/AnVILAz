@@ -45,7 +45,6 @@ Date: 2024-03-21
 Collate: 
     'AnVILAz-package.R'
     'authentication.R'
-    'av_sas_token.R'
     'azure-class.R'
     'avdata-methods.R'
     'avnotebooks-methods.R'
@@ -54,6 +53,7 @@ Collate:
     'avworkspace-methods.R'
     'az-utilities.R'
     'az_copy-helpers.R'
+    'az_sas_token.R'
     'azure-methods.R'
     'resources.R'
     'utilities.R'

@@ -13,12 +13,12 @@
 #'
 #' @examples
 #' if (interactive()) {
-#'   sas <- av_sas_token()
+#'   sas <- az_sas_token()
 #'   sas[["token"]]
 #'   sas[["url"]]
 #' }
 #' @export
-av_sas_token <- function(as = "parsed", sasExpirationDuration = 28800) {
+az_sas_token <- function(as = "parsed", sasExpirationDuration = 28800) {
     api_endpoint <- paste0(
         "/api/workspaces/v1/{workspaceId}/resources/",
         "controlled/azure/storageContainer/{resourceId}/getSasToken"

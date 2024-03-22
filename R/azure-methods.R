@@ -103,7 +103,7 @@ setMethod("avcopy", signature = c(platform = "azure"), definition =
 #' @exportMethod avlist
 setMethod("avlist", signature = c(platform = "azure"), definition =
     function(..., platform = cloud_platform()) {
-        path <- av_sas_token()[["url"]]
+        path <- az_sas_token()[["url"]]
         args <- c("list", shQuote(path))
         output <- .az_do("azcopy", args = args)
         files <- strsplit(output, "; ")
@@ -130,7 +130,7 @@ setMethod("avremove", signature = c(platform = "azure"), definition =
         )
         .validate_blob(source)
         wscu <- .avcache$get("wscu")
-        sas_cred <- av_sas_token()
+        sas_cred <- az_sas_token()
         token_slug <- sas_cred[["token"]]
         path <- paste0(wscu, "/", source, "?")
         path <- shQuote(paste0(path, token_slug))
@@ -164,7 +164,7 @@ setMethod("avbackup", signature = c(platform = "azure"), definition =
         source <- normalizePath(source)
 
         wscu <- .avcache$get("wscu")
-        sas_cred <- av_sas_token()
+        sas_cred <- az_sas_token()
         token <- sas_cred[["token"]]
         path <- sas_cred[["url"]]
         if (!missing(destination)) {
@@ -201,7 +201,7 @@ setMethod("avrestore", signature = c(platform = "azure"), definition =
 
         source <- gsub("\\/$", "", source)
 
-        sas_cred <- av_sas_token()
+        sas_cred <- az_sas_token()
         token <- sas_cred[["token"]]
         wscu <- .avcache$get("wscu")
         path <- paste0(wscu, "/", source, "?")

@@ -4,7 +4,7 @@
 #'
 #' @description These functions invoke the `azcopy` command line utility. The
 #'   utilities make use of a managed SAS token to mainly transfer files from the
-#'   Azure workspace to the Azure Storage container. See `av_sas_token` for
+#'   Azure workspace to the Azure Storage container. See `az_sas_token` for
 #'   credential details. The results of `azcopy copy` commands are returned as
 #'   an `azcopyStatus` object which has S3 methods to print and convert to
 #'   logical.
@@ -75,7 +75,7 @@ az_copy_from_storage <-
 
     recurse <- tolower(as.character(recursive))
 
-    sas_cred <- av_sas_token()
+    sas_cred <- az_sas_token()
     wscu <- .avcache$get("wscu")
     token <- sas_cred[["token"]]
     path <- paste0(wscu, "/", from, "?")
@@ -105,7 +105,7 @@ az_copy_to_storage <-
 
     recurse <- tolower(as.character(recursive))
 
-    sas_cred <- av_sas_token()
+    sas_cred <- az_sas_token()
     wscu <- .avcache$get("wscu")
     token <- sas_cred[["token"]]
     path <- sas_cred[["url"]]
