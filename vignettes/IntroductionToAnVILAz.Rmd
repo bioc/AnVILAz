@@ -1,6 +1,9 @@
 ---
 title: "Introduction to the AnVILAz package"
 author: 
+- name: Marcel Ramos
+  affiliation: Roswell Park Comprehensive Cancer Center
+  email: Marcel.Ramos@RoswellPark.org
 - name: Martin Morgan
   affiliation: Roswell Park Comprehensive Cancer Center
   email: Martin.Morgan@RoswellPark.org
