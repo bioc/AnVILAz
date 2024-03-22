@@ -4,13 +4,9 @@
 \alias{az_sas_token}
 \title{Obtain the Shared Access Signature (SAS) for the Azure Storage}
 \usage{
-az_sas_token(as = "parsed", sasExpirationDuration = 28800)
+az_sas_token(sasExpirationDuration = 28800)
 }
 \arguments{
-\item{as}{desired type of output: \code{raw}, \code{text} or
-\code{parsed}. \code{content} attempts to automatically figure out
-which one is most appropriate, based on the content-type.}
-
 \item{sasExpirationDuration}{\code{numeric(1)} The number of seconds until the SAS
 token expires (default: 28,800 seconds)}
 }
