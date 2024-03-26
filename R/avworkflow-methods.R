@@ -14,7 +14,7 @@
 #'   jobs in the current workspace.
 #'
 #' @inheritParams azure-methods
-#' @inheritParams avdata-methods
+#' @inheritParams avnotebooks-methods
 #'
 #' @include azure-class.R
 #'

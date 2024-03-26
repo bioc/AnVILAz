@@ -80,7 +80,7 @@ setMethod("avworkspace", signature = c(platform = "azure"), definition =
 
 #' @describeIn avworkspace-methods Clone a workspace
 #'
-#' @inheritParams avdata-methods
+#' @inheritParams avnotebooks-methods
 #'
 #' @param to_namespace `character(1)` workspace (billing account) in
 #'     which to make the clone.

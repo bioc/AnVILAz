@@ -46,7 +46,6 @@ Collate:
     'AnVILAz-package.R'
     'authentication.R'
     'azure-class.R'
-    'avdata-methods.R'
     'avnotebooks-methods.R'
     'avtable-methods.R'
     'avworkflow-methods.R'

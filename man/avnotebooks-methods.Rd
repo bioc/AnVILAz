@@ -32,13 +32,6 @@
 When \code{local = TRUE}, the notebook path is
 \verb{<workspace_data_service_url()>/analyses}.}
 
-\item{...}{Additional arguments passed to lower level functions (not used)}
-
-\item{platform}{\code{azure()} The cloud platform class to dispatch on as given by
-\link[AnVILBase:cloud_platform]{AnVILBase::cloud_platform}. Typically not set manually as
-\code{cloud_platform()} returns the \code{"azure"} class for Azure workspaces on
-AnVIL.}
-
 \item{destination}{\code{character(1)} or \code{missing} file path to the local file
 system directory for synchronization. The default location is
 \verb{~/<workspace_data_service_url()>/analyses}. Out-of-date local files are
@@ -47,6 +40,12 @@ replaced with the workspace version.}
 \item{source}{\code{character(1)} or \code{missing} file path to the local file system
 directory for synchronization. The default location is the home folder.
 Out-of-date local files are replaced with the workspace version.}
+
+\item{namespace}{\code{character(1)} AnVIL workspace namespace as returned by,
+e.g., \code{avworkspace_namespace()}}
+
+\item{name}{\code{character(1)} AnVIL workspace name as returned by, eg.,
+\code{avworkspace_name()}.}
 }
 \value{
 \code{avnotebooks()} returns a character vector of files located
