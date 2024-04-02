@@ -15,7 +15,12 @@ Authors@R:
 Description: The AnVIL is a cloud computing resource developed in part
     by the National Human Genome Research Institute. The AnVILAz
     package supports end-users and developers using the AnVIL platform
-    in the Azure cloud.
+    in the Azure cloud. The package provides a programmatic interface
+    to AnVIL resources, including workspaces, notebooks, tables, and
+    workflows. The package also provides utilities for managing
+    resources, including copying files to and from Azure Blob Storage,
+    and creating shared access signatures (SAS) for secure access to
+    Azure resources.
 License: Artistic-2.0
 Encoding: UTF-8
 Imports:
@@ -28,6 +33,7 @@ Imports:
     rjsoncons,
     tibble,
     utils
+biocViews: Software, Infrastructure, ThirdPartyClient
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Suggests: 
@@ -37,7 +43,6 @@ Suggests:
     readr,
     rmarkdown,
     tinytest
-Remotes: Bioconductor/AnVILBase
 BugReports: https://github.com/Bioconductor/AnVILAz/issues
 URL: https://github.com/Bioconductor/AnVILAz
 VignetteBuilder: knitr
