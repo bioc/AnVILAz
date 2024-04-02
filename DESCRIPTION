@@ -43,6 +43,7 @@ Suggests:
     readr,
     rmarkdown,
     tinytest
+SystemRequirements: az, azcopy
 BugReports: https://github.com/Bioconductor/AnVILAz/issues
 URL: https://github.com/Bioconductor/AnVILAz
 VignetteBuilder: knitr
