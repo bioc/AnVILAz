@@ -3,12 +3,12 @@
 \name{az-utilities}
 \alias{az-utilities}
 \alias{az_exists}
-\alias{az_healthcheck}
+\alias{az_health_check}
 \title{az health check helpers}
 \usage{
 az_exists()
 
-az_healthcheck()
+az_health_check()
 }
 \value{
 az_exists returns a logical value indicating the presence of the \code{az}

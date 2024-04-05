@@ -28,7 +28,7 @@ az_exists <- function() {
 #' @rdname az-utilities
 #'
 #' @export
-az_healthcheck <- function() {
+az_health_check <- function() {
     if (!az_exists())
         warning("The 'az' command line utility is not available", call. = FALSE)
     keys <- .avcache$keys()
