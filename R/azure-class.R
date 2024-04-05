@@ -11,6 +11,10 @@
 
 #' @rdname azure-class
 #'
+#' @examples
+#' az <- azure()
+#' az
+#' showClass(class(az))
 #' @export
 azure <- function() {
     .azure()

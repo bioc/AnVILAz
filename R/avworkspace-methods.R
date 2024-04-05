@@ -14,6 +14,8 @@ NULL
 
 #' @describeIn avworkspace-methods List workspaces
 #'
+#' @return `avworkspaces()`: a `tibble` table of available workspaces
+#'
 #' @importFrom AnVILBase avworkspaces
 #' @exportMethod avworkspaces
 setMethod("avworkspaces", signature = c(platform = "azure"), definition =
@@ -33,6 +35,9 @@ setMethod("avworkspaces", signature = c(platform = "azure"), definition =
 .LEONARDO_URL <- "https://leonardo.dsde-prod.broadinstitute.org"
 
 #' @describeIn avworkspace-methods List the workspace namespace
+#'
+#' @return `avworkspace_namespace()`: a character string of the workspace
+#'   namespace
 #'
 #' @importFrom AnVILBase avworkspace_namespace
 #' @exportMethod avworkspace_namespace
@@ -55,6 +60,8 @@ setMethod("avworkspace_namespace", signature = c(platform = "azure"),
 
 #' @describeIn avworkspace-methods Obtain the workspace name
 #'
+#' @return `avworkspace_name()`: a character string of the workspace name
+#'
 #' @importFrom AnVILBase avworkspace_name
 #' @exportMethod avworkspace_name
 setMethod("avworkspace_name", signature = c(platform = "azure"), definition =
@@ -67,6 +74,9 @@ setMethod("avworkspace_name", signature = c(platform = "azure"), definition =
 
 #' @describeIn avworkspace-methods Obtain the current workspace namespace and
 #'   name combination
+#'
+#' @return `avworkspace()`: a character string of the workspace namespace and
+#'  name combination
 #'
 #' @importFrom AnVILBase avworkspace
 #' @exportMethod avworkspace
@@ -97,6 +107,9 @@ setMethod("avworkspace", signature = c(platform = "azure"), definition =
 #' @param bucket_location `character(1)` region in which bucket
 #'   attached to the workspace should be created. The default is set to a
 #'   single region ("US"); multi-region is available but more costly.
+#'
+#' @return `avworkspace_clone()`: called for the side-effect of cloning a
+#'  workspace to a new namespace and name.
 #'
 #' @importFrom AnVILBase avworkspace_clone
 #' @exportMethod avworkspace_clone

@@ -65,7 +65,7 @@ az_copy_from_storage <-
     .validate_blob(from)
 
     if (!endsWith(to, "/"))
-       stop("Provide a local directory with a forward slash (e.g., './to/')")
+        stop("Provide a local directory with a forward slash (e.g., './to/')")
 
     isdir <- file.info(to)[["isdir"]]
     if (is.na(isdir) || !dir.exists(to))
@@ -183,10 +183,10 @@ print.azcopyStatus <- function(x, ..., verbose = FALSE) {
             cat(
                 paste(x[[i]]$INFO, collapse = "\n"), "\n"
             )
-       cat(
-           "LogFile: ", x[[i]]$logFile, "\n  ",
+        cat(
+            "LogFile: ", x[[i]]$logFile, "\n  ",
             x[[i]]$statusLine, "\n",
-           sep = ""
+            sep = ""
         )
     }
 }

@@ -12,3 +12,8 @@ azure()
 \description{
 This class represents the Azure platform.
 }
+\examples{
+az <- azure()
+az
+showClass(class(az))
+}

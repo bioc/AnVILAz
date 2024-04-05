@@ -50,6 +50,20 @@ which to make the clone.}
 attached to the workspace should be created. The default is set to a
 single region ("US"); multi-region is available but more costly.}
 }
+\value{
+\code{avworkspaces()}: a \code{tibble} table of available workspaces
+
+\code{avworkspace_namespace()}: a character string of the workspace
+namespace
+
+\code{avworkspace_name()}: a character string of the workspace name
+
+\code{avworkspace()}: a character string of the workspace namespace and
+name combination
+
+\code{avworkspace_clone()}: called for the side-effect of cloning a
+workspace to a new namespace and name.
+}
 \description{
 AnVIL Azure Workspace methods
 }

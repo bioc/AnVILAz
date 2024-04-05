@@ -19,7 +19,8 @@
 #'     (`type`)
 #'   * `get_type_id` - a `GET` request to retrieve a single row from an existing
 #'     table (`type`)
-#'   * `delete_type` - a `DELETE` request to remove then entire data set (`type`)
+#'   * `delete_type` - a `DELETE` request to remove then entire data set
+#'     (`type`)
 #'
 #' @param tsv_file `character(1)` A path to a tab-separated values file
 #'

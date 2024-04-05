@@ -2,6 +2,12 @@
 % Please edit documentation in R/avtable-methods.R
 \name{avtable-methods}
 \alias{avtable-methods}
+\alias{avtable}
+\alias{avtables}
+\alias{avtable_import}
+\alias{avtable_import_set}
+\alias{avtable_delete}
+\alias{avtable_delete_values}
 \alias{avtable,azure-method}
 \alias{avtables,azure-method}
 \alias{avtable_import,azure-method}
@@ -65,8 +71,23 @@ an ID is in more than one set.}
 rows to be deleted}
 }
 \value{
-\code{avtable_import_set()} returns a \code{character(1)} name of the imported
+\code{avtable}: a \code{tibble()} corresponding to the data with the name as
+given by \code{table}
+
+\code{avtables}: a \code{tibble()} with columns \code{table}, \code{count}, and
+\code{colnames} corresponding to the tables / types available in the current
+workspace
+
+\code{avtable_import()}: called for the side effect of uploading the data
+to the DATA tab
+
+\code{avtable_import_set()}: a \code{character(1)} name of the imported
 tibble.
+
+\code{avtable_delete}: a \code{logical(1)} indicating success or failure
+
+\code{avtable_delete_values()}: a \code{logical(1)} vector indicating success
+or failure for each value in \code{values}
 }
 \description{
 Methods for working with AnVIL Azure tables. These are referred
@@ -95,8 +116,26 @@ operation is somewhat like \code{split(member, set)}.
 
 }}
 \examples{
-\dontrun{
-avtable("testData") |>                          # new 'testData_set' table
-    avtable_import_set("testData", "cyl", "model_id")
+if (interactive()) {
+  library(dplyr)
+  mtcars_tbl <-
+      mtcars |>
+      as_tibble(rownames = "model_id") |>
+      mutate(model_id = gsub(" ", "-", model_id))
+
+  avtable_import(
+    mtcars_tbl,
+    table = "testData",
+    entity = "model_id"
+  )
+
+  avtable("testData")
+
+  avtable("testData") |>                  # new 'testData_set' table
+        avtable_import_set("testData", "cyl", "model_id")
+
+  avtable_delete("testData_set")
+
+  avtable_delete_values("testData", "Mazda-RX4")
 }
 }

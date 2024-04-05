@@ -70,7 +70,8 @@ operations that affect the "DATA" tab include:
 (\code{type})
 \item \code{get_type_id} - a \code{GET} request to retrieve a single row from an existing
 table (\code{type})
-\item \code{delete_type} - a \code{DELETE} request to remove then entire data set (\code{type})
+\item \code{delete_type} - a \code{DELETE} request to remove then entire data set
+(\code{type})
 }
 }
 \examples{

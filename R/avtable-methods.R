@@ -1,5 +1,8 @@
 #' @name avtable-methods
 #'
+#' @aliases avtable avtables avtable_import avtable_import_set avtable_delete
+#'   avtable_delete_values
+#'
 #' @title AnVIL Azure table ("type") methods
 #'
 #' @description Methods for working with AnVIL Azure tables. These are referred
@@ -15,13 +18,28 @@
 #'
 #' @inheritParams azure-methods
 #'
-#' @return `avtable_import_set()` returns a `character(1)` name of the imported
-#'   tibble.
-#'
 #' @examples
-#' \dontrun{
-#' avtable("testData") |>                          # new 'testData_set' table
-#'     avtable_import_set("testData", "cyl", "model_id")
+#' if (interactive()) {
+#'   library(dplyr)
+#'   mtcars_tbl <-
+#'       mtcars |>
+#'       as_tibble(rownames = "model_id") |>
+#'       mutate(model_id = gsub(" ", "-", model_id))
+#'
+#'   avtable_import(
+#'     mtcars_tbl,
+#'     table = "testData",
+#'     entity = "model_id"
+#'   )
+#'
+#'   avtable("testData")
+#'
+#'   avtable("testData") |>                  # new 'testData_set' table
+#'         avtable_import_set("testData", "cyl", "model_id")
+#'
+#'   avtable_delete("testData_set")
+#'
+#'   avtable_delete_values("testData", "Mazda-RX4")
 #' }
 NULL
 
@@ -31,6 +49,9 @@ NULL
 #' @describeIn avtable-methods List the contents of a particular table / type
 #'
 #' @param table `character(1)` The name of the table / type
+#'
+#' @return `avtable`: a `tibble()` corresponding to the data with the name as
+#'   given by `table`
 #'
 #' @importFrom AnVILBase avtable
 #' @importFrom BiocBaseUtils isScalarCharacter
@@ -47,6 +68,10 @@ setMethod("avtable", signature = c(platform = "azure"), definition =
 # avtables ----------------------------------------------------------------
 
 #' @describeIn avtable-methods List the available tables / types
+#'
+#' @return `avtables`: a `tibble()` with columns `table`, `count`, and
+#'   `colnames` corresponding to the tables / types available in the current
+#'   workspace
 #'
 #' @importFrom AnVILBase avtables
 #' @importFrom rjsoncons jmespath
@@ -90,6 +115,9 @@ setMethod("avtables", signature = c(platform = "azure"), definition =
 #'   provides the keys for the data (a.k.a. `primaryKey`). By default, the first
 #'   column in the table. The keys cannot contain special characters or spaces.
 #'
+#' @return `avtable_import()`: called for the side effect of uploading the data
+#'   to the DATA tab
+#'
 #' @importFrom AnVILBase avtable_import
 #' @exportMethod avtable_import
 setMethod("avtable_import", signature = c(platform = "azure"), definition =
@@ -128,6 +156,9 @@ setMethod("avtable_import", signature = c(platform = "azure"), definition =
 #' @param member `character(1)` column name of `.data` identifying the member(s)
 #'   of the set(s) or groups. The values in this column may repeat if
 #'   an ID is in more than one set.
+#'
+#' @return `avtable_import_set()`: a `character(1)` name of the imported
+#'   tibble.
 #'
 #' @importFrom AnVILBase avtable_import_set
 #' @importFrom BiocBaseUtils isScalarCharacter
@@ -170,6 +201,8 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
 #' @describeIn avtable-methods Delete a table / type
 #' @importFrom AnVILBase avtable_delete
 #'
+#' @return `avtable_delete`: a `logical(1)` indicating success or failure
+#'
 #' @exportMethod avtable_delete
 setMethod("avtable_delete", signature = c(platform = "azure"), definition =
     function(table, ..., platform = cloud_platform()) {
@@ -184,6 +217,9 @@ setMethod("avtable_delete", signature = c(platform = "azure"), definition =
 #'
 #' @param values `character()` vector of `primaryKey` values corresponding to
 #'   rows to be deleted
+#'
+#' @return `avtable_delete_values()`: a `logical(1)` vector indicating success
+#'   or failure for each value in `values`
 #'
 #' @importFrom AnVILBase avtable_delete_values
 #' @exportMethod avtable_delete_values
