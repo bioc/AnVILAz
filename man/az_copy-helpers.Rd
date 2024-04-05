@@ -13,11 +13,11 @@ az_copy_from_storage(from, to = "./", recursive = FALSE, dry = TRUE)
 
 az_copy_to_storage(from, to, recursive = FALSE, dry = TRUE)
 
-\method{as.logical}{azcopyStatus}(x)
+\method{as.logical}{azcopyStatus}(x, ...)
 
 \method{print}{azcopyStatus}(x, ..., verbose = FALSE)
 
-\method{summary}{azcopyStatus}(x, ..., na.rm = FALSE)
+\method{summary}{azcopyStatus}(object, ...)
 }
 \arguments{
 \item{from}{\code{character(1)} A relative file path corresponding to
@@ -33,6 +33,14 @@ base directory of the remote location. The \code{to} path can be a folder path
 but must end in a forward slash (\code{/}). If the \code{to} path points to a
 non-existent directory, it will be created.}
 
+\item{recursive}{\code{logical(1)} Whether to recursively move or remove files in
+a directory. Only applies to \code{avremove}, \code{avbackup}, and \code{avrestore}.
+Default is \code{TRUE} for \code{backup} and \code{restore} operations and \code{FALSE} for
+\code{avremove}.}
+
+\item{dry}{\code{logical(1)} Whether to perform a dry run i.e., add the
+\code{--dry-run} flag to the command.}
+
 \item{x}{\code{azcopyStatus} object to be checked; usually the output of \code{avcopy}
 operations}
 
@@ -40,7 +48,8 @@ operations}
 
 \item{verbose}{\code{logical(1)} Print the \code{INFO} lines from the \code{azcopy} output}
 
-\item{na.rm}{\code{logical(1)} Not used.}
+\item{object}{\code{azcopyStatus} object to be summarized; usually the output of
+\code{avcopy} operations}
 }
 \value{
 \itemize{
@@ -94,3 +103,4 @@ if (interactive()) {
 
 }
 }
+\keyword{internal}

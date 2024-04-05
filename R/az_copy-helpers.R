@@ -9,6 +9,8 @@
 #'   an `azcopyStatus` object which has S3 methods to print and convert to
 #'   logical.
 #'
+#' @inheritParams azure-methods
+#'
 #' @details
 #' * `az_copy_from_storage` - copy a file from the Azure Storage Container to
 #'   the workspace environment
@@ -50,7 +52,7 @@
 #'   az_copy_from_storage("analyses/jupyter.log")
 #'
 #' }
-#' @export
+#' @keywords internal
 az_copy_from_storage <-
     function(from, to = "./", recursive = FALSE, dry = TRUE)
 {
@@ -89,7 +91,6 @@ az_copy_from_storage <-
 }
 
 #' @rdname az_copy-helpers
-#' @export
 az_copy_to_storage <-
     function(from, to, recursive = FALSE, dry = TRUE)
 {
@@ -165,7 +166,7 @@ az_copy_to_storage <-
 #'   operations
 #'
 #' @export
-as.logical.azcopyStatus <- function(x) {
+as.logical.azcopyStatus <- function(x, ...) {
     vapply(x, function(x) x$Status, logical(1))
 }
 
@@ -193,14 +194,15 @@ print.azcopyStatus <- function(x, ..., verbose = FALSE) {
 #' @describeIn az_copy-helpers Get a summary of the results of `azcopy`
 #'   operations
 #'
-#' @param na.rm `logical(1)` Not used.
+#' @param object `azcopyStatus` object to be summarized; usually the output of
+#'   `avcopy` operations
 #'
 #' @export
-summary.azcopyStatus <- function(x, ..., na.rm = FALSE) {
-    for (i in seq_along(x)) {
+summary.azcopyStatus <- function(object, ...) {
+    for (i in seq_along(object)) {
         cat(
-            "Job ID: ", x[[i]]$jobId, "\n",
-            paste(x[[i]]$summary, collapse = "\n"), "\n",
+            "Job ID: ", object[[i]]$jobId, "\n",
+            paste(object[[i]]$summary, collapse = "\n"), "\n",
             sep = ""
         )
     }

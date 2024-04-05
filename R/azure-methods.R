@@ -20,6 +20,9 @@
 #'   Default is `TRUE` for `backup` and `restore` operations and `FALSE` for
 #'   `avremove`.
 #'
+#' @param dry `logical(1)` Whether to perform a dry run i.e., add the
+#'   `--dry-run` flag to the command.
+#'
 #' @param platform `azure()` The cloud platform class to dispatch on as given by
 #'   [AnVILBase::cloud_platform]. Typically not set manually as
 #'   `cloud_platform()` returns the `"azure"` class for Azure workspaces on
@@ -78,18 +81,19 @@ NULL
 #' @importFrom AnVILBase avcopy
 #' @exportMethod avcopy
 setMethod("avcopy", signature = c(platform = "azure"), definition =
-    function(source, destination, ..., platform = cloud_platform()) {
+    function(source, destination, dry = TRUE, ..., platform = cloud_platform())
+    {
         stopifnot(
             isScalarCharacter(source)
         )
         if (.is_remote_path(source))
-            az_copy_from_storage(from = source, to = destination, dry = FALSE)
+            az_copy_from_storage(from = source, to = destination, dry = dry)
         else if (
             file.exists(source) && (
                 .is_remote_path(destination) || missing(destination)
             )
         )
-            az_copy_to_storage(from = source, to = destination, dry = FALSE)
+            az_copy_to_storage(from = source, to = destination, dry = dry)
         else
             stop("Invalid source or destination path")
     }

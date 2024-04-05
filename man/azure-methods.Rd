@@ -10,7 +10,7 @@
 \alias{avstorage,azure-method}
 \title{A number of methods compatible with the Azure platform class.}
 \usage{
-\S4method{avcopy}{azure}(source, destination, ..., platform = cloud_platform())
+\S4method{avcopy}{azure}(source, destination, dry = TRUE, ..., platform = cloud_platform())
 
 \S4method{avlist}{azure}(..., platform = cloud_platform())
 
@@ -47,6 +47,9 @@ the Azure Storage Container. When not specified, it will default to the
 base directory of the remote location. The \code{to} path can be a folder path
 but must end in a forward slash (\code{/}). If the \code{to} path points to a
 non-existent directory, it will be created.}
+
+\item{dry}{\code{logical(1)} Whether to perform a dry run i.e., add the
+\code{--dry-run} flag to the command.}
 
 \item{...}{Additional arguments passed to lower level functions (not used)}
 

@@ -6,17 +6,12 @@
 #'
 #' @description `avnotebooks()` lists the notebooks in the current workspace.
 #'
-#' @param namespace `character(1)` AnVIL workspace namespace as returned by,
-#'   e.g., `avworkspace_namespace()`
-#'
-#' @param name `character(1)` AnVIL workspace name as returned by, eg.,
-#'   `avworkspace_name()`.
-#'
-#'
 #' @param local `logical(1)` notebooks located on the workspace
 #'   (`local = FALSE`, default) or runtime / local instance (`local = TRUE`).
 #'   When `local = TRUE`, the notebook path is
 #'   `<workspace_data_service_url()>/analyses`.
+#'
+#' @inheritParams azure-methods
 #'
 #' @return `avnotebooks()` returns a character vector of files located
 #'   in the workspace 'analyses/' folder path, or on the local file
