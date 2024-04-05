@@ -27,15 +27,16 @@ az_exists <- function() {
 
 #' @rdname az-utilities
 #'
+#' @importFrom BiocBaseUtils isScalarCharacter
 #' @export
 az_health_check <- function() {
     if (!az_exists())
         warning("The 'az' command line utility is not available", call. = FALSE)
     keys <- .avcache$keys()
-    nchars <-  vapply(
-        keys, function(x) nchar(.avcache$get(x)), numeric(1L)
+    nzchars <-  vapply(
+        keys, function(x) isScalarCharacter(.avcache$get(x)), logical(1L)
     )
-    notfounds <- keys[!nchars]
+    notfounds <- keys[!nzchars]
     if (length(notfounds))
         warning(
             "The environment variable(s) ",
@@ -43,5 +44,5 @@ az_health_check <- function() {
             " are not set.",
             call. = FALSE
         )
-    all(nchar(keys))
+    all(nzchars)
 }
