@@ -9,7 +9,7 @@ Authors@R:
     ),
     person(
         "Marcel", "Ramos", role = c("aut", "cre"),
-        email = "marcel.ramosperez@roswellpark.org",
+        email = "marcel.ramos@roswellpark.org",
         comment = c(ORCID = "0000-0002-3242-0582")
     ))
 Description: The AnVIL is a cloud computing resource developed in part
