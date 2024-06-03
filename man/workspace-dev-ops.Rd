@@ -12,7 +12,7 @@
 \usage{
 upload_tsv(
   tsv_file,
-  type = tools:::file_path_sans_ext(basename(tsv_file)),
+  type = tools::file_path_sans_ext(basename(tsv_file)),
   primaryKey = NULL
 )
 

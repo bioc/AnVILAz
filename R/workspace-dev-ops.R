@@ -79,7 +79,7 @@
 #' }
 upload_tsv <- function(
     tsv_file,
-    type = tools:::file_path_sans_ext(basename(tsv_file)),
+    type = tools::file_path_sans_ext(basename(tsv_file)),
     primaryKey = NULL
 ) {
     base_uri <- workspace_data_service_url()
