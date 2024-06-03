@@ -1,6 +1,6 @@
 Package: AnVILAz
 Title: R / Bioconductor Support for the AnVIL Azure Platform
-Version: 0.99.7
+Version: 0.99.8
 Authors@R: 
     c(person(
         "Martin", "Morgan", role = c("aut", "ctb"),
@@ -47,7 +47,7 @@ SystemRequirements: az, azcopy
 BugReports: https://github.com/Bioconductor/AnVILAz/issues
 URL: https://github.com/Bioconductor/AnVILAz
 VignetteBuilder: knitr
-Date: 2024-04-05
+Date: 2024-06-03
 Collate: 
     'AnVILAz-package.R'
     'authentication.R'
