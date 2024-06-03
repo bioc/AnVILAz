@@ -119,6 +119,7 @@ setMethod("avtables", signature = c(platform = "azure"), definition =
 #'   to the DATA tab
 #'
 #' @importFrom AnVILBase avtable_import
+#' @importFrom utils write.table
 #' @exportMethod avtable_import
 setMethod("avtable_import", signature = c(platform = "azure"), definition =
     function(
@@ -132,7 +133,7 @@ setMethod("avtable_import", signature = c(platform = "azure"), definition =
             table <- deparse(substitute(.data))
 
         temptsv <- tempfile(fileext = ".tsv")
-        utils::write.table(.data, file = temptsv, sep = "\t", row.names = FALSE)
+        write.table(.data, file = temptsv, sep = "\t", row.names = FALSE)
         on.exit(file.remove(temptsv))
 
         upload_tsv(
@@ -162,6 +163,7 @@ setMethod("avtable_import", signature = c(platform = "azure"), definition =
 #'
 #' @importFrom AnVILBase avtable_import_set
 #' @importFrom BiocBaseUtils isScalarCharacter
+#' @importFrom utils URLencode stack
 #' @exportMethod avtable_import_set
 setMethod("avtable_import_set", signature = c(platform = "azure"),
     definition = function(
@@ -176,9 +178,9 @@ setMethod("avtable_import_set", signature = c(platform = "azure"),
             set %in% names(.data),
             !identical(set, member), member %in% names(.data)
         )
-        origin <- utils::URLencode(origin)
+        origin <- URLencode(origin)
         .data <- .data[, c(set, member)]
-        .data <- rev(utils::stack(
+        .data <- rev(stack(
             lapply(
                 split(.data, .data[[1L]]),
                 function(x) paste(x[[2L]], collapse = ", ")
