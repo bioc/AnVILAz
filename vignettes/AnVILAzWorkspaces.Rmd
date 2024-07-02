@@ -47,7 +47,7 @@ resources. Workspaces are created by users and can be shared with other users.
 The `avworkspaces()` function lists the workspaces available to the current
 user.
 
-```{r avworkspaces}
+```{r avworkspaces, eval=az_ok}
 avworkspaces()
 ```
 
@@ -67,7 +67,7 @@ for working with GCP-based workspaces.
 The `avworkspace()` function returns the name of the current workspace provided
 that it is set.
 
-```{r avworkspace}
+```{r avworkspace, eval=az_ok}
 avworkspace()
 ```
 
@@ -75,7 +75,7 @@ avworkspace()
 
 The `avworkspace()` function can be used to set the current workspace.
 
-```{r avworkspace_set}
+```{r avworkspace_set, eval=az_ok}
 avworkspace("my-namespace/my-workspace")
 avworkspace()
 ```
@@ -88,11 +88,11 @@ AnVIL Azure environment.
 The `avworkspace_namespace()` and `avworkspace_name()` functions return the
 namespace and name of the current workspace.
 
-```{r avworkspace_namespace}
+```{r avworkspace_namespace, eval=az_ok}
 avworkspace_namespace()
 ```
 
-```{r avworkspace_name}
+```{r avworkspace_name, eval=az_ok}
 avworkspace_name()
 ```
 
@@ -101,7 +101,7 @@ avworkspace_name()
 
 The `avworkspace_clone()` function clones a workspace.
 
-```{r avworkspace_clone, eval = FALSE}
+```{r avworkspace_clone, eval=FALSE}
 avworkspace_clone(
     namespace = "my-namespace",
     name = "my-workspace",
@@ -124,7 +124,7 @@ Notebooks are a way to interact with the data and analysis resources in a
 workspace. The `avnotebooks()` function lists the notebooks available in the
 current workspace. 
 
-```{r avnotebooks}
+```{r avnotebooks, eval=az_ok}
 avnotebooks()
 ```
 
@@ -158,7 +158,7 @@ avnotebooks_delocalize(source = "./")
 The `avworkflows_jobs()` function reports the status of the current workflows
 within the workspace.
 
-```{r avworkflows_jobs}
+```{r avworkflows_jobs, eval=az_ok}
 avworkflows_jobs()
 ```
 
@@ -172,12 +172,12 @@ The `avworkflows_jobs_inputs()` function lists the inputs for a given workflow.
 It returns a list of `tibbles` with the inputs for each workflow within the
 current workspace.
 
-```{r avworkflows_jobs_inputs}
+```{r avworkflows_jobs_inputs, eval=az_ok}
 avworkflows_jobs_inputs()
 ```
 
 # sessionInfo
 
-```{r sessionInfo}
+```{r sessionInfo, eval=TRUE}
 sessionInfo()
 ```

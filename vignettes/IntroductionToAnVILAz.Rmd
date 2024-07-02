@@ -61,7 +61,7 @@ to Microsoft's definition of containers and blobs.
 
 ## List Azure Blob Storage Container Files
 
-```{r}
+```{r, eval=az_ok}
 avlist()
 ```
 
@@ -76,7 +76,7 @@ container on Azure. They can also be accessed via the
 As an example, we load the internal `mtcars` dataset and save it as an `.Rda`
 file with `save`. We can then upload this file to the ABS.
 
-```{r}
+```{r, eval=az_ok}
 data("mtcars", package = "datasets")
 test <- head(mtcars)
 save(test, file = "mydata.Rda")
@@ -85,14 +85,14 @@ save(test, file = "mydata.Rda")
 Now we can upload the data to the `analyses/` folder in the Azure Blob Storage
 (ABS) Container.
 
-```{r}
+```{r, eval=az_ok}
 avcopy("mydata.Rda", "analyses/")
 ```
 
 We can also use a small log file for demonstration purposes. The `jupyter.log`
 file is already present in our workspace directory.
 
-```{r}
+```{r, eval=az_ok}
 avcopy("jupyter.log", "analyses/")
 ```
 
@@ -101,7 +101,7 @@ avcopy("jupyter.log", "analyses/")
 We can remove the data with `avremove` and the _relative_ path to the `.Rda`
 file.
 
-```{r}
+```{r, eval=az_ok}
 avremove("analyses/mydata.Rda")
 ```
 
@@ -110,7 +110,7 @@ avremove("analyses/mydata.Rda")
 The reverse operation is also possible with a remote and local paths as the
 first and second arguments, respectively.
 
-```{r}
+```{r, eval=az_ok}
 avcopy("analyses/jupyter.log", "./test/")
 ```
 
@@ -119,7 +119,7 @@ avcopy("analyses/jupyter.log", "./test/")
 To upload an entire folder, we can use `avbackup`. Note that the entire `test`
 folder becomes a subfolder of the remote `analyses` folder in this example.
 
-```{r}
+```{r, eval=az_ok}
 avbackup("./test/", "analyses/")
 ```
 
@@ -128,14 +128,14 @@ avbackup("./test/", "analyses/")
 By default, the entire `source` directory will be copied to the current working
 directory `"."`, i.e., the base workspace directory.
 
-```{r}
+```{r, eval=az_ok}
 avrestore("analyses/test")
 ```
 
 You may also move this to another folder by providing a folder name as the
 second argument.
 
-```{r}
+```{r, eval=az_ok}
 avrestore("analyses/test", "test")
 ```
 
@@ -146,7 +146,7 @@ avrestore("analyses/test", "test")
 First we create an example dataset for uploading to the `DATA` tab. We create a
 `model_id` column from the `rownames`.
 
-```{r}
+```{r, eval=az_ok}
 library(dplyr)
 mtcars_tbl <-
     mtcars |>
@@ -163,7 +163,7 @@ corresponds to the column name that uniquely identifies each row in the data.
 Typically, the `primaryKey` column provides a list of patient or UUID
 identifiers and is in the first column of the data.
 
-```{r}
+```{r, eval=az_ok}
 mtcars_tbl |> avtable_import(table = "testData", primaryKey = "model_id")
 ```
 
@@ -173,7 +173,7 @@ The `avtable` function will pull the data from the `DATA` tab and represent the
 data locally as a `tibble`. It works by using the same `type` identifier (i.e.,
 the `table` argument) that was used when the data was uploaded.
 
-```{r}
+```{r, eval=az_ok}
 model_data <- avtable(table = "testData")
 head(model_data)
 ```
@@ -186,7 +186,7 @@ set of values that correspond to row identifiers in the `primaryKey`. In this
 example, we remove the `AMC-Javelin` entry from the data. We are left with 31
 records.
 
-```{r}
+```{r, eval=az_ok}
 avtable_delete_values(table = "testData", values = "AMC-Javelin")
 ```
 
@@ -195,7 +195,7 @@ avtable_delete_values(table = "testData", values = "AMC-Javelin")
 To remove the entire table from the `DATA` tab, we can use the `avtable_delete`
 method with the corresponding table name.
 
-```{r}
+```{r, eval=az_ok}
 avtable_delete(table = "testData")
 ```
 
@@ -208,6 +208,6 @@ example on GitHub:
 
 # Session information {.unnumbered}
 
-```{r sessionInfo, echo = FALSE}
+```{r sessionInfo, echo = FALSE, eval = TRUE}
 sessionInfo()
 ```
