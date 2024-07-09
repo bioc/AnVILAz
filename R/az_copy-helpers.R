@@ -120,14 +120,19 @@ az_copy_to_storage <-
         .az_shQuote(from), shQuote(path), paste0("--recursive=", recurse),
         if (dry) "--dry-run"
     )
-    .azcopyStatus(results)
+    .azcopyStatus(results, dry = dry)
 }
 
-.azcopyStatus <- function(txtlist) {
+.azcopyStatus <- function(txtlist, dry) {
+    .parse_fun <- switch(
+        dry,
+        `TRUE` = .parse_dry_text,
+        .parse_job_status_text
+    )
     if (!is.list(txtlist) && is.character(txtlist))
-        res <- list(.parse_job_status_text(txtlist))
+        res <- list(.parse_fun(txtlist))
     else
-        res <- lapply(txtlist, .parse_job_status_text)
+        res <- lapply(txtlist, .parse_fun)
     class(res) <- c("azcopyStatus", class(res))
     res
 }
@@ -141,6 +146,20 @@ az_copy_to_storage <-
         return(NA_character_)
     else
         strwrap(summary, indent = 2L, exdent = 4L, width = 80)
+}
+
+.parse_dry_text <- function(txt) {
+    txt <- sub("\\r", "", txt)
+    txt <- Filter(nzchar, txt)
+    info <- Filter(function(x) startsWith(x, "INFO"), txt)
+    dryrun <- Filter(function(x) startsWith(x, "DRYRUN"), txt)
+    result <- list(
+        INFO = if (length(info)) info else NA_character_,
+        DRYRUN = if (length(dryrun)) dryrun else NA_character_,
+        summary = NA_character_,
+        logFile = NULL,
+        jobId = NULL
+    )
 }
 
 .parse_job_status_text <- function(txt) {
