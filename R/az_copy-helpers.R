@@ -124,12 +124,17 @@ az_copy_to_storage <-
 }
 
 .azcopyStatus <- function(txtlist) {
-    res <- lapply(txtlist, .parse_job_status_text)
+    if (!is.list(txtlist) && is.character(txtlist))
+        res <- list(.parse_job_status_text(txtlist))
+    else
+        res <- lapply(txtlist, .parse_job_status_text)
     class(res) <- c("azcopyStatus", class(res))
     res
 }
 
 .clean_summary <- function(txt) {
+    if (!length(txt))
+        return(NA_character_)
     jobsumInd <- grep("Job.*summary$", txt) + 1
     summary <- txt[jobsumInd:length(txt)]
     if (!length(summary))
