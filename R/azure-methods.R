@@ -140,7 +140,8 @@ setMethod("avremove", signature = c(platform = "azure"), definition =
         path <- shQuote(paste0(path, token_slug))
         recurse <- paste0("--recursive=", tolower(recursive))
         args <- c("rm", path, recurse)
-        .az_do("azcopy", args = args)
+        results <- .az_do("azcopy", args = args)
+        .azcopyStatus(results)
     }
 )
 
