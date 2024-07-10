@@ -120,46 +120,24 @@ az_copy_to_storage <-
         .az_shQuote(from), shQuote(path), paste0("--recursive=", recurse),
         if (dry) "--dry-run"
     )
-    .azcopyStatus(results, dry = dry)
+    .azcopyStatus(results)
 }
 
-.azcopyStatus <- function(txtlist, dry) {
-    .parse_fun <- switch(
-        dry,
-        `TRUE` = .parse_dry_text,
-        .parse_job_status_text
-    )
+.azcopyStatus <- function(txtlist) {
     if (!is.list(txtlist) && is.character(txtlist))
-        res <- list(.parse_fun(txtlist))
-    else
-        res <- lapply(txtlist, .parse_fun)
+        txtlist <- list(txtlist)
+    res <- lapply(txtlist, .parse_job_status_text)
     class(res) <- c("azcopyStatus", class(res))
     res
 }
 
 .clean_summary <- function(txt) {
-    if (!length(txt))
+    jobsum <- grep("Job.*summary", txt)
+    if (!length(txt) || !length(jobsum))
         return(NA_character_)
-    jobsumInd <- grep("Job.*summary$", txt) + 1
+    jobsumInd <- jobsum + 1
     summary <- txt[jobsumInd:length(txt)]
-    if (!length(summary))
-        return(NA_character_)
-    else
-        strwrap(summary, indent = 2L, exdent = 4L, width = 80)
-}
-
-.parse_dry_text <- function(txt) {
-    txt <- sub("\\r", "", txt)
-    txt <- Filter(nzchar, txt)
-    info <- Filter(function(x) startsWith(x, "INFO"), txt)
-    dryrun <- Filter(function(x) startsWith(x, "DRYRUN"), txt)
-    result <- list(
-        INFO = if (length(info)) info else NA_character_,
-        DRYRUN = if (length(dryrun)) dryrun else NA_character_,
-        summary = NA_character_,
-        logFile = NULL,
-        jobId = NULL
-    )
+    strwrap(summary, indent = 2L, exdent = 4L, width = 80)
 }
 
 .parse_job_status_text <- function(txt) {
@@ -168,6 +146,9 @@ az_copy_to_storage <-
     statusLine <- grep(".*Done.*Failed", txt, value = TRUE)
     status <- grepl("100.0 %", statusLine)
     info <- Filter(function(x) startsWith(x, "INFO"), txt)
+    dryrun <- Filter(function(x) startsWith(x, "DRYRUN"), txt)
+    if (length(dryrun))
+        statusLine <- "100.0 %, 1 DRYRUN"
     summary <- .clean_summary(txt)
     logLine <- grep("Log file is located at:", txt, value = TRUE)
     logfile <- gsub("Log file is located at: (.*)", "\\1", logLine)
@@ -175,11 +156,12 @@ az_copy_to_storage <-
     jobId <- gsub("Job (.*) has started", "\\1", jobLine)
     result <- list(
         INFO = if (length(info)) info else NA_character_,
-        statusLine = statusLine,
-        Status = status,
+        DRYRUN = if (length(dryrun)) dryrun else NA_character_,
+        statusLine = if (length(statusLine)) statusLine else NA_character_,
+        Status = if (length(status)) status else FALSE,
         summary = if (length(summary)) summary else NA_character_,
         logFile = if (length(logfile)) logfile else NA_character_,
-        jobId = jobId
+        jobId = if (length(jobId)) jobId else NA_character_
     )
 }
 
