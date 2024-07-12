@@ -42,5 +42,14 @@ az_health_check <- function() {
             "The environment variable(s) ", notfounds, " are not set.",
             call. = FALSE
         )
+    apps_running <- .apps_running()
+    if (is.null(apps_running))
+        warning("No apps were found.", call. = FALSE)
+    else if (!all(apps_running))
+        warning(
+            "The following apps are not running: ",
+            paste(names(apps_running)[!apps_running], collapse = ", "),
+            call. = FALSE
+        )
     all(nzchars)
 }

@@ -78,17 +78,34 @@ cbas_url <- function() {
     .leo_apps("cbas")
 }
 
-.leo_apps <- function(app) {
-    url_resp <- request(.LEONARDO_URL) |>
+.list_apps <- function() {
+    token <- try({az_token()}, silent = TRUE)
+    if (inherits(token, "try-error"))
+        return("[]")
+    request(.LEONARDO_URL) |>
         req_template(
             "/api/apps/v2/{workspaceId}",
             workspaceId = .avcache$get("workspaceId")
         ) |>
-        req_auth_bearer_token(az_token()) |>
+        req_auth_bearer_token(token) |>
         req_url_query(includeDeleted = "false") |>
         req_perform() |>
         resp_body_string()
+}
 
+.apps_running <- function() {
+    status <- .list_apps() |>
+        jsonlite::fromJSON()
+    if (!length(status))
+        return(NULL)
+    status <- status[, c("status", "appType")]
+    res <- status[["status"]] == "RUNNING"
+    names(res) <- status[["appType"]]
+    res
+}
+
+.leo_apps <- function(app) {
+    url_resp <- .list_apps()
     res_url <- rjsoncons::jmespath(
         url_resp,
         paste0("[*].proxyUrls.", app)
