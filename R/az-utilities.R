@@ -36,12 +36,10 @@ az_health_check <- function() {
     nzchars <-  vapply(
         keys, function(x) isScalarCharacter(.avcache$get(x)), logical(1L)
     )
-    notfounds <- keys[!nzchars]
-    if (length(notfounds))
+    notfounds <- paste(keys[!nzchars], collapse = ", ")
+    if (!nzchar(notfounds))
         warning(
-            "The environment variable(s) ",
-            paste(notfounds, collapse = ", "),
-            " are not set.",
+            "The environment variable(s) ", notfounds, " are not set.",
             call. = FALSE
         )
     all(nzchars)

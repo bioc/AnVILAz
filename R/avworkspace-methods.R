@@ -52,7 +52,7 @@ setMethod("avworkspace_namespace", signature = c(platform = "azure"),
             req_perform() |>
             resp_body_json()
 
-        qrs[[1L]][["labels"]][["saturnWorkspaceNamespace"]]
+        qrs[[1L]][[c("labels", "saturnWorkspaceNamespace")]]
     }
 )
 
