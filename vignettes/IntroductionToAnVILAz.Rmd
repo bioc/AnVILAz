@@ -1,13 +1,13 @@
 ---
 title: "Introduction to the AnVILAz package"
-author: 
+author:
 - name: Marcel Ramos
   affiliation: Roswell Park Comprehensive Cancer Center
-  email: Marcel.Ramos@RoswellPark.org
+  email: marcel.ramos@sph.cuny.edu
 - name: Martin Morgan
   affiliation: Roswell Park Comprehensive Cancer Center
   email: Martin.Morgan@RoswellPark.org
-output: 
+output:
   BiocStyle::html_document:
     self_contained: yes
     toc: true
@@ -19,7 +19,7 @@ package: "`r pkg_ver('AnVILAz')`"
 vignette: >
   %\VignetteIndexEntry{Introduction to the AnVILAz package}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}  
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -35,7 +35,7 @@ options(width = 75)
 
 # Installation
 
-The package is not yet available from [Bioconductor](https://bioconductor.org). 
+The package is not yet available from [Bioconductor](https://bioconductor.org).
 
 Install the development version of the _AnVILAz_ package from GitHub
 with
