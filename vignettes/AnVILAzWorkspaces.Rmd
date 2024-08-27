@@ -1,13 +1,13 @@
 ---
 title: "Working with workspaces on AnVIL Azure"
-author: 
+author:
 - name: Marcel Ramos
   affiliation: Roswell Park Comprehensive Cancer Center
-  email: Marcel.Ramos@RoswellPark.org
+  email: marcel.ramos@sph.cuny.edu
 - name: Martin Morgan
   affiliation: Roswell Park Comprehensive Cancer Center
   email: Martin.Morgan@RoswellPark.org
-output: 
+output:
   BiocStyle::html_document:
     self_contained: yes
     toc: true
@@ -19,7 +19,7 @@ package: "`r pkg_ver('AnVILAz')`"
 vignette: >
   %\VignetteIndexEntry{Working with Workspaces on AnVIL Azure}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}  
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -122,7 +122,7 @@ To delete a workspace, it is recommended to use the AnVIL Azure interface.
 
 Notebooks are a way to interact with the data and analysis resources in a
 workspace. The `avnotebooks()` function lists the notebooks available in the
-current workspace. 
+current workspace.
 
 ```{r avnotebooks, eval=az_ok}
 avnotebooks()
