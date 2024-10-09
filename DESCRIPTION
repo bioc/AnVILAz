@@ -60,6 +60,7 @@ Collate:
     'az_copy-helpers.R'
     'az_sas_token.R'
     'azure-methods.R'
+    'has_avworkspace-methods.R'
     'resources.R'
     'utilities.R'
     'workspace-dev-ops.R'
