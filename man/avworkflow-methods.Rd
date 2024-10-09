@@ -37,11 +37,7 @@ for the workflow jobs as a \code{tibble}.
 
 }}
 \examples{
-library(AnVILBase)
-if (
-    az_exists() && identical(avplatform_namespace(), "AnVILAz") &&
-    nzchar(avworkspace_name())
-)
+if (has_avworkspace(strict = TRUE, platform = azure()))
     ## from within AnVIL
     avworkflow_jobs()
 

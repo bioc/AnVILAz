@@ -71,11 +71,7 @@ the Azure Blob Storage Container
 
 }}
 \examples{
-library(AnVILBase)
-if (
-    az_exists() && identical(avplatform_namespace(), "AnVILAz") &&
-    nzchar(avworkspace_name())
-)
+if (has_avworkspace(strict = TRUE, platform = azure()))
     avnotebooks()
 
 }
