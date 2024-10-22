@@ -10,7 +10,7 @@ workspace}
 }
 \arguments{
 \item{strict}{\code{logical(1)} Whether to include a check for an existing
-\code{avworkspace_name()} setting.}
+\code{avworkspace_name()} setting. Default \code{FALSE}.}
 
 \item{...}{Arguments passed to the methods.}
 
