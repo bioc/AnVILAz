@@ -1,6 +1,6 @@
 Package: AnVILAz
 Title: R / Bioconductor Support for the AnVIL Azure Platform
-Version: 0.99.20
+Version: 0.99.21
 Authors@R: 
     c(person(
         "Martin", "Morgan", role = c("aut", "ctb"),
