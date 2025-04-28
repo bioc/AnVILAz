@@ -23,6 +23,7 @@ Description: The AnVIL is a cloud computing resource developed in part
     Azure resources.
 License: Artistic-2.0
 Encoding: UTF-8
+Depends: R (>= 4.5.0)
 Imports:
     AnVILBase,
     BiocBaseUtils,
