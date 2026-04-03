@@ -25,6 +25,14 @@
     TRUE
 }
 
+.az_sanitize <- function(x) {
+    gsub("(https?://[^? \"]+)\\?[^ \"]+", "\\1?[...]", x)
+}
+
+.az_system2 <- function(...) {
+    base::system2(...)
+}
+
 #' @importFrom BiocBaseUtils isScalarCharacter isCharacter
 .az_do <- function(command, args) {
     stopifnot(
@@ -34,11 +42,12 @@
     bin <- .az_find(command)
     res <- withCallingHandlers({
         tryCatch({
-            system2(bin, args, stdout = TRUE, stderr = TRUE, wait=TRUE)
+            .az_system2(bin, args, stdout = TRUE, stderr = TRUE, wait=TRUE)
         }, error = function(err) {
+            sani_args <- .az_sanitize(args)
             msg <- paste0(
-                "'", command, " ", paste(args, collapse = " "), "' failed:\n",
-                "  ", conditionMessage(err)
+                "'", command, " ", paste(sani_args, collapse = " "),
+                "' failed:\n", "  ", conditionMessage(err)
             )
             stop(msg, call. = FALSE)
         })
