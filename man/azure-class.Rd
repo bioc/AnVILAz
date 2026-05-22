@@ -9,10 +9,15 @@
 \usage{
 azure()
 }
+\value{
+An object of class \code{azure}.
+}
 \description{
 This class represents the Azure platform.
 }
 \examples{
+showCLass("azure")
+
 az <- azure()
 az
 showClass(class(az))

@@ -6,6 +6,12 @@
 #' @importClassesFrom AnVILBase Platform
 #' @importFrom methods new
 #' @importFrom AnVILBase cloud_platform
+#'
+#' @returns An object of class `azure`.
+#'
+#' @examples
+#' showCLass("azure")
+#'
 #' @exportClass azure
 .azure <- setClass("azure", contains = "Platform")
 
