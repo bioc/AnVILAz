@@ -1,7 +1,7 @@
 #' @name workspace-env
 #'
 #' @aliases workspace_id workspace_storage_container_id
-#'   workspace_storage_container_url workspace_data_service_url
+#' @aliases workspace_storage_container_url workspace_data_service_url
 #'
 #' @title Access Terra on Azure workspace session variables
 #'

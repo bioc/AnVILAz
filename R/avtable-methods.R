@@ -1,7 +1,7 @@
 #' @name avtable-methods
 #'
 #' @aliases avtable avtables avtable_import avtable_import_set avtable_delete
-#'   avtable_delete_values
+#' @aliases avtable_delete_values
 #'
 #' @title AnVIL Azure table ("type") methods
 #'
