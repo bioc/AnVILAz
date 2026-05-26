@@ -16,7 +16,7 @@ An object of class \code{azure}.
 This class represents the Azure platform.
 }
 \examples{
-showCLass("azure")
+showClass("azure")
 
 az <- azure()
 az

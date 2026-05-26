@@ -10,7 +10,7 @@
 #' @returns An object of class `azure`.
 #'
 #' @examples
-#' showCLass("azure")
+#' showClass("azure")
 #'
 #' @exportClass azure
 .azure <- setClass("azure", contains = "Platform")
